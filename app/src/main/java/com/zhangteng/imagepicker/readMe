@@ -1,0 +1,51 @@
+ 第一步：使用选择器配置
+   imagePickerConfig = new ImagePickerConfig.Builder()
+                 .imageLoader(new GlideImageLoader())    // ImageLoader 加载框架（必填）,可以实现ImageLoader自定义（内置Glid实现）
+                 .iHandlerCallBack(iHandlerCallBack)     // 监听接口，可以实现IHandlerCallBack自定义
+                 .provider("com.zhangteng.imagepicker.fileprovider")   // provider默认com.zhangteng.imagepicker.fileprovider
+                 .pathList(path)                         // 记录已选的图片
+                 .multiSelect(false)                      // 是否多选   默认：false
+                 .multiSelect(false, 9)                   // 配置是否多选的同时 配置多选数量   默认：false ， 9
+                 .maxSize(9)                             // 配置多选时 的多选数量。    默认：9
+                 .isShowCamera(true)                     // 是否现实相机按钮  默认：false
+                 .filePath("/imagePicker/ImagePickerPictures")          // 图片存放路径
+                 .build();
+
+第二步：使用启动器启动选择器
+   ImagePickerOpen.getInstance().setImagePickerConfig(imagePickerConfig).openCamera(mActivity);
+   或
+   ImagePickerOpen.getInstance().setImagePickerConfig(imagePickerConfig).open(mActivity);
+
+第三步：使用IHandlerCallBack监听选择器生命周期
+     iHandlerCallBack = new IHandlerCallBack() {
+                @Override
+                public void onStart() {
+                    Log.i(TAG, "onStart: 开启");
+                }
+
+                @Override
+                public void onSuccess(List<String> photoList) {
+                    Log.i(TAG, "onSuccess: 返回数据");
+                    path.clear();
+                    for (String s : photoList) {
+                        Log.i(TAG, s);
+                        path.add(s);
+                    }
+                    photoAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancel() {
+                    Log.i(TAG, "onCancel: 取消");
+                }
+
+                @Override
+                public void onFinish() {
+                    Log.i(TAG, "onFinish: 结束");
+                }
+
+                @Override
+                public void onError() {
+                    Log.i(TAG, "onError: 出错");
+                }
+            };
