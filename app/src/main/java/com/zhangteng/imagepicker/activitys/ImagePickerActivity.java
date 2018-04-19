@@ -182,13 +182,13 @@ public class ImagePickerActivity extends BaseActivity {
                                 File file = new File(path);
                                 File parent = file.getParentFile();
                                 FolderInfo folderInfo = new FolderInfo();
-                                folderInfo.setImageInfo(imageInfos1.get(0));
                                 folderInfo.setName(parent.getName());
                                 folderInfo.setPath(parent.getAbsolutePath());
                                 if (!folderInfos.contains(folderInfo)) {
                                     List<ImageInfo> list = new ArrayList<>();
                                     list.add(imageInfo);
                                     folderInfo.setImageInfoList(list);
+                                    folderInfo.setImageInfo(list.get(0));
                                     folderInfos.add(folderInfo);
                                 } else {
                                     folderInfos.get(folderInfos.indexOf(folderInfo)).getImageInfoList().add(imageInfo);

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.bean.FolderInfo;
+import com.zhangteng.imagepicker.config.ImagePickerOpen;
 import com.zhangteng.imagepicker.imageloader.GlideImageLoader;
 import com.zhangteng.imagepicker.utils.ScreenUtils;
 
@@ -44,12 +45,12 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
     @Override
     public void onBindViewHolder(@NonNull FolderViewHolder holder, final int position) {
         if (position == 0) {
-            new GlideImageLoader().loadImage(mContext, holder.ivImagePickerFolderImage, folderInfos.get(0).getImageInfo().getPath());
+            ImagePickerOpen.getInstance().getImagePickerConfig().getImageLoader().loadImage(mContext, holder.ivImagePickerFolderImage, folderInfos.get(0).getImageInfo().getPath());
             holder.tvImagePickerFolderName.setText(mContext.getString(R.string.image_picker_all_folder));
             holder.tvImagePickerPhotoNum.setText(mContext.getString(R.string.image_picker_photo_num, getTotalImageSize()));
         } else {
             FolderInfo folderInfo = folderInfos.get(position - 1);
-            new GlideImageLoader().loadImage(mContext, holder.ivImagePickerFolderImage, folderInfo.getImageInfo().getPath());
+            ImagePickerOpen.getInstance().getImagePickerConfig().getImageLoader().loadImage(mContext, holder.ivImagePickerFolderImage, folderInfo.getImageInfo().getPath());
             holder.tvImagePickerFolderName.setText(folderInfo.getName());
             holder.tvImagePickerPhotoNum.setText(mContext.getString(R.string.image_picker_photo_num, folderInfo.getImageInfoList().size()));
         }
