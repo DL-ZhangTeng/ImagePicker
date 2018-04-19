@@ -263,6 +263,7 @@ public class ImagePickerActivity extends BaseActivity {
                     intent.setData(uri);
                     sendBroadcast(intent);
                     iHandlerCallBack.onSuccess(selectImage);
+                    getSupportLoaderManager().restartLoader(ALL, null, loaderCallbacks);
                     finish();
                 }
             } else {

@@ -72,7 +72,7 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
 
     @Override
     public int getItemCount() {
-        return folderInfos.isEmpty() ? 0 : folderInfos.size() + 1;
+        return folderInfos.isEmpty() ? 1 : folderInfos.size() + 1;
     }
 
     /**
