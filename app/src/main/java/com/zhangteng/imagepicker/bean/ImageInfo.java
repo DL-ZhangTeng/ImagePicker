@@ -7,6 +7,7 @@ public class ImageInfo {
     private String name;
     private String addTime;
     private String path;
+    private String thumbnail;
 
     public ImageInfo() {
     }
@@ -15,6 +16,13 @@ public class ImageInfo {
         this.name = name;
         this.addTime = addTime;
         this.path = path;
+    }
+
+    public ImageInfo(String name, String addTime, String path, String thumbnail) {
+        this.name = name;
+        this.addTime = addTime;
+        this.path = path;
+        this.thumbnail = thumbnail;
     }
 
     public String getName() {
@@ -39,5 +47,13 @@ public class ImageInfo {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

@@ -23,6 +23,7 @@ public class ImagePickerConfig {
     private String filePath;            // 拍照以及截图后 存放的位置。    默认：/imagePicker/Pictures
     private ArrayList<String> pathList;      // 已选择照片的路径
     private boolean isOpenCamera;             // 是否直接开启相机    默认：false
+    private boolean isVideoPicker;
     private Builder builder;
 
     public ImagePickerConfig(Builder builder) {
@@ -37,6 +38,7 @@ public class ImagePickerConfig {
         this.pathList = builder.pathList;
         this.filePath = builder.filePath;
         this.isOpenCamera = builder.isOpenCamera;
+        this.isVideoPicker = builder.isVideoPicker;
         this.provider = builder.provider;
         this.iHandlerCallBack = builder.iHandlerCallBack;
         this.builder = builder;
@@ -59,6 +61,8 @@ public class ImagePickerConfig {
         private ArrayList<String> pathList = new ArrayList<>();
 
         private boolean isOpenCamera = false;
+
+        private boolean isVideoPicker = false;
 
         public Builder provider(String provider) {
             this.provider = provider;
@@ -107,6 +111,10 @@ public class ImagePickerConfig {
             return this;
         }
 
+        public Builder isVideoPicker(boolean isVideoPicker){
+            this.isVideoPicker = isVideoPicker;
+            return this;
+        }
 
         public Builder pathList(List<String> pathList) {
             this.pathList.clear();
@@ -163,5 +171,13 @@ public class ImagePickerConfig {
 
     public void setOpenCamera(boolean openCamera) {
         isOpenCamera = openCamera;
+    }
+
+    public boolean isVideoPicker() {
+        return isVideoPicker;
+    }
+
+    public void setVideoPicker(boolean videoPicker) {
+        isVideoPicker = videoPicker;
     }
 }

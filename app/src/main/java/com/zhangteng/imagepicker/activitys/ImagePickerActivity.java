@@ -19,7 +19,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -153,13 +152,29 @@ public class ImagePickerActivity extends BaseActivity {
                     MediaStore.Images.Media._ID,
                     MediaStore.Images.Media.SIZE
             };
+            private final String[] VIDEO_PROJECTION = {
+                    MediaStore.Video.Media.DATA,
+                    MediaStore.Video.Media.DISPLAY_NAME,
+                    MediaStore.Video.Media.DATE_ADDED,
+                    MediaStore.Video.Media._ID,
+                    MediaStore.Video.Media.SIZE,
+                    MediaStore.Video.Media.MINI_THUMB_MAGIC
+            };
 
             @Override
             public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-                if (i == ALL) {
-                    return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, null, null, IMAGE_PROJECTION[2] + " DESC");
-                } else if (i == FODLER) {
-                    return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, IMAGE_PROJECTION[0] + " like '%" + bundle.getString("path") + "%'", null, IMAGE_PROJECTION[2] + " DESC");
+                if (imagePickerConfig.isVideoPicker()) {
+                    if (i == ALL) {
+                        return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, VIDEO_PROJECTION, null, null, VIDEO_PROJECTION[2] + " DESC");
+                    } else if (i == FODLER) {
+                        return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, VIDEO_PROJECTION, VIDEO_PROJECTION[0] + " like '%" + bundle.getString("path") + "%'", null, VIDEO_PROJECTION[2] + " DESC");
+                    }
+                } else {
+                    if (i == ALL) {
+                        return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, null, null, IMAGE_PROJECTION[2] + " DESC");
+                    } else if (i == FODLER) {
+                        return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, IMAGE_PROJECTION[0] + " like '%" + bundle.getString("path") + "%'", null, IMAGE_PROJECTION[2] + " DESC");
+                    }
                 }
                 return null;
             }
@@ -172,12 +187,28 @@ public class ImagePickerActivity extends BaseActivity {
                         List<ImageInfo> imageInfos1 = new ArrayList<>();
                         cursor.moveToFirst();
                         do {
-                            String name = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
-                            String addtime = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
-                            String path = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
-                            int size = cursor.getInt(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[4]));
+                            String name = null;
+                            String addtime = null;
+                            String path = null;
+                            int size = 0;
+                            String thumb = null;
+                            if (imagePickerConfig.isVideoPicker()) {
+                                name = cursor.getString(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[1]));
+                                addtime = cursor.getString(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[2]));
+                                path = cursor.getString(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[0]));
+                                size = cursor.getInt(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[4]));
+                                thumb = cursor.getString(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[5]));
+                            } else {
+                                name = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
+                                addtime = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
+                                path = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
+                                size = cursor.getInt(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[4]));
+                            }
                             if (size > 1024 * 5) {
                                 ImageInfo imageInfo = new ImageInfo(name, addtime, path);
+                                if (imagePickerConfig.isVideoPicker()) {
+                                    imageInfo.setThumbnail(thumb);
+                                }
                                 imageInfos1.add(imageInfo);
                                 File file = new File(path);
                                 File parent = file.getParentFile();
