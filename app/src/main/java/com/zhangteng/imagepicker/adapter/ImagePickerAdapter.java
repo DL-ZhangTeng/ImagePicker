@@ -1,7 +1,6 @@
 package com.zhangteng.imagepicker.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.bean.ImageInfo;
 import com.zhangteng.imagepicker.config.ImagePickerConfig;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
-import com.zhangteng.imagepicker.imageloader.GlideImageLoader;
 import com.zhangteng.imagepicker.utils.ScreenUtils;
 
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<ImageInfo> imageInfoList;
     private ImagePickerConfig imagePickerConfig = ImagePickerOpen.getInstance().getImagePickerConfig();
     private List<String> selectImage = new ArrayList<>();
+    private int selectable = imagePickerConfig.isVideoPicker()?imagePickerConfig.getMaxVideoSelectable():imagePickerConfig.getMaxImageSelectable();
 
     public ImagePickerAdapter(Context context, ArrayList<ImageInfo> imageInfoList) {
         this.mContext = context;
@@ -62,7 +61,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     @Override
                     public void onClick(View view) {
                         if (onItemClickListener != null) {
-                            if (imagePickerConfig.isMultiSelect() && selectImage.size() < imagePickerConfig.getMaxSize()) {
+                            if (imagePickerConfig.isMultiSelect() && selectImage.size() < selectable) {
                                 onItemClickListener.onCameraClick(selectImage);
                             } else {
                                 onItemClickListener.onCameraClick(selectImage);
@@ -81,7 +80,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         if (selectImage.contains(finalImageInfo.getPath())) {
                             selectImage.remove(finalImageInfo.getPath());
                         } else {
-                            if (selectImage.size() < imagePickerConfig.getMaxSize()) {
+                            if (selectImage.size() < selectable) {
                                 selectImage.add(finalImageInfo.getPath());
                             }
                         }
@@ -102,7 +101,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     if (selectImage.contains(finalImageInfo1.getPath())) {
                         selectImage.remove(finalImageInfo1.getPath());
                     } else {
-                        if (selectImage.size() < imagePickerConfig.getMaxSize())
+                        if (selectImage.size() < selectable)
                             selectImage.add(finalImageInfo1.getPath());
                     }
                     if (onItemClickListener != null)

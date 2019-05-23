@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
+import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,7 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
-import android.support.v4.content.FileProvider;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +20,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.adapter.FolderListAdapter;
@@ -29,13 +29,15 @@ import com.zhangteng.imagepicker.base.BaseActivity;
 import com.zhangteng.imagepicker.bean.FolderInfo;
 import com.zhangteng.imagepicker.bean.ImageInfo;
 import com.zhangteng.imagepicker.callback.IHandlerCallBack;
+import com.zhangteng.imagepicker.config.Constant;
 import com.zhangteng.imagepicker.config.ImagePickerConfig;
+import com.zhangteng.imagepicker.config.ImagePickerEnum;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
-import com.zhangteng.imagepicker.utils.FileUtils;
 import com.zhangteng.imagepicker.widget.FolderPopupWindow;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class ImagePickerActivity extends BaseActivity {
@@ -49,12 +51,20 @@ public class ImagePickerActivity extends BaseActivity {
     private static final int ALL = 0;
     private static final int FODLER = 1;
     private Context mContext;
+    /**
+     * 文件夹列表
+     */
     private ArrayList<FolderInfo> folderInfos;
+    /**
+     * 文件列表
+     */
     private ArrayList<ImageInfo> imageInfos;
+    /**
+     * 用于过滤同一个图片
+     */
+    private HashSet<String> imageInfosDifferent;
     private FolderListAdapter folderListAdapter;
     private ImagePickerAdapter imagePickerAdapter;
-    private int REQUEST_CODE = 100;
-    private File cameraTempFile;
     private ImagePickerConfig imagePickerConfig;
     private IHandlerCallBack iHandlerCallBack;
     private List<String> selectImage;
@@ -88,6 +98,9 @@ public class ImagePickerActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 iHandlerCallBack.onSuccess(selectImage);
+                Intent intent = new Intent();
+                intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>)selectImage);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -105,13 +118,10 @@ public class ImagePickerActivity extends BaseActivity {
         selectImage = imagePickerConfig.getPathList();
         iHandlerCallBack = imagePickerConfig.getiHandlerCallBack();
         iHandlerCallBack.onStart();
-        if (imagePickerConfig.isOpenCamera()) {
-            startCamera();
-        }
         mContext = this;
         imageInfos = new ArrayList<>();
         folderInfos = new ArrayList<>();
-        mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish, 0, imagePickerConfig.getMaxSize()));
+        mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish, 0, imagePickerConfig.isVideoPicker() ? imagePickerConfig.getMaxVideoSelectable() : imagePickerConfig.getMaxImageSelectable()));
         folderListAdapter = new FolderListAdapter(mContext, folderInfos);
         folderListAdapter.setOnItemClickListener(new FolderListAdapter.OnItemClickListener() {
             @Override
@@ -132,13 +142,13 @@ public class ImagePickerActivity extends BaseActivity {
         imagePickerAdapter.setOnItemClickListener(new ImagePickerAdapter.OnItemClickListener() {
             @Override
             public void onCameraClick(List<String> selectImage) {
-                startCamera();
+                ImagePickerOpen.getInstance().openCamera(ImagePickerActivity.this);
                 ImagePickerActivity.this.selectImage = selectImage;
             }
 
             @Override
             public void onImageClick(List<String> selectImage) {
-                mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish, selectImage.size(), imagePickerConfig.getMaxSize()));
+                mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish, selectImage.size(), imagePickerConfig.isVideoPicker() ? imagePickerConfig.getMaxVideoSelectable() : imagePickerConfig.getMaxImageSelectable()));
                 iHandlerCallBack.onSuccess(selectImage);
                 ImagePickerActivity.this.selectImage = selectImage;
             }
@@ -205,6 +215,14 @@ public class ImagePickerActivity extends BaseActivity {
                                 size = cursor.getInt(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[4]));
                             }
                             if (size > 1024 * 5) {
+                                if (imageInfosDifferent == null) {
+                                    imageInfosDifferent = new HashSet<>();
+                                }
+                                if (imageInfosDifferent.contains(path)) {
+                                    return;
+                                } else {
+                                    imageInfosDifferent.add(path);
+                                }
                                 ImageInfo imageInfo = new ImageInfo(name, addtime, path);
                                 if (imagePickerConfig.isVideoPicker()) {
                                     imageInfo.setThumbnail(thumb);
@@ -269,42 +287,27 @@ public class ImagePickerActivity extends BaseActivity {
         super.goBack();
     }
 
-    private void startCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraTempFile = FileUtils.createTmpFile(this, imagePickerConfig.getFilePath());
-        String provider = imagePickerConfig.getProvider();
-        Uri imageUri = FileProvider.getUriForFile(mContext, provider, cameraTempFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                if (cameraTempFile != null) {
-                    if (!imagePickerConfig.isMultiSelect()) {
-                        selectImage.clear();
-                    }
-                    selectImage.add(cameraTempFile.getAbsolutePath());
-                    // 通知系统扫描该文件夹
-                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri uri = Uri.fromFile(new File(FileUtils.getFilePath(mContext) + imagePickerConfig.getFilePath()));
-                    intent.setData(uri);
-                    sendBroadcast(intent);
-                    iHandlerCallBack.onSuccess(selectImage);
-                    getSupportLoaderManager().restartLoader(ALL, null, loaderCallbacks);
-                    finish();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constant.CAMERA_RESULT_CODE) {
+                ArrayList<String> paths;
+                paths = data.getStringArrayListExtra(Constant.CAMERA_PATH);
+                if (!imagePickerConfig.isMultiSelect()) {
+                    selectImage.clear();
                 }
-            } else {
-                if (cameraTempFile != null && cameraTempFile.exists()) {
-                    cameraTempFile.delete();
-                }
-                if (imagePickerConfig.isOpenCamera()) {
-                    finish();
-                }
+                selectImage.addAll(paths);
+                iHandlerCallBack.onSuccess(selectImage);
+                getSupportLoaderManager().restartLoader(ALL, null, loaderCallbacks);
+                Intent intent = new Intent();
+                intent.putExtra(Constant.PICKER_PATH, paths);
+                setResult(RESULT_OK, intent);
+                finish();
             }
+        }
+        if (resultCode == Constant.CAMERA_ERROR_CODE) {
+            Toast.makeText(this, "请检查相机权限", Toast.LENGTH_SHORT).show();
         }
     }
 }

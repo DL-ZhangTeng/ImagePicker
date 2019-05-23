@@ -1,22 +1,27 @@
  第一步：使用选择器配置
-   imagePickerConfig = new ImagePickerConfig.Builder()
-                 .imageLoader(new GlideImageLoader())    // ImageLoader 加载框架（必填）,可以实现ImageLoader自定义（内置Glid实现）
-                 .iHandlerCallBack(iHandlerCallBack)     // 监听接口，可以实现IHandlerCallBack自定义
-                 .provider("com.zhangteng.imagepicker.fileprovider")   // provider默认com.zhangteng.imagepicker.fileprovider
-                 .pathList(path)                         // 记录已选的图片
-                 .multiSelect(false)                      // 是否多选   默认：false
-                 .multiSelect(false, 9)                   // 配置是否多选的同时 配置多选数量   默认：false ， 9
-                 .maxSize(9)                             // 配置多选时 的多选数量。    默认：9
-                 .isShowCamera(true)                     // 是否现实相机按钮  默认：false
-                 .filePath("/imagePicker/ImagePickerPictures")          // 图片存放路径
-                 .build();
+    ImagePickerConfig imagePickerConfig = new ImagePickerConfig.Builder()
+                  .imageLoader(new GlideImageLoader()) //图片加载器
+                  .iHandlerCallBack(handlerCallBack)    //图片选择器生命周期监听（直接打开摄像头时无效）
+                  .multiSelect(false)               //是否显示摄像头按钮
+                  .isVideoPicker(true)              //是否选择视频 默认false
+                  .imagePickerType(ImagePickerEnum.PHOTO_PICKER) //选择器打开类型
+                  .filePath("/imagePicker/ImagePickerPictures") //文件保存地址
+                  .isMirror(false)                              //是否旋转镜头
+                  .maxImageSelectable(9)                        //图片可选择数
+                  .maxHeight(1920)                              //图片最大高度
+                  .maxWidth(1080)                               //图片最大宽度
+                  .maxImageSize(15)                             //图片最大大小Mb
+                  .maxVideoSelectable(1)                        //视频可选择数
+                  .maxVideoSize(20)                             //视频最大大小mb
+                  .maxVideoLength(20000)                        //视频最大长度ms
+                  .pathList(new ArrayList<String>())            //文件保存路径
+                  .provider("com.zhangteng.imagepicker.fileprovider")//文件提供者
+                  .build();
 
 第二步：使用启动器启动选择器
-   ImagePickerOpen.getInstance().setImagePickerConfig(imagePickerConfig).openCamera(mActivity);
-   或
    ImagePickerOpen.getInstance().setImagePickerConfig(imagePickerConfig).open(mActivity);
 
-第三步：使用IHandlerCallBack监听选择器生命周期
+第三步：使用IHandlerCallBack监听选择器生命周期 或 使用ImagePickerOpen.getResultData()
      iHandlerCallBack = new IHandlerCallBack() {
                 @Override
                 public void onStart() {

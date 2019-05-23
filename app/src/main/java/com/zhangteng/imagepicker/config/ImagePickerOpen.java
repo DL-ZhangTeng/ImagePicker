@@ -1,12 +1,24 @@
 package com.zhangteng.imagepicker.config;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.zhangteng.imagepicker.activitys.CameraActivity;
+import com.zhangteng.imagepicker.activitys.CameraDialogFragment;
 import com.zhangteng.imagepicker.activitys.ImagePickerActivity;
+import com.zhangteng.imagepicker.utils.ActivityHelper;
 import com.zhangteng.imagepicker.utils.FileUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by swing on 2018/4/18.
@@ -15,6 +27,7 @@ public class ImagePickerOpen {
     private static ImagePickerOpen imagePickerOpen;
     private static String TAG = "ImagePicker";
     private ImagePickerConfig imagePickerConfig;
+    private CameraDialogFragment cameraDialogFragment;
 
     public static ImagePickerOpen getInstance() {
         if (imagePickerOpen == null) {
@@ -23,49 +36,72 @@ public class ImagePickerOpen {
         return imagePickerOpen;
     }
 
+    /**
+     * ImagePickerEnum.PHOTO_PICKER 只启动照片选择
+     * ImagePickerEnum.CAMERA 只启动相机
+     * 其他 启动下方弹框
+     */
+    public void open(FragmentActivity mActivity) {
+        if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.PHOTO_PICKER) {
+            openImagePicker(mActivity);
+        } else if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.CAMERA) {
+            openCamera(mActivity);
+        } else {
+            if (mActivity != null) {
+                if (cameraDialogFragment == null) {
+                    cameraDialogFragment = new CameraDialogFragment();
+                }
+                cameraDialogFragment.show(mActivity.getSupportFragmentManager(), "cameraDialogFragment");
+            }
+        }
+    }
 
-    public void open(Activity mActivity) {
-        if (imagePickerOpen.imagePickerConfig == null) {
+    public void openCamera(Activity activity) {
+        if (imagePickerConfig == null) {
             Log.e(TAG, "请配置 imagePickerConfig");
             return;
         }
-        if (imagePickerOpen.imagePickerConfig.getImageLoader() == null) {
+        if (imagePickerConfig.getImageLoader() == null) {
             Log.e(TAG, "请配置 ImageLoader");
             return;
         }
-        if (TextUtils.isEmpty(imagePickerOpen.imagePickerConfig.getProvider())) {
+        if (TextUtils.isEmpty(imagePickerConfig.getProvider())) {
             Log.e(TAG, "请配置 Provider");
             return;
         }
-        if (imagePickerOpen.imagePickerConfig.getiHandlerCallBack() == null) {
+        if (imagePickerConfig.getiHandlerCallBack() == null) {
             Log.e(TAG, "请配置 IHandlerCallBack");
             return;
         }
-        FileUtils.createFile(imagePickerOpen.imagePickerConfig.getFilePath());
-
-        Intent intent = new Intent(mActivity, ImagePickerActivity.class);
-        mActivity.startActivity(intent);
+        Intent intent = new Intent();
+        intent.setClass(activity, CameraActivity.class);
+        intent.putExtra(Constant.BUTTON_STATE, imagePickerConfig.getCameraMediaType());
+        intent.putExtra(Constant.DURATION, imagePickerConfig.getMaxVideoLength());
+        intent.putExtra(Constant.IS_MIRROR, imagePickerConfig.isMirror());
+        activity.startActivityForResult(intent, Constant.CAMERA_RESULT_CODE);
     }
 
-    public void openCamera(Activity mActivity) {
-        if (imagePickerOpen.imagePickerConfig == null) {
+    public void openImagePicker(Activity activity) {
+        if (imagePickerConfig == null) {
             Log.e(TAG, "请配置 imagePickerConfig");
             return;
         }
-        if (imagePickerOpen.imagePickerConfig.getImageLoader() == null) {
+        if (imagePickerConfig.getImageLoader() == null) {
             Log.e(TAG, "请配置 ImageLoader");
             return;
         }
-        if (TextUtils.isEmpty(imagePickerOpen.imagePickerConfig.getProvider())) {
+        if (TextUtils.isEmpty(imagePickerConfig.getProvider())) {
             Log.e(TAG, "请配置 Provider");
             return;
         }
+        if (imagePickerConfig.getiHandlerCallBack() == null) {
+            Log.e(TAG, "请配置 IHandlerCallBack");
+            return;
+        }
+        FileUtils.createFile(imagePickerConfig.getFilePath());
 
-        FileUtils.createFile(imagePickerOpen.imagePickerConfig.getFilePath());
-        imagePickerOpen.imagePickerConfig.setOpenCamera(true);
-
-        Intent intent = new Intent(mActivity, ImagePickerActivity.class);
-        mActivity.startActivity(intent);
+        Intent intent = new Intent(activity, ImagePickerActivity.class);
+        activity.startActivityForResult(intent, Constant.PICKER_RESULT_CODE);
     }
 
 
@@ -80,4 +116,20 @@ public class ImagePickerOpen {
         }
         return imagePickerConfig;
     }
+
+    public static List<String> getResultData(Context context, int requestCode, int resultCode, @Nullable Intent data) {
+        List<String> result = new ArrayList<>();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constant.PICKER_RESULT_CODE) {
+                result =  data.getStringArrayListExtra(Constant.PICKER_PATH);
+            } else if (requestCode == Constant.CAMERA_RESULT_CODE) {
+                result = data.getStringArrayListExtra(Constant.CAMERA_PATH);
+            }
+        }
+        if (resultCode == Constant.CAMERA_ERROR_CODE) {
+            Toast.makeText(context, "请检查相机权限", Toast.LENGTH_SHORT).show();
+        }
+        return result;
+    }
+
 }

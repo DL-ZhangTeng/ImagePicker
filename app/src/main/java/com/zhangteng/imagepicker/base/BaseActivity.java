@@ -53,8 +53,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void setContentView(View view) {
         rootLayout = (LinearLayout) findViewById(R.id.root_layout);
-        if (rootLayout == null)
+        if (rootLayout == null) {
             return;
+        }
         rootLayout.addView(view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
     }
 

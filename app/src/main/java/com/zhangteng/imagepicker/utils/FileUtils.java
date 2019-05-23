@@ -1,8 +1,10 @@
 package com.zhangteng.imagepicker.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Environment;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,19 +18,7 @@ import java.util.Locale;
  * 文件操作工具类
  */
 public class FileUtils {
-    /**
-     * 在指定的位置创建指定的文件
-     *
-     * @param filePath 完整的文件路径
-     * @param mkdir    是否创建相关的文件夹
-     * @throws Exception
-     */
-    public static void mkFile(String filePath, boolean mkdir) throws Exception {
-        File file = new File(filePath);
-        file.getParentFile().mkdirs();
-        file.createNewFile();
-        file = null;
-    }
+
 
     /**
      * 在指定的位置创建文件夹
@@ -90,10 +80,9 @@ public class FileUtils {
      * @param source   源文件（夹）
      * @param target   目标文件（夹）
      * @param isFolder 若进行文件夹复制，则为True；反之为False
-     * @throws Exception
+     * @throws IOException
      */
-    public static void copy(String source, String target, boolean isFolder)
-            throws Exception {
+    public static void copy(String source, String target, boolean isFolder) throws IOException {
         if (isFolder) {
             (new File(target)).mkdirs();
             File a = new File(source);
@@ -147,10 +136,9 @@ public class FileUtils {
      * @param target   目标文件（夹）
      * @param isFolder 若为文件夹，则为True；反之为False
      * @return
-     * @throws Exception
+     * @throws IOException
      */
-    public static boolean move(String source, String target, boolean isFolder)
-            throws Exception {
+    public static boolean move(String source, String target, boolean isFolder) throws IOException {
         copy(source, target, isFolder);
         if (isFolder) {
             return delDir(source, true);
@@ -242,5 +230,42 @@ public class FileUtils {
         } else {
             return context.getCacheDir().getAbsolutePath();
         }
+    }
+
+    public static String saveBitmap(Context context, String dir, Bitmap b) {
+        File f = new File(dir);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        long dataTake = System.currentTimeMillis();
+        String jpegName = "picture_" + dataTake + ".jpg";
+        String jpegPath = dir + File.separator + jpegName;
+        try {
+            FileOutputStream fout = new FileOutputStream(jpegPath);
+            BufferedOutputStream bos = new BufferedOutputStream(fout);
+            b.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+            // 其次把文件插入到系统图库
+//            try {
+//                MediaStore.Images.Media.insertImage(context.getContentResolver(),
+//                        jpegPath, jpegName, null);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+            return jpegPath;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static boolean deleteFile(String url) {
+        boolean result = false;
+        File file = new File(url);
+        if (file.exists()) {
+            result = file.delete();
+        }
+        return result;
     }
 }

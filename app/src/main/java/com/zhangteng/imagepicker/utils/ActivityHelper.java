@@ -72,7 +72,7 @@ public class ActivityHelper {
     }
 
 
-    private static void anim(Activity activity, int code) {
+    public static void anim(Activity activity, int code) {
         if (code == 1) {
             ActivityHelper.setActivityAnimShow(activity);
         } else if (code == 2) {
