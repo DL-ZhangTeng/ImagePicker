@@ -56,6 +56,10 @@ public class ImagePickerConfig {
      */
     private boolean isVideoPicker;
     /**
+     * 是否选择图片  默认：true
+     */
+    private boolean isImagePicker;
+    /**
      * 前置摄像头拍摄是否启用镜像 默认开启
      */
     private boolean isMirror;
@@ -101,6 +105,7 @@ public class ImagePickerConfig {
         this.pathList = builder.pathList;
         this.filePath = builder.filePath;
         this.isVideoPicker = builder.isVideoPicker;
+        this.isImagePicker = builder.isImagePicker;
         this.provider = builder.provider;
         this.iHandlerCallBack = builder.iHandlerCallBack;
         this.isMirror = builder.isMirror;
@@ -126,6 +131,7 @@ public class ImagePickerConfig {
         private String provider = "com.zhangteng.imagepicker.fileprovider";
         private ArrayList<String> pathList = new ArrayList<>();
         private boolean isVideoPicker = false;
+        private boolean isImagePicker = true;
         private boolean isMirror = false;
         private int maxWidth = 1920;
         private int maxHeight = 1920;
@@ -163,26 +169,12 @@ public class ImagePickerConfig {
 
         public Builder maxImageSelectable(int maxImageSelectable) {
             this.maxImageSelectable = maxImageSelectable;
-            if (!isVideoPicker) {
-                if (maxImageSelectable <= 0) {
-                    this.maxVideoSelectable = 1;
-                } else {
-                    this.maxVideoSelectable = 0;
-                }
-            }
             return this;
         }
 
 
         public Builder maxVideoSelectable(int maxVideoSelectable) {
             this.maxVideoSelectable = maxVideoSelectable;
-            if (isVideoPicker) {
-                if (maxVideoSelectable <= 0) {
-                    this.maxImageSelectable = 9;
-                } else {
-                    this.maxImageSelectable = 0;
-                }
-            }
             return this;
         }
 
@@ -198,6 +190,13 @@ public class ImagePickerConfig {
 
         public Builder isVideoPicker(boolean isVideoPicker) {
             this.isVideoPicker = isVideoPicker;
+            this.isImagePicker = !isVideoPicker;
+            return this;
+        }
+
+        public Builder isImagePicker(boolean isImagePicker) {
+            this.isImagePicker = isImagePicker;
+            this.isVideoPicker = !isImagePicker;
             return this;
         }
 
@@ -269,17 +268,10 @@ public class ImagePickerConfig {
         return maxImageSelectable;
     }
 
-    public void setMaxImageSelectable(int maxImageSelectable) {
-        this.maxImageSelectable = maxImageSelectable;
-    }
-
     public int getMaxVideoSelectable() {
         return maxVideoSelectable;
     }
 
-    public void setMaxVideoSelectable(int maxVideoSelectable) {
-        this.maxVideoSelectable = maxVideoSelectable;
-    }
 
     public boolean isShowCamera() {
         return isShowCamera;
@@ -301,70 +293,42 @@ public class ImagePickerConfig {
         return isVideoPicker;
     }
 
-    public void setVideoPicker(boolean videoPicker) {
-        isVideoPicker = videoPicker;
+    public boolean isImagePicker() {
+        return isImagePicker;
     }
 
     public boolean isMirror() {
         return isMirror;
     }
 
-    public void setMirror(boolean mirror) {
-        isMirror = mirror;
-    }
-
     public int getMaxWidth() {
         return maxWidth;
-    }
-
-    public void setMaxWidth(int maxWidth) {
-        this.maxWidth = maxWidth;
     }
 
     public int getMaxHeight() {
         return maxHeight;
     }
 
-    public void setMaxHeight(int maxHeight) {
-        this.maxHeight = maxHeight;
-    }
-
     public int getMaxImageSize() {
         return maxImageSize;
-    }
-
-    public void setMaxImageSize(int maxImageSize) {
-        this.maxImageSize = maxImageSize;
     }
 
     public int getMaxVideoLength() {
         return maxVideoLength;
     }
 
-    public void setMaxVideoLength(int maxVideoLength) {
-        this.maxVideoLength = maxVideoLength;
-    }
-
     public int getMaxVideoSize() {
         return maxVideoSize;
-    }
-
-    public void setMaxVideoSize(int maxVideoSize) {
-        this.maxVideoSize = maxVideoSize;
     }
 
     public ImagePickerEnum getImagePickerType() {
         return imagePickerType;
     }
 
-    public void setImagePickerType(ImagePickerEnum imagePickerType) {
-        this.imagePickerType = imagePickerType;
-    }
-
     public int getCameraMediaType() {
-        if (getMaxImageSelectable() == 0 && getMaxVideoSelectable() > 0) {
+        if (isVideoPicker() && !isImagePicker()) {
             return JCameraView.BUTTON_STATE_ONLY_RECORDER;
-        } else if (getMaxImageSelectable() > 0 && getMaxVideoSelectable() == 0) {
+        } else if (isImagePicker() && !isVideoPicker()) {
             return JCameraView.BUTTON_STATE_ONLY_CAPTURE;
         }
         return JCameraView.BUTTON_STATE_BOTH;

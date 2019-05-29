@@ -135,7 +135,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return imageInfoList.isEmpty() ? 0 : imagePickerConfig.isShowCamera() ? imageInfoList.size() + 1 : imageInfoList.size();
+        return imagePickerConfig.isShowCamera() ? imageInfoList.size() + 1 : imageInfoList.size();
     }
 
     @Override

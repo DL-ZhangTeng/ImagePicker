@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,7 +30,6 @@ import com.zhangteng.imagepicker.bean.ImageInfo;
 import com.zhangteng.imagepicker.callback.IHandlerCallBack;
 import com.zhangteng.imagepicker.config.Constant;
 import com.zhangteng.imagepicker.config.ImagePickerConfig;
-import com.zhangteng.imagepicker.config.ImagePickerEnum;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
 import com.zhangteng.imagepicker.widget.FolderPopupWindow;
 
@@ -99,7 +97,7 @@ public class ImagePickerActivity extends BaseActivity {
             public void onClick(View view) {
                 iHandlerCallBack.onSuccess(selectImage);
                 Intent intent = new Intent();
-                intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>)selectImage);
+                intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>) selectImage);
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -142,7 +140,7 @@ public class ImagePickerActivity extends BaseActivity {
         imagePickerAdapter.setOnItemClickListener(new ImagePickerAdapter.OnItemClickListener() {
             @Override
             public void onCameraClick(List<String> selectImage) {
-                ImagePickerOpen.getInstance().openCamera(ImagePickerActivity.this);
+                ImagePickerOpen.getInstance().openCamera(ImagePickerActivity.this, Constant.CAMERA_RESULT_CODE);
                 ImagePickerActivity.this.selectImage = selectImage;
             }
 
@@ -155,35 +153,28 @@ public class ImagePickerActivity extends BaseActivity {
         });
         mRecyclerViewImageList.setAdapter(imagePickerAdapter);
         loaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
-            private final String[] IMAGE_PROJECTION = {
-                    MediaStore.Images.Media.DATA,
-                    MediaStore.Images.Media.DISPLAY_NAME,
-                    MediaStore.Images.Media.DATE_ADDED,
-                    MediaStore.Images.Media._ID,
-                    MediaStore.Images.Media.SIZE
-            };
-            private final String[] VIDEO_PROJECTION = {
-                    MediaStore.Video.Media.DATA,
-                    MediaStore.Video.Media.DISPLAY_NAME,
-                    MediaStore.Video.Media.DATE_ADDED,
-                    MediaStore.Video.Media._ID,
-                    MediaStore.Video.Media.SIZE,
-                    MediaStore.Video.Media.MINI_THUMB_MAGIC
+            private final String[] PROJECTION = {
+                    MediaStore.MediaColumns.DATA,
+                    MediaStore.MediaColumns.DISPLAY_NAME,
+                    MediaStore.MediaColumns.DATE_ADDED,
+                    MediaStore.MediaColumns._ID,
+                    MediaStore.MediaColumns.SIZE,
+                    MediaStore.Images.Media.MINI_THUMB_MAGIC
             };
 
             @Override
             public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-                if (imagePickerConfig.isVideoPicker()) {
+                if (imagePickerConfig.isVideoPicker() && !imagePickerConfig.isImagePicker()) {
                     if (i == ALL) {
-                        return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, VIDEO_PROJECTION, null, null, VIDEO_PROJECTION[2] + " DESC");
+                        return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, PROJECTION, null, null, PROJECTION[2] + " DESC");
                     } else if (i == FODLER) {
-                        return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, VIDEO_PROJECTION, VIDEO_PROJECTION[0] + " like '%" + bundle.getString("path") + "%'", null, VIDEO_PROJECTION[2] + " DESC");
+                        return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, PROJECTION, PROJECTION[0] + " like '%" + bundle.getString("path") + "%'", null, PROJECTION[2] + " DESC");
                     }
-                } else {
+                } else if (!imagePickerConfig.isVideoPicker() && imagePickerConfig.isImagePicker()) {
                     if (i == ALL) {
-                        return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, null, null, IMAGE_PROJECTION[2] + " DESC");
+                        return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, PROJECTION, null, null, PROJECTION[2] + " DESC");
                     } else if (i == FODLER) {
-                        return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, IMAGE_PROJECTION[0] + " like '%" + bundle.getString("path") + "%'", null, IMAGE_PROJECTION[2] + " DESC");
+                        return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, PROJECTION, PROJECTION[0] + " like '%" + bundle.getString("path") + "%'", null, PROJECTION[2] + " DESC");
                     }
                 }
                 return null;
@@ -197,23 +188,11 @@ public class ImagePickerActivity extends BaseActivity {
                         List<ImageInfo> imageInfos1 = new ArrayList<>();
                         cursor.moveToFirst();
                         do {
-                            String name = null;
-                            String addtime = null;
-                            String path = null;
-                            int size = 0;
-                            String thumb = null;
-                            if (imagePickerConfig.isVideoPicker()) {
-                                name = cursor.getString(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[1]));
-                                addtime = cursor.getString(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[2]));
-                                path = cursor.getString(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[0]));
-                                size = cursor.getInt(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[4]));
-                                thumb = cursor.getString(cursor.getColumnIndexOrThrow(VIDEO_PROJECTION[5]));
-                            } else {
-                                name = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
-                                addtime = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
-                                path = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
-                                size = cursor.getInt(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[4]));
-                            }
+                            String name = cursor.getString(cursor.getColumnIndexOrThrow(PROJECTION[1]));
+                            String addtime = cursor.getString(cursor.getColumnIndexOrThrow(PROJECTION[2]));
+                            String path = cursor.getString(cursor.getColumnIndexOrThrow(PROJECTION[0]));
+                            int size = cursor.getInt(cursor.getColumnIndexOrThrow(PROJECTION[4]));
+                            String thumb = cursor.getString(cursor.getColumnIndexOrThrow(PROJECTION[5]));
                             if (size > 1024 * 5) {
                                 if (imageInfosDifferent == null) {
                                     imageInfosDifferent = new HashSet<>();
@@ -223,10 +202,7 @@ public class ImagePickerActivity extends BaseActivity {
                                 } else {
                                     imageInfosDifferent.add(path);
                                 }
-                                ImageInfo imageInfo = new ImageInfo(name, addtime, path);
-                                if (imagePickerConfig.isVideoPicker()) {
-                                    imageInfo.setThumbnail(thumb);
-                                }
+                                ImageInfo imageInfo = new ImageInfo(name, addtime, path, thumb);
                                 imageInfos1.add(imageInfo);
                                 File file = new File(path);
                                 File parent = file.getParentFile();

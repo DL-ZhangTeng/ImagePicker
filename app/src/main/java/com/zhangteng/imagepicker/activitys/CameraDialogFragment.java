@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.zhangteng.imagepicker.R;
+import com.zhangteng.imagepicker.config.Constant;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
 
 
@@ -27,10 +28,28 @@ public class CameraDialogFragment extends DialogFragment {
     private ImageView ivTakePhoto;
     private ImageView ivPickPhoto;
     private ImageView ivCancel;
+    private int cameraRequestCode = Constant.CAMERA_RESULT_CODE;
+    private int pickerRequestCode = Constant.PICKER_RESULT_CODE;
+
+    public CameraDialogFragment() {
+    }
+
+    public static CameraDialogFragment newInstance(int cameraRequestCode, int pickerRequestCode) {
+        CameraDialogFragment cameraDialogFragment = new CameraDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("cameraRequestcode", cameraRequestCode);
+        bundle.putInt("pickerRequestCode", pickerRequestCode);
+        cameraDialogFragment.setArguments(bundle);
+        return cameraDialogFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            cameraRequestCode = getArguments().getInt("cameraRequestcode");
+            pickerRequestCode = getArguments().getInt("pickerRequestCode");
+        }
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDialog().setCanceledOnTouchOutside(true);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -80,7 +99,7 @@ public class CameraDialogFragment extends DialogFragment {
         ivTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePickerOpen.getInstance().openCamera(CameraDialogFragment.this.getActivity());
+                ImagePickerOpen.getInstance().openCamera(CameraDialogFragment.this.getActivity(), cameraRequestCode);
                 dismiss();
             }
         });
@@ -88,7 +107,7 @@ public class CameraDialogFragment extends DialogFragment {
         ivPickPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePickerOpen.getInstance().openImagePicker(CameraDialogFragment.this.getActivity());
+                ImagePickerOpen.getInstance().openImagePicker(CameraDialogFragment.this.getActivity(), pickerRequestCode);
                 dismiss();
             }
         });

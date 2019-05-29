@@ -43,20 +43,40 @@ public class ImagePickerOpen {
      */
     public void open(FragmentActivity mActivity) {
         if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.PHOTO_PICKER) {
-            openImagePicker(mActivity);
+            openImagePicker(mActivity, Constant.PICKER_RESULT_CODE);
         } else if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.CAMERA) {
-            openCamera(mActivity);
+            openCamera(mActivity, Constant.CAMERA_RESULT_CODE);
         } else {
             if (mActivity != null) {
                 if (cameraDialogFragment == null) {
-                    cameraDialogFragment = new CameraDialogFragment();
+                    cameraDialogFragment = CameraDialogFragment.newInstance(Constant.CAMERA_RESULT_CODE, Constant.PICKER_RESULT_CODE);
                 }
                 cameraDialogFragment.show(mActivity.getSupportFragmentManager(), "cameraDialogFragment");
             }
         }
     }
 
-    public void openCamera(Activity activity) {
+    /**
+     * ImagePickerEnum.PHOTO_PICKER 只启动照片选择
+     * ImagePickerEnum.CAMERA 只启动相机
+     * 其他 启动下方弹框
+     */
+    public void open(FragmentActivity mActivity, int requestCode) {
+        if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.PHOTO_PICKER) {
+            openImagePicker(mActivity, requestCode);
+        } else if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.CAMERA) {
+            openCamera(mActivity, requestCode);
+        } else {
+            if (mActivity != null) {
+                if (cameraDialogFragment == null) {
+                    cameraDialogFragment = CameraDialogFragment.newInstance(requestCode, requestCode);
+                }
+                cameraDialogFragment.show(mActivity.getSupportFragmentManager(), "cameraDialogFragment");
+            }
+        }
+    }
+
+    public void openCamera(Activity activity, int requestCode) {
         if (imagePickerConfig == null) {
             Log.e(TAG, "请配置 imagePickerConfig");
             return;
@@ -78,10 +98,10 @@ public class ImagePickerOpen {
         intent.putExtra(Constant.BUTTON_STATE, imagePickerConfig.getCameraMediaType());
         intent.putExtra(Constant.DURATION, imagePickerConfig.getMaxVideoLength());
         intent.putExtra(Constant.IS_MIRROR, imagePickerConfig.isMirror());
-        activity.startActivityForResult(intent, Constant.CAMERA_RESULT_CODE);
+        activity.startActivityForResult(intent, requestCode);
     }
 
-    public void openImagePicker(Activity activity) {
+    public void openImagePicker(Activity activity, int requestCode) {
         if (imagePickerConfig == null) {
             Log.e(TAG, "请配置 imagePickerConfig");
             return;
@@ -101,7 +121,7 @@ public class ImagePickerOpen {
         FileUtils.createFile(imagePickerConfig.getFilePath());
 
         Intent intent = new Intent(activity, ImagePickerActivity.class);
-        activity.startActivityForResult(intent, Constant.PICKER_RESULT_CODE);
+        activity.startActivityForResult(intent, requestCode);
     }
 
 
