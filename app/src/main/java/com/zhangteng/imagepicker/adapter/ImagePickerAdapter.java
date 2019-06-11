@@ -160,16 +160,21 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     /**
-     * todo 注：视频多选的逻辑未处理
      * 选择或取消选择文件,
      */
     private void selectItem(ImageInfo imageInfo) {
         if (imagePickerConfig.isVideoPicker() && imageInfo.getMime().toLowerCase().contains("video")) {
+            int selected = 0;
+            for (ImageInfo info : selectImageInfo) {
+                if (info.getMime().toLowerCase().contains("video")) {
+                    selected++;
+                }
+            }
             if (selectImageInfo.contains(imageInfo)) {
                 selectImageInfo.remove(imageInfo);
                 if (imagePickerConfig.isImagePicker())
                     selectable = imagePickerConfig.getMaxImageSelectable();
-            } else if (selectImageInfo.size() < imagePickerConfig.getMaxVideoSelectable()) {
+            } else if (selectImageInfo.size() < imagePickerConfig.getMaxVideoSelectable() - selected) {
                 selectImageInfo.add(imageInfo);
                 selectable = imagePickerConfig.getMaxVideoSelectable();
             } else {
