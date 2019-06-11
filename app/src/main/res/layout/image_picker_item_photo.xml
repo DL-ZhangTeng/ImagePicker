@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,6 +12,19 @@
         android:contentDescription="@null"
         android:scaleType="centerInside"
         android:src="@mipmap/image_picker_photo" />
+
+    <TextView
+        android:id="@+id/image_picker_tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="6dp"
+        android:text="0:30"
+        android:textColor="@color/image_picker_white"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
         android:id="@+id/image_picker_v_photo_mask"
@@ -28,7 +42,9 @@
         android:layout_gravity="right"
         android:button="@mipmap/image_picker_select_unchecked"
         android:clickable="false"
-        android:contentDescription="@null" />
+        android:contentDescription="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

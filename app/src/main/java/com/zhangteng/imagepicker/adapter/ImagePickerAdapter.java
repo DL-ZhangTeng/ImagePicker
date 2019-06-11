@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.bean.ImageInfo;
@@ -15,6 +16,7 @@ import com.zhangteng.imagepicker.config.ImagePickerConfig;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
 import com.zhangteng.imagepicker.utils.ScreenUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,6 +126,12 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ImageViewHolder) holder).checkBox.setChecked(false);
             ((ImageViewHolder) holder).checkBox.setButtonDrawable(R.mipmap.image_picker_select_unchecked);
         }
+        if (imageInfo.getMime().toLowerCase().contains("video")) {
+            ((ImageViewHolder) holder).duration.setVisibility(View.VISIBLE);
+            ((ImageViewHolder) holder).duration.setText(new SimpleDateFormat("mm:ss").format(imageInfo.getDuration()));
+        } else {
+            ((ImageViewHolder) holder).duration.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -195,12 +203,14 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private ImageView imageView;
         private View mask;
         private CheckBox checkBox;
+        private TextView duration;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
             this.imageView = (ImageView) itemView.findViewById(R.id.image_picker_im_photo);
             this.mask = (View) itemView.findViewById(R.id.image_picker_v_photo_mask);
             this.checkBox = (CheckBox) itemView.findViewById(R.id.image_picker_cb_select);
+            this.duration = itemView.findViewById(R.id.image_picker_tv_duration);
         }
     }
 
