@@ -158,23 +158,27 @@ public class ImagePickerConfig {
 
         public Builder multiSelect(boolean multiSelect) {
             this.multiSelect = multiSelect;
-            return this;
-        }
-
-        public Builder multiSelect(boolean multiSelect, int maxImageSelectable) {
-            this.multiSelect = multiSelect;
-            this.maxImageSelectable = maxImageSelectable;
+            if (!multiSelect){
+                this.maxImageSelectable = 1;
+                this.maxVideoSelectable = 1;
+            }
             return this;
         }
 
         public Builder maxImageSelectable(int maxImageSelectable) {
             this.maxImageSelectable = maxImageSelectable;
+            if (!multiSelect){
+                this.maxImageSelectable = 1;
+            }
             return this;
         }
 
 
         public Builder maxVideoSelectable(int maxVideoSelectable) {
             this.maxVideoSelectable = maxVideoSelectable;
+            if (!multiSelect){
+                this.maxVideoSelectable = 1;
+            }
             return this;
         }
 

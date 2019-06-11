@@ -2,7 +2,7 @@
     ImagePickerConfig imagePickerConfig = new ImagePickerConfig.Builder()
                   .imageLoader(new GlideImageLoader()) //图片加载器
                   .iHandlerCallBack(handlerCallBack)    //图片选择器生命周期监听（直接打开摄像头时无效）
-                  .multiSelect(false)               //是否拍照与选择器同时生效
+                  .multiSelect(false)               //是否显示多选按钮
                   .isVideoPicker(true)              //是否选择视频 默认false
                   .imagePickerType(ImagePickerEnum.PHOTO_PICKER) //选择器打开类型
                   .filePath("/imagePicker/ImagePickerPictures") //文件保存地址

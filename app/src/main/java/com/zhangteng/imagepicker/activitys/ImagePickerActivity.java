@@ -128,6 +128,9 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
         folderInfos = new ArrayList<>();
         mTextViewFolder.setText(mContext.getString(imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker() ? R.string.image_picker_all_file :
                 imagePickerConfig.isVideoPicker() ? R.string.image_picker_all_video : R.string.image_picker_all_folder));
+        if (!imagePickerConfig.isMultiSelect()) {
+            mTextViewFinish.setVisibility(View.GONE);
+        }
         mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish));
         folderListAdapter = new FolderListAdapter(mContext, folderInfos);
         folderListAdapter.setOnItemClickListener(new FolderListAdapter.OnItemClickListener() {
@@ -150,11 +153,6 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
 
             @Override
             public void onImageClick(List<ImageInfo> selectImageInfo, int selectable) {
-                if (selectImageInfo.isEmpty()) {
-                    mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish));
-                    return;
-                }
-                mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish_, selectImageInfo.size(), selectable));
                 List<String> selectImage = imagePickerConfig.getPathList();
                 if (selectImage != null) {
                     selectImage.clear();
@@ -164,6 +162,17 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                 }
                 iHandlerCallBack.onSuccess(selectImage);
                 ImagePickerActivity.this.selectImageInfo = selectImageInfo;
+
+                if (!imagePickerConfig.isMultiSelect()) {
+                    mTextViewFinish.setVisibility(View.GONE);
+                    finish();
+                } else {
+                    if (selectImageInfo.isEmpty()) {
+                        mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish));
+                        return;
+                    }
+                    mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish_, selectImageInfo.size(), selectable));
+                }
             }
         });
         mRecyclerViewImageList.setAdapter(imagePickerAdapter);

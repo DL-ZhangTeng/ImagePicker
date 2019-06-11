@@ -112,19 +112,19 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void initView(RecyclerView.ViewHolder holder, ImageInfo imageInfo) {
         if (imagePickerConfig.isMultiSelect()) {
             ((ImageViewHolder) holder).checkBox.setVisibility(View.VISIBLE);
+            if (selectImageInfo.contains(imageInfo)) {
+                ((ImageViewHolder) holder).checkBox.setVisibility(View.VISIBLE);
+                ((ImageViewHolder) holder).mask.setVisibility(View.VISIBLE);
+                ((ImageViewHolder) holder).checkBox.setChecked(true);
+                ((ImageViewHolder) holder).checkBox.setButtonDrawable(R.mipmap.image_picker_select_checked);
+            } else {
+                ((ImageViewHolder) holder).checkBox.setVisibility(View.VISIBLE);
+                ((ImageViewHolder) holder).mask.setVisibility(View.GONE);
+                ((ImageViewHolder) holder).checkBox.setChecked(false);
+                ((ImageViewHolder) holder).checkBox.setButtonDrawable(R.mipmap.image_picker_select_unchecked);
+            }
         } else {
             ((ImageViewHolder) holder).checkBox.setVisibility(View.GONE);
-        }
-        if (selectImageInfo.contains(imageInfo)) {
-            ((ImageViewHolder) holder).checkBox.setVisibility(View.VISIBLE);
-            ((ImageViewHolder) holder).mask.setVisibility(View.VISIBLE);
-            ((ImageViewHolder) holder).checkBox.setChecked(true);
-            ((ImageViewHolder) holder).checkBox.setButtonDrawable(R.mipmap.image_picker_select_checked);
-        } else {
-            ((ImageViewHolder) holder).checkBox.setVisibility(View.VISIBLE);
-            ((ImageViewHolder) holder).mask.setVisibility(View.GONE);
-            ((ImageViewHolder) holder).checkBox.setChecked(false);
-            ((ImageViewHolder) holder).checkBox.setButtonDrawable(R.mipmap.image_picker_select_unchecked);
         }
         if (imageInfo.getMime().toLowerCase().contains("video")) {
             ((ImageViewHolder) holder).duration.setVisibility(View.VISIBLE);
