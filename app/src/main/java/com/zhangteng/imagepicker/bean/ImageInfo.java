@@ -9,6 +9,16 @@ public class ImageInfo {
     private String path;
     private String thumbnail;
 
+    private String mime;
+    private int folderId;
+    private String folderName;
+    private String folderPath;
+    private long duration;
+    private long dateToken;
+
+    private int id;
+    private int size;
+
     public ImageInfo() {
     }
 
@@ -55,5 +65,69 @@ public class ImageInfo {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getMime() {
+        return mime;
+    }
+
+    public void setMime(String mime) {
+        this.mime = mime;
+    }
+
+    public String getFolderName() {
+        return folderName;
+    }
+
+    public void setFolderName(String folderName) {
+        this.folderName = folderName;
+    }
+
+    public String getFolderPath() {
+        return folderPath;
+    }
+
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(int folderId) {
+        this.folderId = folderId;
+    }
+
+    public long getDateToken() {
+        return dateToken;
+    }
+
+    public void setDateToken(long dateToken) {
+        this.dateToken = dateToken;
     }
 }

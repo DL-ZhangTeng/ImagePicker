@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">ImagePicker</string>
     <string name="image_picker_all_folder">所有图片</string>
+    <string name="image_picker_all_file">所有文件</string>
+    <string name="image_picker_all_video">所有视频</string>
     <string name="image_picker_shoot">拍摄照片</string>
-    <string name="image_picker_finish">( %1$d / %2$d )完成</string>
+    <string name="image_picker_finish">完成</string>
+    <string name="image_picker_finish_">( %1$d / %2$d )完成</string>
     <string name="image_picker_gallery">相册</string>
     <string name="image_picker_send">发送</string>
     <string name="image_picker_msg_no_camera">没有系统相机</string>

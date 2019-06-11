@@ -11,6 +11,7 @@ public class FolderInfo {
     private String path;                         // 文件夹路径
     private ImageInfo imageInfo;                 // 文件夹中第一张图片的信息
     private List<ImageInfo> imageInfoList;       // 文件夹中的图片集合
+    private int folderId;
 
     public FolderInfo() {
     }
@@ -20,6 +21,13 @@ public class FolderInfo {
         this.path = path;
         this.imageInfo = imageInfo;
         this.imageInfoList = imageInfoList;
+    }
+
+    public FolderInfo(int folderId, String name, ImageInfo imageInfo, List<ImageInfo> imageInfoList) {
+        this.name = name;
+        this.imageInfo = imageInfo;
+        this.imageInfoList = imageInfoList;
+        this.folderId = folderId;
     }
 
     public String getName() {
@@ -52,6 +60,14 @@ public class FolderInfo {
 
     public void setImageInfoList(List<ImageInfo> imageInfoList) {
         this.imageInfoList = imageInfoList;
+    }
+
+    public int getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(int folderId) {
+        this.folderId = folderId;
     }
 
     @Override

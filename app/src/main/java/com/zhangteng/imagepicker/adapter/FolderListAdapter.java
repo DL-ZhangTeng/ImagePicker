@@ -44,21 +44,10 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
 
     @Override
     public void onBindViewHolder(@NonNull FolderViewHolder holder, final int position) {
-        if (position == 0) {
-            if (folderInfos.isEmpty()){
-                holder.tvImagePickerFolderName.setText(mContext.getString(R.string.image_picker_all_folder));
-                holder.tvImagePickerPhotoNum.setText(mContext.getString(R.string.image_picker_photo_num, 0));
-            }else {
-                ImagePickerOpen.getInstance().getImagePickerConfig().getImageLoader().loadImage(mContext, holder.ivImagePickerFolderImage, folderInfos.get(0).getImageInfo().getPath());
-                holder.tvImagePickerFolderName.setText(mContext.getString(R.string.image_picker_all_folder));
-                holder.tvImagePickerPhotoNum.setText(mContext.getString(R.string.image_picker_photo_num, getTotalImageSize()));
-            }
-        } else {
-            FolderInfo folderInfo = folderInfos.get(position - 1);
-            ImagePickerOpen.getInstance().getImagePickerConfig().getImageLoader().loadImage(mContext, holder.ivImagePickerFolderImage, folderInfo.getImageInfo().getPath());
-            holder.tvImagePickerFolderName.setText(folderInfo.getName());
-            holder.tvImagePickerPhotoNum.setText(mContext.getString(R.string.image_picker_photo_num, folderInfo.getImageInfoList().size()));
-        }
+        FolderInfo folderInfo = folderInfos.get(position);
+        ImagePickerOpen.getInstance().getImagePickerConfig().getImageLoader().loadImage(mContext, holder.ivImagePickerFolderImage, folderInfo.getImageInfo().getPath());
+        holder.tvImagePickerFolderName.setText(folderInfo.getName());
+        holder.tvImagePickerPhotoNum.setText(mContext.getString(R.string.image_picker_photo_num, folderInfo.getImageInfoList().size()));
         if (clicked == position) {
             holder.ivImagePickerIndicator.setVisibility(View.VISIBLE);
         } else {
@@ -77,20 +66,7 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
 
     @Override
     public int getItemCount() {
-        return folderInfos.isEmpty() ? 1 : folderInfos.size() + 1;
-    }
-
-    /**
-     * @return 所有图片数量
-     */
-    private int getTotalImageSize() {
-        int result = 0;
-        if (this.folderInfos != null && this.folderInfos.size() > 0) {
-            for (FolderInfo folderInfo : this.folderInfos) {
-                result += folderInfo.getImageInfoList().size();
-            }
-        }
-        return result;
+        return folderInfos.size();
     }
 
     public interface OnItemClickListener {

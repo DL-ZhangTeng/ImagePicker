@@ -6,13 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -31,14 +27,16 @@ import com.zhangteng.imagepicker.callback.IHandlerCallBack;
 import com.zhangteng.imagepicker.config.Constant;
 import com.zhangteng.imagepicker.config.ImagePickerConfig;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
+import com.zhangteng.imagepicker.loader.ImageLoaderCallBacks;
+import com.zhangteng.imagepicker.loader.LoaderCallBacks;
+import com.zhangteng.imagepicker.loader.MediaHandler;
+import com.zhangteng.imagepicker.loader.VideoLoaderCallBacks;
 import com.zhangteng.imagepicker.widget.FolderPopupWindow;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-public class ImagePickerActivity extends BaseActivity {
+public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks {
     private RecyclerView mRecyclerViewImageList;
     private LinearLayout mLinearLaoyutBack;
     private TextView mTextViewFolder;
@@ -46,8 +44,6 @@ public class ImagePickerActivity extends BaseActivity {
     private FolderPopupWindow mFolderPopupWindow;
     private RelativeLayout mRelativeLayout;
     private LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks;
-    private static final int ALL = 0;
-    private static final int FODLER = 1;
     private Context mContext;
     /**
      * 文件夹列表
@@ -57,15 +53,12 @@ public class ImagePickerActivity extends BaseActivity {
      * 文件列表
      */
     private ArrayList<ImageInfo> imageInfos;
-    /**
-     * 用于过滤同一个图片
-     */
-    private HashSet<String> imageInfosDifferent;
+
     private FolderListAdapter folderListAdapter;
     private ImagePickerAdapter imagePickerAdapter;
     private ImagePickerConfig imagePickerConfig;
     private IHandlerCallBack iHandlerCallBack;
-    private List<String> selectImage;
+    private List<ImageInfo> selectImageInfo;
 
     @Override
     protected int getResourceId() {
@@ -80,7 +73,7 @@ public class ImagePickerActivity extends BaseActivity {
         mLinearLaoyutBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonClick(view);
+                goBack();
             }
         });
         mTextViewFolder = (TextView) findViewById(R.id.image_picker_tv_folder);
@@ -89,12 +82,27 @@ public class ImagePickerActivity extends BaseActivity {
         mTextViewFolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonClick(view);
+                showPopupWindow(view);
             }
         });
         mTextViewFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (selectImageInfo == null) {
+                    if (imagePickerConfig.isVideoPicker() && imagePickerConfig.isImagePicker()) {
+                        showToast("请选择文件");
+                    } else {
+                        showToast(imagePickerConfig.isImagePicker() ? "请选择图片" : "请选择视频");
+                    }
+                    return;
+                }
+                List<String> selectImage = imagePickerConfig.getPathList();
+                if (selectImage != null) {
+                    selectImage.clear();
+                    for (ImageInfo info : selectImageInfo) {
+                        selectImage.add(info.getPath());
+                    }
+                }
                 iHandlerCallBack.onSuccess(selectImage);
                 Intent intent = new Intent();
                 intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>) selectImage);
@@ -113,24 +121,20 @@ public class ImagePickerActivity extends BaseActivity {
     @Override
     protected void initData() {
         imagePickerConfig = ImagePickerOpen.getInstance().getImagePickerConfig();
-        selectImage = imagePickerConfig.getPathList();
         iHandlerCallBack = imagePickerConfig.getiHandlerCallBack();
         iHandlerCallBack.onStart();
         mContext = this;
         imageInfos = new ArrayList<>();
         folderInfos = new ArrayList<>();
-        mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish, 0, imagePickerConfig.isVideoPicker() ? imagePickerConfig.getMaxVideoSelectable() : imagePickerConfig.getMaxImageSelectable()));
+        mTextViewFolder.setText(mContext.getString(imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker() ? R.string.image_picker_all_file :
+                imagePickerConfig.isVideoPicker() ? R.string.image_picker_all_video : R.string.image_picker_all_folder));
+        mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish));
         folderListAdapter = new FolderListAdapter(mContext, folderInfos);
         folderListAdapter.setOnItemClickListener(new FolderListAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
-                if (position == 0) {
-                    mTextViewFolder.setText(mContext.getString(R.string.image_picker_all_folder));
-                    imagePickerAdapter.setImageInfoList(imageInfos);
-                } else {
-                    mTextViewFolder.setText(folderInfos.get(position - 1).getName());
-                    imagePickerAdapter.setImageInfoList(folderInfos.get(position - 1).getImageInfoList());
-                }
+                mTextViewFolder.setText(folderInfos.get(position).getName());
+                imagePickerAdapter.setImageInfoList(folderInfos.get(position).getImageInfoList());
                 if (mFolderPopupWindow != null) {
                     mFolderPopupWindow.dismiss();
                 }
@@ -139,107 +143,50 @@ public class ImagePickerActivity extends BaseActivity {
         imagePickerAdapter = new ImagePickerAdapter(mContext, imageInfos);
         imagePickerAdapter.setOnItemClickListener(new ImagePickerAdapter.OnItemClickListener() {
             @Override
-            public void onCameraClick(List<String> selectImage) {
+            public void onCameraClick(List<ImageInfo> selectImageInfo) {
                 ImagePickerOpen.getInstance().openCamera(ImagePickerActivity.this, Constant.CAMERA_RESULT_CODE);
-                ImagePickerActivity.this.selectImage = selectImage;
+                ImagePickerActivity.this.selectImageInfo = selectImageInfo;
             }
 
             @Override
-            public void onImageClick(List<String> selectImage) {
-                mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish, selectImage.size(), imagePickerConfig.isVideoPicker() ? imagePickerConfig.getMaxVideoSelectable() : imagePickerConfig.getMaxImageSelectable()));
+            public void onImageClick(List<ImageInfo> selectImageInfo, int selectable) {
+                if (selectImageInfo.isEmpty()) {
+                    mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish));
+                    return;
+                }
+                mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish_, selectImageInfo.size(), selectable));
+                List<String> selectImage = imagePickerConfig.getPathList();
+                if (selectImage != null) {
+                    selectImage.clear();
+                    for (ImageInfo info : selectImageInfo) {
+                        selectImage.add(info.getPath());
+                    }
+                }
                 iHandlerCallBack.onSuccess(selectImage);
-                ImagePickerActivity.this.selectImage = selectImage;
+                ImagePickerActivity.this.selectImageInfo = selectImageInfo;
             }
         });
         mRecyclerViewImageList.setAdapter(imagePickerAdapter);
-        loaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
-            private final String[] PROJECTION = {
-                    MediaStore.MediaColumns.DATA,
-                    MediaStore.MediaColumns.DISPLAY_NAME,
-                    MediaStore.MediaColumns.DATE_ADDED,
-                    MediaStore.MediaColumns._ID,
-                    MediaStore.MediaColumns.SIZE,
-                    MediaStore.Images.Media.MINI_THUMB_MAGIC
-            };
+        if (imagePickerConfig.isImagePicker() && !imagePickerConfig.isVideoPicker()) {
+            loaderCallbacks = new ImageLoaderCallBacks(this, this);
+            getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
+        } else if (!imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
+            loaderCallbacks = new VideoLoaderCallBacks(this, this);
+            getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
+        } else {
+            loaderCallbacks = new ImageLoaderCallBacks(this, this);
+            getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
+        }
 
-            @Override
-            public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-                if (imagePickerConfig.isVideoPicker() && !imagePickerConfig.isImagePicker()) {
-                    if (i == ALL) {
-                        return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, PROJECTION, null, null, PROJECTION[2] + " DESC");
-                    } else if (i == FODLER) {
-                        return new CursorLoader(mContext, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, PROJECTION, PROJECTION[0] + " like '%" + bundle.getString("path") + "%'", null, PROJECTION[2] + " DESC");
-                    }
-                } else if (!imagePickerConfig.isVideoPicker() && imagePickerConfig.isImagePicker()) {
-                    if (i == ALL) {
-                        return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, PROJECTION, null, null, PROJECTION[2] + " DESC");
-                    } else if (i == FODLER) {
-                        return new CursorLoader(mContext, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, PROJECTION, PROJECTION[0] + " like '%" + bundle.getString("path") + "%'", null, PROJECTION[2] + " DESC");
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-                if (cursor != null) {
-                    int count = cursor.getCount();
-                    if (count > 0) {
-                        List<ImageInfo> imageInfos1 = new ArrayList<>();
-                        cursor.moveToFirst();
-                        do {
-                            String name = cursor.getString(cursor.getColumnIndexOrThrow(PROJECTION[1]));
-                            String addtime = cursor.getString(cursor.getColumnIndexOrThrow(PROJECTION[2]));
-                            String path = cursor.getString(cursor.getColumnIndexOrThrow(PROJECTION[0]));
-                            int size = cursor.getInt(cursor.getColumnIndexOrThrow(PROJECTION[4]));
-                            String thumb = cursor.getString(cursor.getColumnIndexOrThrow(PROJECTION[5]));
-                            if (size > 1024 * 5) {
-                                if (imageInfosDifferent == null) {
-                                    imageInfosDifferent = new HashSet<>();
-                                }
-                                if (imageInfosDifferent.contains(path)) {
-                                    return;
-                                } else {
-                                    imageInfosDifferent.add(path);
-                                }
-                                ImageInfo imageInfo = new ImageInfo(name, addtime, path, thumb);
-                                imageInfos1.add(imageInfo);
-                                File file = new File(path);
-                                File parent = file.getParentFile();
-                                FolderInfo folderInfo = new FolderInfo();
-                                folderInfo.setName(parent.getName());
-                                folderInfo.setPath(parent.getAbsolutePath());
-                                if (!folderInfos.contains(folderInfo)) {
-                                    List<ImageInfo> list = new ArrayList<>();
-                                    list.add(imageInfo);
-                                    folderInfo.setImageInfoList(list);
-                                    folderInfo.setImageInfo(list.get(0));
-                                    folderInfos.add(folderInfo);
-                                } else {
-                                    folderInfos.get(folderInfos.indexOf(folderInfo)).getImageInfoList().add(imageInfo);
-                                }
-                            }
-                        } while (cursor.moveToNext());
-                        imageInfos.clear();
-                        imageInfos.addAll(imageInfos1);
-
-                        folderListAdapter.notifyDataSetChanged();
-                        imagePickerAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-
-            @Override
-            public void onLoaderReset(Loader<Cursor> loader) {
-
-            }
-        };
-        getSupportLoaderManager().restartLoader(ALL, null, loaderCallbacks);
     }
 
     @Override
-    public void localButtonClick(View v) {
-        super.localButtonClick(v);
+    public void onBackPressed() {
+        super.onBackPressed();
+        goBack();
+    }
+
+    public void showPopupWindow(View v) {
         if (mFolderPopupWindow == null) {
             if (folderInfos == null) {
                 folderInfos = new ArrayList<>();
@@ -247,6 +194,15 @@ public class ImagePickerActivity extends BaseActivity {
             mFolderPopupWindow = new FolderPopupWindow(this, folderListAdapter);
         }
         mFolderPopupWindow.showAsDropDown(mRelativeLayout, 0, 0);
+    }
+
+    public void goBack() {
+        if (iHandlerCallBack != null) {
+            iHandlerCallBack.onCancel();
+        }
+        if (!isFinishing()) {
+            finish();
+        }
     }
 
     @Override
@@ -258,24 +214,26 @@ public class ImagePickerActivity extends BaseActivity {
     }
 
     @Override
-    public void goBack() {
-        iHandlerCallBack.onCancel();
-        super.goBack();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == Constant.CAMERA_RESULT_CODE) {
                 ArrayList<String> paths;
                 paths = data.getStringArrayListExtra(Constant.CAMERA_PATH);
+                List<String> selectImage = imagePickerConfig.getPathList();
+                if (selectImage != null) {
+                    selectImage.clear();
+                    for (ImageInfo info : selectImageInfo) {
+                        selectImage.add(info.getPath());
+                    }
+                }
                 if (!imagePickerConfig.isMultiSelect()) {
+                    selectImageInfo.clear();
                     selectImage.clear();
                 }
                 selectImage.addAll(paths);
                 iHandlerCallBack.onSuccess(selectImage);
-                getSupportLoaderManager().restartLoader(ALL, null, loaderCallbacks);
+                getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
                 Intent intent = new Intent();
                 intent.putExtra(Constant.PICKER_PATH, paths);
                 setResult(RESULT_OK, intent);
@@ -284,6 +242,46 @@ public class ImagePickerActivity extends BaseActivity {
         }
         if (resultCode == Constant.CAMERA_ERROR_CODE) {
             Toast.makeText(this, "请检查相机权限", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onImageLoadFinished(ArrayList<ImageInfo> fileList, ArrayList<FolderInfo> folderList) {
+        imageInfos.clear();
+        imageInfos.addAll(fileList);
+        if (imagePickerConfig.isImagePicker() && !imagePickerConfig.isVideoPicker()) {
+            folderInfos.clear();
+            folderInfos.addAll(MediaHandler.getImageFolder(this, fileList));
+            folderListAdapter.notifyDataSetChanged();
+            imagePickerAdapter.notifyDataSetChanged();
+        } else if (imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
+            loaderCallbacks = new VideoLoaderCallBacks(this, this);
+            getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
+        }
+    }
+
+    @Override
+    public void onVideoLoadFinished(ArrayList<ImageInfo> fileList, ArrayList<FolderInfo> folderList) {
+        if (!imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
+            imageInfos.clear();
+            imageInfos.addAll(fileList);
+            folderInfos.clear();
+            folderInfos.addAll(MediaHandler.getVideoFolder(this, fileList));
+            folderListAdapter.notifyDataSetChanged();
+            imagePickerAdapter.notifyDataSetChanged();
+        } else if (imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
+            List<FolderInfo> folderInfoArrayList = MediaHandler.getFolderInfo(this, imageInfos, fileList);
+            for (int i = 0; i < folderInfoArrayList.size(); i++) {
+                FolderInfo folderInfo = folderInfoArrayList.get(i);
+                if (folderInfo.getFolderId() == MediaHandler.ALL_MEDIA_FOLDER) {
+                    imageInfos.clear();
+                    imageInfos.addAll(folderInfo.getImageInfoList());
+                }
+            }
+            folderInfos.clear();
+            folderInfos.addAll(folderInfoArrayList);
+            folderListAdapter.notifyDataSetChanged();
+            imagePickerAdapter.notifyDataSetChanged();
         }
     }
 }

@@ -1,6 +1,9 @@
 package com.zhangteng.imagepicker.config;
 
 public interface Constant {
+    int ALL = 0;
+    int FODLER = 1;
+
     int PICKER_RESULT_CODE = 100;
     int CAMERA_RESULT_CODE = 101;
     int CAMERA_ERROR_CODE = 103;

@@ -27,8 +27,12 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Context mContext;
     private List<ImageInfo> imageInfoList;
     private ImagePickerConfig imagePickerConfig = ImagePickerOpen.getInstance().getImagePickerConfig();
-    private List<String> selectImage = new ArrayList<>();
-    private int selectable = imagePickerConfig.isVideoPicker()?imagePickerConfig.getMaxVideoSelectable():imagePickerConfig.getMaxImageSelectable();
+    private List<ImageInfo> selectImageInfo = new ArrayList<>();
+    private int selectable = imagePickerConfig.isVideoPicker() && imagePickerConfig.isImagePicker()
+            ? imagePickerConfig.getMaxImageSelectable()
+            : imagePickerConfig.isVideoPicker()
+            ? imagePickerConfig.getMaxVideoSelectable()
+            : imagePickerConfig.getMaxImageSelectable();
 
     public ImagePickerAdapter(Context context, ArrayList<ImageInfo> imageInfoList) {
         this.mContext = context;
@@ -61,10 +65,10 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     @Override
                     public void onClick(View view) {
                         if (onItemClickListener != null) {
-                            if (imagePickerConfig.isMultiSelect() && selectImage.size() < selectable) {
-                                onItemClickListener.onCameraClick(selectImage);
+                            if (imagePickerConfig.isMultiSelect() && selectImageInfo.size() < selectable) {
+                                onItemClickListener.onCameraClick(selectImageInfo);
                             } else {
-                                onItemClickListener.onCameraClick(selectImage);
+                                onItemClickListener.onCameraClick(selectImageInfo);
                             }
                         }
                         notifyDataSetChanged();
@@ -77,15 +81,9 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 ((ImageViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (selectImage.contains(finalImageInfo.getPath())) {
-                            selectImage.remove(finalImageInfo.getPath());
-                        } else {
-                            if (selectImage.size() < selectable) {
-                                selectImage.add(finalImageInfo.getPath());
-                            }
-                        }
+                        selectItem(finalImageInfo);
                         if (onItemClickListener != null)
-                            onItemClickListener.onImageClick(selectImage);
+                            onItemClickListener.onImageClick(selectImageInfo, selectable);
                         notifyDataSetChanged();
                     }
                 });
@@ -98,14 +96,9 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ImageViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (selectImage.contains(finalImageInfo1.getPath())) {
-                        selectImage.remove(finalImageInfo1.getPath());
-                    } else {
-                        if (selectImage.size() < selectable)
-                            selectImage.add(finalImageInfo1.getPath());
-                    }
+                    selectItem(finalImageInfo1);
                     if (onItemClickListener != null)
-                        onItemClickListener.onImageClick(selectImage);
+                        onItemClickListener.onImageClick(selectImageInfo, selectable);
                     notifyDataSetChanged();
                 }
             });
@@ -120,7 +113,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         } else {
             ((ImageViewHolder) holder).checkBox.setVisibility(View.GONE);
         }
-        if (selectImage.contains(imageInfo.getPath())) {
+        if (selectImageInfo.contains(imageInfo)) {
             ((ImageViewHolder) holder).checkBox.setVisibility(View.VISIBLE);
             ((ImageViewHolder) holder).mask.setVisibility(View.VISIBLE);
             ((ImageViewHolder) holder).checkBox.setChecked(true);
@@ -154,9 +147,9 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public interface OnItemClickListener {
-        void onCameraClick(List<String> selectImage);
+        void onCameraClick(List<ImageInfo> selectImageInfo);
 
-        void onImageClick(List<String> selectImage);
+        void onImageClick(List<ImageInfo> selectImageInfo, int selectable);
     }
 
     private OnItemClickListener onItemClickListener;
@@ -164,6 +157,33 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
         notifyDataSetChanged();
+    }
+
+    /**
+     * todo 注：视频多选的逻辑未处理
+     * 选择或取消选择文件,
+     */
+    private void selectItem(ImageInfo imageInfo) {
+        if (imagePickerConfig.isVideoPicker() && imageInfo.getMime().toLowerCase().contains("video")) {
+            if (selectImageInfo.contains(imageInfo)) {
+                selectImageInfo.remove(imageInfo);
+                if (imagePickerConfig.isImagePicker())
+                    selectable = imagePickerConfig.getMaxImageSelectable();
+            } else if (selectImageInfo.size() < imagePickerConfig.getMaxVideoSelectable()) {
+                selectImageInfo.add(imageInfo);
+                selectable = imagePickerConfig.getMaxVideoSelectable();
+            } else {
+                return;
+            }
+        } else {
+            if (selectImageInfo.contains(imageInfo)) {
+                selectImageInfo.remove(imageInfo);
+            } else {
+                if (selectImageInfo.size() < selectable) {
+                    selectImageInfo.add(imageInfo);
+                }
+            }
+        }
     }
 
     private static class ImageViewHolder extends RecyclerView.ViewHolder {

@@ -130,7 +130,7 @@ public class ImagePickerConfig {
         private String filePath = "/imagePicker/ImagePickerPictures";
         private String provider = "com.zhangteng.imagepicker.fileprovider";
         private ArrayList<String> pathList = new ArrayList<>();
-        private boolean isVideoPicker = false;
+        private boolean isVideoPicker = true;
         private boolean isImagePicker = true;
         private boolean isMirror = false;
         private int maxWidth = 1920;
@@ -190,13 +190,11 @@ public class ImagePickerConfig {
 
         public Builder isVideoPicker(boolean isVideoPicker) {
             this.isVideoPicker = isVideoPicker;
-            this.isImagePicker = !isVideoPicker;
             return this;
         }
 
         public Builder isImagePicker(boolean isImagePicker) {
             this.isImagePicker = isImagePicker;
-            this.isVideoPicker = !isImagePicker;
             return this;
         }
 
@@ -330,7 +328,9 @@ public class ImagePickerConfig {
             return JCameraView.BUTTON_STATE_ONLY_RECORDER;
         } else if (isImagePicker() && !isVideoPicker()) {
             return JCameraView.BUTTON_STATE_ONLY_CAPTURE;
+        }else {
+            return JCameraView.BUTTON_STATE_BOTH;
         }
-        return JCameraView.BUTTON_STATE_BOTH;
     }
 }
+
