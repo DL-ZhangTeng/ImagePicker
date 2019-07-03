@@ -118,7 +118,7 @@ public class ImagePickerOpen {
             Log.e(TAG, "请配置 IHandlerCallBack");
             return;
         }
-        FileUtils.createFile(imagePickerConfig.getFilePath());
+        FileUtils.createFile(activity, imagePickerConfig.getFilePath());
 
         Intent intent = new Intent(activity, ImagePickerActivity.class);
         activity.startActivityForResult(intent, requestCode);

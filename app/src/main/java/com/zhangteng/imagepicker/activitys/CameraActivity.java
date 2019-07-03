@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,7 +20,6 @@ import com.zhangteng.imagepicker.config.ImagePickerOpen;
 import com.zhangteng.imagepicker.utils.FileUtils;
 import com.zhangteng.imagepicker.widget.JCameraView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -47,7 +43,7 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         buttonState = getIntent().getIntExtra(Constant.BUTTON_STATE, JCameraView.BUTTON_STATE_BOTH);
-        duration = getIntent().getIntExtra(Constant.DURATION, 10 * 1000);
+        duration = getIntent().getIntExtra(Constant.DURATION, 15 * 1000);
         isMirror = getIntent().getBooleanExtra(Constant.IS_MIRROR, true);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -55,7 +51,7 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.camera_layout);
         jCameraView = findViewById(R.id.jcameraview);
         //设置视频保存路径
-        jCameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath() + ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath());
+        jCameraView.setSaveVideoPath(FileUtils.getFilesDir(CameraActivity.this) + ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath());
         jCameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
         jCameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
         jCameraView.setDuration(duration);
@@ -91,7 +87,7 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void captureSuccess(Bitmap bitmap) {
                 //获取图片bitmap
-                String path = FileUtils.saveBitmap(CameraActivity.this, FileUtils.getFilePath(CameraActivity.this) + ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath(), bitmap);
+                String path = FileUtils.saveBitmap(CameraActivity.this, ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath(), bitmap);
                 ArrayList<String> paths = new ArrayList<>(1);
                 paths.add(path);
 
