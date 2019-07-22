@@ -125,6 +125,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         } else {
             ((ImageViewHolder) holder).checkBox.setVisibility(View.GONE);
+            ((ImageViewHolder) holder).mask.setVisibility(View.VISIBLE);
         }
         if (imageInfo.getMime().toLowerCase().contains("video")) {
             ((ImageViewHolder) holder).duration.setVisibility(View.VISIBLE);
