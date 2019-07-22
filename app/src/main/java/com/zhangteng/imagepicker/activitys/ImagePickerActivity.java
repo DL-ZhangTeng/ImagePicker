@@ -165,6 +165,10 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
 
                 if (!imagePickerConfig.isMultiSelect()) {
                     mTextViewFinish.setVisibility(View.GONE);
+                    iHandlerCallBack.onSuccess(selectImage);
+                    Intent intent = new Intent();
+                    intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>) selectImage);
+                    setResult(RESULT_OK, intent);
                     finish();
                 } else {
                     if (selectImageInfo.isEmpty()) {
