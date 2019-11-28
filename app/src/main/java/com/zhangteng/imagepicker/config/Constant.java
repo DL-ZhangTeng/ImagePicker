@@ -16,4 +16,10 @@ public interface Constant {
     String DURATION = "DURATION";
 
     String IS_MIRROR = "IS_MIRROR";
+
+    String MIME = "mime";
+    String MIME_IMAGE = "image/jpeg";
+    String MIME_VIDEO = "video/mp4";
+    String HEIGHT = "height";
+    String WIDTH = "width";
 }

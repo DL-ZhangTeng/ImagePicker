@@ -31,6 +31,7 @@ import com.zhangteng.imagepicker.loader.ImageLoaderCallBacks;
 import com.zhangteng.imagepicker.loader.LoaderCallBacks;
 import com.zhangteng.imagepicker.loader.MediaHandler;
 import com.zhangteng.imagepicker.loader.VideoLoaderCallBacks;
+import com.zhangteng.imagepicker.utils.ScreenUtils;
 import com.zhangteng.imagepicker.widget.FolderPopupWindow;
 
 import java.util.ArrayList;
@@ -103,7 +104,8 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                         selectImage.add(info.getPath());
                     }
                 }
-                iHandlerCallBack.onSuccess(selectImageInfo);
+                if (iHandlerCallBack != null)
+                    iHandlerCallBack.onSuccess(selectImageInfo);
                 Intent intent = new Intent();
                 intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>) selectImage);
                 setResult(RESULT_OK, intent);
@@ -122,7 +124,8 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
     protected void initData() {
         imagePickerConfig = ImagePickerOpen.getInstance().getImagePickerConfig();
         iHandlerCallBack = imagePickerConfig.getiHandlerCallBack();
-        iHandlerCallBack.onStart();
+        if (iHandlerCallBack != null)
+            iHandlerCallBack.onStart();
         mContext = this;
         imageInfos = new ArrayList<>();
         folderInfos = new ArrayList<>();
@@ -160,12 +163,14 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                         selectImage.add(info.getPath());
                     }
                 }
-                iHandlerCallBack.onSuccess(selectImageInfo);
+                if (iHandlerCallBack != null)
+                    iHandlerCallBack.onSuccess(selectImageInfo);
                 ImagePickerActivity.this.selectImageInfo = selectImageInfo;
 
                 if (!imagePickerConfig.isMultiSelect()) {
                     mTextViewFinish.setVisibility(View.GONE);
-                    iHandlerCallBack.onSuccess(selectImageInfo);
+                    if (iHandlerCallBack != null)
+                        iHandlerCallBack.onSuccess(selectImageInfo);
                     Intent intent = new Intent();
                     intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>) selectImage);
                     setResult(RESULT_OK, intent);
@@ -231,21 +236,33 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == Constant.CAMERA_RESULT_CODE) {
-                ArrayList<String> paths;
-                paths = data.getStringArrayListExtra(Constant.CAMERA_PATH);
+                ArrayList<String> paths = data.getStringArrayListExtra(Constant.CAMERA_PATH);
+                String mime = data.getStringExtra(Constant.MIME);
+                long height = data.getIntExtra(Constant.HEIGHT, ScreenUtils.getScreenHeight(this));
+                long width = data.getIntExtra(Constant.WIDTH, ScreenUtils.getScreenWidth(this));
                 List<String> selectImage = imagePickerConfig.getPathList();
                 if (selectImage != null) {
                     selectImage.clear();
                     for (ImageInfo info : selectImageInfo) {
                         selectImage.add(info.getPath());
                     }
+                    if (!imagePickerConfig.isMultiSelect()) {
+                        selectImageInfo.clear();
+                        selectImage.clear();
+                    }
+                    selectImage.addAll(paths);
+                    for (String path : paths) {
+                        ImageInfo imageInfo = new ImageInfo();
+                        imageInfo.setPath(path);
+                        imageInfo.setAddTime(String.valueOf(System.currentTimeMillis() / 1000));
+                        imageInfo.setMime(mime);
+                        imageInfo.setWidth(width);
+                        imageInfo.setHeight(height);
+                        selectImageInfo.add(imageInfo);
+                    }
                 }
-                if (!imagePickerConfig.isMultiSelect()) {
-                    selectImageInfo.clear();
-                    selectImage.clear();
-                }
-                selectImage.addAll(paths);
-                iHandlerCallBack.onSuccess(selectImageInfo);
+                if (iHandlerCallBack != null)
+                    iHandlerCallBack.onSuccess(selectImageInfo);
                 getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
                 Intent intent = new Intent();
                 intent.putExtra(Constant.PICKER_PATH, paths);

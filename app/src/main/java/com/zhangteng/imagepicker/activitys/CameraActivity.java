@@ -91,10 +91,13 @@ public class CameraActivity extends AppCompatActivity {
                 ArrayList<String> paths = new ArrayList<>(1);
                 paths.add(path);
 
-                MediaScannerConnection.scanFile(CameraActivity.this, paths.toArray(new String[]{}), new String[]{"image/jpeg"}, null);
+                MediaScannerConnection.scanFile(CameraActivity.this, paths.toArray(new String[]{}), new String[]{Constant.MIME_IMAGE}, null);
 
                 Intent intent = new Intent();
                 intent.putExtra(Constant.CAMERA_PATH, paths);
+                intent.putExtra(Constant.MIME, Constant.MIME_IMAGE);
+                intent.putExtra(Constant.HEIGHT, bitmap.getHeight());
+                intent.putExtra(Constant.WIDTH, bitmap.getWidth());
                 setResult(RESULT_OK, intent);
                 finishActivityWithAnim();
             }
@@ -105,7 +108,7 @@ public class CameraActivity extends AppCompatActivity {
                 ArrayList<String> paths = new ArrayList<>(1);
                 paths.add(url);
 
-                MediaScannerConnection.scanFile(CameraActivity.this, paths.toArray(new String[]{}), new String[]{"video/mp4"}, null);
+                MediaScannerConnection.scanFile(CameraActivity.this, paths.toArray(new String[]{}), new String[]{Constant.MIME_VIDEO}, null);
 //                Uri uri;
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                    uri = FileProvider.getUriForFile(CameraActivity.this, "com.zhangteng.imagepicker.fileprovider", new File(url));
@@ -115,6 +118,9 @@ public class CameraActivity extends AppCompatActivity {
 //                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
                 Intent intent = new Intent();
                 intent.putExtra(Constant.CAMERA_PATH, paths);
+                intent.putExtra(Constant.MIME, Constant.MIME_VIDEO);
+                intent.putExtra(Constant.HEIGHT, firstFrame.getHeight());
+                intent.putExtra(Constant.WIDTH, firstFrame.getWidth());
                 setResult(RESULT_OK, intent);
                 finishActivityWithAnim();
             }
