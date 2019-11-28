@@ -103,7 +103,7 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                         selectImage.add(info.getPath());
                     }
                 }
-                iHandlerCallBack.onSuccess(selectImage);
+                iHandlerCallBack.onSuccess(selectImageInfo);
                 Intent intent = new Intent();
                 intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>) selectImage);
                 setResult(RESULT_OK, intent);
@@ -160,12 +160,12 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                         selectImage.add(info.getPath());
                     }
                 }
-                iHandlerCallBack.onSuccess(selectImage);
+                iHandlerCallBack.onSuccess(selectImageInfo);
                 ImagePickerActivity.this.selectImageInfo = selectImageInfo;
 
                 if (!imagePickerConfig.isMultiSelect()) {
                     mTextViewFinish.setVisibility(View.GONE);
-                    iHandlerCallBack.onSuccess(selectImage);
+                    iHandlerCallBack.onSuccess(selectImageInfo);
                     Intent intent = new Intent();
                     intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>) selectImage);
                     setResult(RESULT_OK, intent);
@@ -245,7 +245,7 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                     selectImage.clear();
                 }
                 selectImage.addAll(paths);
-                iHandlerCallBack.onSuccess(selectImage);
+                iHandlerCallBack.onSuccess(selectImageInfo);
                 getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
                 Intent intent = new Intent();
                 intent.putExtra(Constant.PICKER_PATH, paths);

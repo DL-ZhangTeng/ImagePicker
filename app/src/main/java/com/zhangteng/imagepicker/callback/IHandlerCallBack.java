@@ -1,5 +1,7 @@
 package com.zhangteng.imagepicker.callback;
 
+import com.zhangteng.imagepicker.bean.ImageInfo;
+
 import java.util.List;
 
 /**
@@ -9,7 +11,7 @@ public interface IHandlerCallBack {
 
     void onStart();
 
-    void onSuccess(List<String> selectImage);
+    void onSuccess(List<ImageInfo> selectImage);
 
     void onCancel();
 
@@ -18,3 +20,4 @@ public interface IHandlerCallBack {
     void onError();
 
 }
+

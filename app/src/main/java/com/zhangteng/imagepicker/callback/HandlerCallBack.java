@@ -2,6 +2,9 @@ package com.zhangteng.imagepicker.callback;
 
 import android.util.Log;
 
+import com.zhangteng.imagepicker.bean.ImageInfo;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,13 +12,16 @@ import java.util.List;
  */
 public class HandlerCallBack implements IHandlerCallBack {
     private String TAG = "---ImagePicker---";
+    List<ImageInfo> photoList = new ArrayList<>();
+
     @Override
     public void onStart() {
         Log.i(TAG, "onStart: 开启");
     }
 
     @Override
-    public void onSuccess(List<String> photoList) {
+    public void onSuccess(List<ImageInfo> photoList) {
+        this.photoList = photoList;
         Log.i(TAG, "onSuccess: 返回数据");
     }
 
@@ -26,7 +32,13 @@ public class HandlerCallBack implements IHandlerCallBack {
 
     @Override
     public void onFinish() {
+        if (photoList != null && !photoList.isEmpty())
+            onFinish(photoList);
+    }
+
+    public void onFinish(List<ImageInfo> photoList) {
         Log.i(TAG, "onFinish: 结束");
+
     }
 
     @Override

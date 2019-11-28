@@ -19,6 +19,9 @@ public class ImageInfo {
     private int id;
     private int size;
 
+    private long width;
+    private long height;
+
     public ImageInfo() {
     }
 
@@ -33,6 +36,22 @@ public class ImageInfo {
         this.addTime = addTime;
         this.path = path;
         this.thumbnail = thumbnail;
+    }
+
+    public long getWidth() {
+        return width;
+    }
+
+    public void setWidth(long width) {
+        this.width = width;
+    }
+
+    public long getHeight() {
+        return height;
+    }
+
+    public void setHeight(long height) {
+        this.height = height;
     }
 
     public String getName() {

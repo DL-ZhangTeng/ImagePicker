@@ -43,7 +43,9 @@ public class VideoLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
             MediaStore.Video.Media.DURATION,
             MediaStore.Video.Media.BUCKET_ID,
             MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
-            MediaStore.Video.Media.DATE_TAKEN
+            MediaStore.Video.Media.DATE_TAKEN,
+            MediaStore.Video.Media.WIDTH,
+            MediaStore.Video.Media.HEIGHT
     };
 
     @NonNull
@@ -76,7 +78,9 @@ public class VideoLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
                     Integer folderId = cursor.getInt(cursor.getColumnIndex(VIDEOPROJECTION[8]));
                     String folderName = cursor.getString(cursor.getColumnIndex(VIDEOPROJECTION[9]));
                     long dateToken = cursor.getLong(cursor.getColumnIndex(VIDEOPROJECTION[10]));
-                    if (size > 1024 * 5) {
+                    long width = cursor.getLong(cursor.getColumnIndex(VIDEOPROJECTION[11]));
+                    long height = cursor.getLong(cursor.getColumnIndex(VIDEOPROJECTION[12]));
+                    if (size > 1024 * 5 && duration / 1000 <= 15) {
                         if (imageInfosDifferent == null) {
                             imageInfosDifferent = new HashSet<>();
                         }
@@ -97,6 +101,8 @@ public class VideoLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
                         imageInfo.setFolderId(folderId);
                         imageInfo.setFolderName(folderName);
                         imageInfo.setDateToken(dateToken);
+                        imageInfo.setWidth(width);
+                        imageInfo.setHeight(height);
                         imageInfos1.add(imageInfo);
 //                        File file = new File(path);
 //                        File parent = file.getParentFile();

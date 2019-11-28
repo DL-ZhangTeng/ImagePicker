@@ -43,7 +43,9 @@ public class ImageLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
             MediaStore.Images.Media.MINI_THUMB_MAGIC,
             MediaStore.Images.Media.BUCKET_ID,
             MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-            MediaStore.Images.Media.DATE_TAKEN
+            MediaStore.Images.Media.DATE_TAKEN,
+            MediaStore.Images.Media.WIDTH,
+            MediaStore.Images.Media.HEIGHT
     };
 
     @NonNull
@@ -75,6 +77,8 @@ public class ImageLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
                     int folderId = cursor.getInt(cursor.getColumnIndex(IMAGEPROJECTION[7]));
                     String folderName = cursor.getString(cursor.getColumnIndex(IMAGEPROJECTION[8]));
                     long dateToken = cursor.getLong(cursor.getColumnIndex(IMAGEPROJECTION[9]));
+                    long width = cursor.getLong(cursor.getColumnIndex(IMAGEPROJECTION[10]));
+                    long height = cursor.getLong(cursor.getColumnIndex(IMAGEPROJECTION[11]));
                     if (size > 1024 * 5) {
                         if (imageInfosDifferent == null) {
                             imageInfosDifferent = new HashSet<>();
@@ -95,6 +99,8 @@ public class ImageLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
                         imageInfo.setFolderId(folderId);
                         imageInfo.setFolderName(folderName);
                         imageInfo.setDateToken(dateToken);
+                        imageInfo.setWidth(width);
+                        imageInfo.setHeight(height);
                         imageInfos1.add(imageInfo);
 //                        File file = new File(path);
 //                        File parent = file.getParentFile();
