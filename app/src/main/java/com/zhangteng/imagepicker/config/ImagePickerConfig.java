@@ -119,8 +119,6 @@ public class ImagePickerConfig {
     }
 
     public static class Builder implements Serializable {
-
-        private static ImagePickerConfig imagePickerConfig;
         private ImageLoader imageLoader = new GlideImageLoader();
         private IHandlerCallBack iHandlerCallBack = new HandlerCallBack();
         private boolean multiSelect = true;
@@ -158,7 +156,7 @@ public class ImagePickerConfig {
 
         public Builder multiSelect(boolean multiSelect) {
             this.multiSelect = multiSelect;
-            if (!multiSelect){
+            if (!multiSelect) {
                 this.maxImageSelectable = 1;
                 this.maxVideoSelectable = 1;
             }
@@ -167,7 +165,7 @@ public class ImagePickerConfig {
 
         public Builder maxImageSelectable(int maxImageSelectable) {
             this.maxImageSelectable = maxImageSelectable;
-            if (!multiSelect){
+            if (!multiSelect) {
                 this.maxImageSelectable = 1;
             }
             return this;
@@ -176,7 +174,7 @@ public class ImagePickerConfig {
 
         public Builder maxVideoSelectable(int maxVideoSelectable) {
             this.maxVideoSelectable = maxVideoSelectable;
-            if (!multiSelect){
+            if (!multiSelect) {
                 this.maxVideoSelectable = 1;
             }
             return this;
@@ -244,12 +242,7 @@ public class ImagePickerConfig {
         }
 
         public ImagePickerConfig build() {
-            if (imagePickerConfig == null) {
-                imagePickerConfig = new ImagePickerConfig(this);
-            } else {
-                imagePickerConfig.setBuilder(this);
-            }
-            return imagePickerConfig;
+            return new ImagePickerConfig(this);
         }
 
     }
@@ -332,7 +325,7 @@ public class ImagePickerConfig {
             return JCameraView.BUTTON_STATE_ONLY_RECORDER;
         } else if (isImagePicker() && !isVideoPicker()) {
             return JCameraView.BUTTON_STATE_ONLY_CAPTURE;
-        }else {
+        } else {
             return JCameraView.BUTTON_STATE_BOTH;
         }
     }
