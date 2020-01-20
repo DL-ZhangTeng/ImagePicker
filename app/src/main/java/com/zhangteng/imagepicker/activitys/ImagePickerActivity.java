@@ -34,6 +34,7 @@ import com.zhangteng.imagepicker.loader.VideoLoaderCallBacks;
 import com.zhangteng.imagepicker.utils.ScreenUtils;
 import com.zhangteng.imagepicker.widget.FolderPopupWindow;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -252,12 +253,16 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                     }
                     selectImage.addAll(paths);
                     for (String path : paths) {
+                        File imageFile = new File(path);
                         ImageInfo imageInfo = new ImageInfo();
                         imageInfo.setPath(path);
                         imageInfo.setAddTime(String.valueOf(System.currentTimeMillis() / 1000));
                         imageInfo.setMime(mime);
                         imageInfo.setWidth(width);
                         imageInfo.setHeight(height);
+                        imageInfo.setName(imageFile.getName());
+                        imageInfo.setFolderName(imageFile.getParentFile().getName());
+                        imageInfo.setFolderPath(imageFile.getParent());
                         selectImageInfo.add(imageInfo);
                     }
                 }
