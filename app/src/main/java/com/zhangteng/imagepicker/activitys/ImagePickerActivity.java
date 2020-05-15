@@ -244,6 +244,9 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                 List<String> selectImage = imagePickerConfig.getPathList();
                 if (selectImage != null) {
                     selectImage.clear();
+                    if (selectImageInfo == null) {
+                        selectImageInfo = new ArrayList<>();
+                    }
                     for (ImageInfo info : selectImageInfo) {
                         selectImage.add(info.getPath());
                     }
