@@ -15,9 +15,8 @@ public interface IHandlerCallBack {
 
     void onCancel();
 
-    void onFinish();
+    void onFinish(List<ImageInfo> selectImage);
 
     void onError();
 
 }
-

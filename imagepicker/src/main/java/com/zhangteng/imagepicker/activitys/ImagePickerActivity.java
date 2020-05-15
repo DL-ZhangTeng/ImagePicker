@@ -5,22 +5,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yalantis.ucrop.UCrop;
 import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.adapter.FolderListAdapter;
 import com.zhangteng.imagepicker.adapter.ImagePickerAdapter;
-import com.zhangteng.imagepicker.base.BaseActivity;
 import com.zhangteng.imagepicker.bean.FolderInfo;
 import com.zhangteng.imagepicker.bean.ImageInfo;
 import com.zhangteng.imagepicker.callback.IHandlerCallBack;
@@ -31,14 +38,19 @@ import com.zhangteng.imagepicker.loader.ImageLoaderCallBacks;
 import com.zhangteng.imagepicker.loader.LoaderCallBacks;
 import com.zhangteng.imagepicker.loader.MediaHandler;
 import com.zhangteng.imagepicker.loader.VideoLoaderCallBacks;
+import com.zhangteng.imagepicker.utils.FileUtils;
+import com.zhangteng.imagepicker.utils.NullUtill;
 import com.zhangteng.imagepicker.utils.ScreenUtils;
+import com.zhangteng.imagepicker.utils.ToastUtil;
+import com.zhangteng.imagepicker.utils.UcropUtil;
 import com.zhangteng.imagepicker.widget.FolderPopupWindow;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks {
+public class ImagePickerActivity extends AppCompatActivity implements LoaderCallBacks {
     private RecyclerView mRecyclerViewImageList;
     private LinearLayout mLinearLaoyutBack;
     private TextView mTextViewFolder;
@@ -61,55 +73,73 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
     private ImagePickerConfig imagePickerConfig;
     private IHandlerCallBack iHandlerCallBack;
     private List<ImageInfo> selectImageInfo;
+    private int count = 0;
 
     @Override
-    protected int getResourceId() {
-        return R.layout.activity_image_picker;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Window window = getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(0x00000000);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        }
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        setContentView(R.layout.activity_image_picker);
+        initView();
+        initData();
     }
 
-    @Override
     protected void initView() {
-        mRecyclerViewImageList = (RecyclerView) findViewById(R.id.image_picker_rv_list);
+        mRecyclerViewImageList = findViewById(R.id.image_picker_rv_list);
         mRecyclerViewImageList.setLayoutManager(new GridLayoutManager(this, 3));
-        mLinearLaoyutBack = (LinearLayout) findViewById(R.id.image_picker_ll_back);
-        mLinearLaoyutBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goBack();
-            }
-        });
-        mTextViewFolder = (TextView) findViewById(R.id.image_picker_tv_folder);
-        mRelativeLayout = (RelativeLayout) findViewById(R.id.image_picker_rv_title);
-        mTextViewFinish = (TextView) findViewById(R.id.image_picker_tv_finish);
-        mTextViewFolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopupWindow(view);
-            }
-        });
-        mTextViewFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectImageInfo == null) {
-                    if (imagePickerConfig.isVideoPicker() && imagePickerConfig.isImagePicker()) {
-                        showToast("请选择文件");
-                    } else {
-                        showToast(imagePickerConfig.isImagePicker() ? "请选择图片" : "请选择视频");
-                    }
-                    return;
+        mLinearLaoyutBack = findViewById(R.id.image_picker_ll_back);
+        mLinearLaoyutBack.setOnClickListener(view -> goBack());
+        mTextViewFolder = findViewById(R.id.image_picker_tv_folder);
+        mRelativeLayout = findViewById(R.id.image_picker_rv_title);
+        mTextViewFinish = findViewById(R.id.image_picker_tv_finish);
+        mTextViewFolder.setOnClickListener(this::showPopupWindow);
+        mTextViewFinish.setOnClickListener(view -> {
+            if (NullUtill.isEmpty(selectImageInfo)) {
+                if (imagePickerConfig.isVideoPicker() && imagePickerConfig.isImagePicker()) {
+                    ToastUtil.toastShort(ImagePickerActivity.this, "请选择文件");
+                } else {
+                    ToastUtil.toastShort(ImagePickerActivity.this, imagePickerConfig.isImagePicker() ? "请选择图片" : "请选择视频");
                 }
-                List<String> selectImage = imagePickerConfig.getPathList();
-                if (selectImage != null) {
-                    selectImage.clear();
-                    for (ImageInfo info : selectImageInfo) {
-                        selectImage.add(info.getPath());
+                return;
+            }
+            if (iHandlerCallBack != null)
+                iHandlerCallBack.onSuccess(selectImageInfo);
+            ArrayList<String> selectImage = imagePickerConfig.getPathList();
+            if (selectImage != null) {
+                selectImage.clear();
+                for (ImageInfo info : selectImageInfo) {
+                    selectImage.add(info.getPath());
+                }
+                if (imagePickerConfig.isCrop()) {
+                    for (int i = selectImageInfo.size() - 1; i >= 0; i--) {
+                        File sourceFile = new File(selectImageInfo.get(i).getPath());
+                        String name = sourceFile.getName();
+                        File parentFile = FileUtils.getCropDir(this, imagePickerConfig.getFilePath());
+                        File destinationFile = new File(parentFile.getAbsoluteFile() + File.separator + UUID.randomUUID() + name);
+                        Uri sourceUri = Uri.fromFile(sourceFile);
+                        Uri destinationUri = Uri.fromFile(destinationFile);
+                        UcropUtil.themeTypeCrop(ImagePickerActivity.this, sourceUri, destinationUri, imagePickerConfig.getCropAspectRatio(), 1);
                     }
                 }
-                if (iHandlerCallBack != null)
-                    iHandlerCallBack.onSuccess(selectImageInfo);
+            }
+            if (!imagePickerConfig.isCrop()) {
                 Intent intent = new Intent();
-                intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>) selectImage);
+                intent.putExtra(Constant.PICKER_PATH, selectImage);
                 setResult(RESULT_OK, intent);
+                if (iHandlerCallBack != null) {
+                    iHandlerCallBack.onFinish(selectImageInfo);
+                }
                 finish();
             }
         });
@@ -121,7 +151,6 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
         }
     }
 
-    @Override
     protected void initData() {
         imagePickerConfig = ImagePickerOpen.getInstance().getImagePickerConfig();
         iHandlerCallBack = imagePickerConfig.getiHandlerCallBack();
@@ -137,14 +166,11 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
         }
         mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish));
         folderListAdapter = new FolderListAdapter(mContext, folderInfos);
-        folderListAdapter.setOnItemClickListener(new FolderListAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                mTextViewFolder.setText(folderInfos.get(position).getName());
-                imagePickerAdapter.setImageInfoList(folderInfos.get(position).getImageInfoList());
-                if (mFolderPopupWindow != null) {
-                    mFolderPopupWindow.dismiss();
-                }
+        folderListAdapter.setOnItemClickListener((view, position) -> {
+            mTextViewFolder.setText(folderInfos.get(position).getName());
+            imagePickerAdapter.setImageInfoList(folderInfos.get(position).getImageInfoList());
+            if (mFolderPopupWindow != null) {
+                mFolderPopupWindow.dismiss();
             }
         });
         imagePickerAdapter = new ImagePickerAdapter(mContext, imageInfos);
@@ -157,7 +183,7 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
 
             @Override
             public void onImageClick(List<ImageInfo> selectImageInfo, int selectable) {
-                List<String> selectImage = imagePickerConfig.getPathList();
+                ArrayList<String> selectImage = imagePickerConfig.getPathList();
                 if (selectImage != null) {
                     selectImage.clear();
                     for (ImageInfo info : selectImageInfo) {
@@ -172,10 +198,23 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                     mTextViewFinish.setVisibility(View.GONE);
                     if (iHandlerCallBack != null)
                         iHandlerCallBack.onSuccess(selectImageInfo);
-                    Intent intent = new Intent();
-                    intent.putExtra(Constant.PICKER_PATH, (ArrayList<String>) selectImage);
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    if (imagePickerConfig.isCrop() && !NullUtill.isEmpty(selectImage) && !NullUtill.isEmpty(selectImageInfo)) {
+                        File sourceFile = new File(selectImage.get(0));
+                        String name = sourceFile.getName();
+                        File parentFile = FileUtils.getCropDir(ImagePickerActivity.this, imagePickerConfig.getFilePath());
+                        File destinationFile = new File(parentFile.getAbsoluteFile() + File.separator + UUID.randomUUID() + name);
+                        Uri sourceUri = Uri.fromFile(sourceFile);
+                        Uri destinationUri = Uri.fromFile(destinationFile);
+                        UcropUtil.themeTypeCrop(ImagePickerActivity.this, sourceUri, destinationUri, imagePickerConfig.getCropAspectRatio(), 1);
+                    } else {
+                        Intent intent = new Intent();
+                        intent.putExtra(Constant.PICKER_PATH, selectImage);
+                        setResult(RESULT_OK, intent);
+                        if (iHandlerCallBack != null) {
+                            iHandlerCallBack.onFinish(selectImageInfo);
+                        }
+                        finish();
+                    }
                 } else {
                     if (selectImageInfo.isEmpty()) {
                         mTextViewFinish.setText(mContext.getString(R.string.image_picker_finish));
@@ -188,13 +227,13 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
         mRecyclerViewImageList.setAdapter(imagePickerAdapter);
         if (imagePickerConfig.isImagePicker() && !imagePickerConfig.isVideoPicker()) {
             loaderCallbacks = new ImageLoaderCallBacks(this, this);
-            getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
+            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
         } else if (!imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
             loaderCallbacks = new VideoLoaderCallBacks(this, this);
-            getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
+            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
         } else {
             loaderCallbacks = new ImageLoaderCallBacks(this, this);
-            getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
+            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
         }
 
     }
@@ -225,18 +264,10 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
     }
 
     @Override
-    public void finish() {
-        if (iHandlerCallBack != null) {
-            iHandlerCallBack.onFinish();
-        }
-        super.finish();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == Constant.CAMERA_RESULT_CODE) {
+        if (requestCode == Constant.CAMERA_RESULT_CODE) {
+            if (resultCode == RESULT_OK) {
                 ArrayList<String> paths = data.getStringArrayListExtra(Constant.CAMERA_PATH);
                 String mime = data.getStringExtra(Constant.MIME);
                 long height = data.getIntExtra(Constant.HEIGHT, ScreenUtils.getScreenHeight(this));
@@ -244,7 +275,7 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                 List<String> selectImage = imagePickerConfig.getPathList();
                 if (selectImage != null) {
                     selectImage.clear();
-                    if (selectImageInfo == null) {
+                    if (NullUtill.isEmpty(selectImageInfo)) {
                         selectImageInfo = new ArrayList<>();
                     }
                     for (ImageInfo info : selectImageInfo) {
@@ -268,18 +299,39 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
                         imageInfo.setFolderPath(imageFile.getParent());
                         selectImageInfo.add(imageInfo);
                     }
+                    if (imagePickerConfig.isCrop()) {
+                        for (int i = selectImageInfo.size() - 1; i >= 0; i--) {
+                            File sourceFile = new File(selectImageInfo.get(i).getPath());
+                            String name = sourceFile.getName();
+                            File parentFile = FileUtils.getCropDir(this, imagePickerConfig.getFilePath());
+                            File destinationFile = new File(parentFile.getAbsoluteFile() + File.separator + UUID.randomUUID() + name);
+                            Uri sourceUri = Uri.fromFile(sourceFile);
+                            Uri destinationUri = Uri.fromFile(destinationFile);
+                            UcropUtil.themeTypeCrop(ImagePickerActivity.this, sourceUri, destinationUri, imagePickerConfig.getCropAspectRatio(), 1);
+                        }
+                    }
                 }
                 if (iHandlerCallBack != null)
                     iHandlerCallBack.onSuccess(selectImageInfo);
-                getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
-                Intent intent = new Intent();
-                intent.putExtra(Constant.PICKER_PATH, paths);
-                setResult(RESULT_OK, intent);
-                finish();
+                LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
+                if (!imagePickerConfig.isCrop()) {
+                    Intent intent = new Intent();
+                    intent.putExtra(Constant.PICKER_PATH, paths);
+                    setResult(RESULT_OK, intent);
+                    if (iHandlerCallBack != null) {
+                        iHandlerCallBack.onFinish(selectImageInfo);
+                    }
+                    finish();
+                }
+            } else if (resultCode == Constant.CAMERA_ERROR_CODE) {
+                Toast.makeText(this, "请检查相机权限", Toast.LENGTH_SHORT).show();
             }
-        }
-        if (resultCode == Constant.CAMERA_ERROR_CODE) {
-            Toast.makeText(this, "请检查相机权限", Toast.LENGTH_SHORT).show();
+        } else if (requestCode == UCrop.REQUEST_CROP) {
+            if (resultCode == RESULT_OK) {
+                updateCropSelectedImage(UCrop.getOutput(data));
+            } else {
+                updateCropSelectedImage(null);
+            }
         }
     }
 
@@ -294,7 +346,7 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
             imagePickerAdapter.notifyDataSetChanged();
         } else if (imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
             loaderCallbacks = new VideoLoaderCallBacks(this, this);
-            getSupportLoaderManager().restartLoader(Constant.ALL, null, loaderCallbacks);
+            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
         }
     }
 
@@ -322,4 +374,41 @@ public class ImagePickerActivity extends BaseActivity implements LoaderCallBacks
             imagePickerAdapter.notifyDataSetChanged();
         }
     }
+
+    private void updateCropSelectedImage(Uri resultUri) {
+        count++;
+        if (NullUtill.isEmpty(selectImageInfo)) {
+            selectImageInfo = new ArrayList<>();
+        }
+        if (resultUri != null && resultUri.getPath() != null) {
+            String resultName = new File(resultUri.getPath()).getName();
+            if (!NullUtill.isEmpty(resultName)) {
+                for (ImageInfo imageInfo : selectImageInfo) {
+                    if (!NullUtill.isEmpty(imageInfo.getName())
+                            && resultName.contains(imageInfo.getName())) {
+                        imageInfo.setPath(resultUri.getPath());
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inJustDecodeBounds = true;
+                        BitmapFactory.decodeFile(resultUri.getPath(), options);
+                        imageInfo.setWidth(options.outWidth);
+                        imageInfo.setHeight(options.outHeight);
+                    }
+                }
+            }
+        }
+        if (count == selectImageInfo.size()) {
+            ArrayList<String> paths = new ArrayList<>();
+            for (int i = selectImageInfo.size() - 1; i >= 0; i--) {
+                paths.add(selectImageInfo.get(i).getPath());
+            }
+            Intent intent = new Intent();
+            intent.putExtra(Constant.PICKER_PATH, paths);
+            setResult(RESULT_OK, intent);
+            if (iHandlerCallBack != null) {
+                iHandlerCallBack.onFinish(selectImageInfo);
+            }
+            finish();
+        }
+    }
 }
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--选中时的遮盖色-->
+    <color name="image_picker_photo_mask">#88000000</color>
+    <!--拍摄按钮的背景色-->
+    <color name="image_picker_dark_gray">#FF343535</color>
+
+    <!--背景-->
+    <color name="image_picker_background">#f7eee3</color>
+    <!--分隔线-->
+    <color name="image_picker_separation">#FFDCDCDC</color>
+    <!--灰色字体-->
+    <color name="image_picker_text_gray">#FF999999</color>
+    <!--字体颜色-->
+    <color name="image_picker_text_black">#FF333333</color>
+    <color name="image_picker_folder_bg">#88FFFFFF</color>
+
+    <!-- 常用颜色 -->
+    <color name="image_picker_white">#FFFFFFFF</color>
+    <color name="image_picker_black">#000000</color>
+    <color name="image_picker_green">#00FF00</color>
+    <color name="image_picker_blue">#00E9C4</color>
+    <color name="image_picker_yellow">#FFFF00</color>
+    <color name="image_picker_red">#FF0000</color>
+    <color name="image_picker_orange">#FF6600</color>
+    <color name="image_picker_theme">#00E9C4</color>
+</resources>

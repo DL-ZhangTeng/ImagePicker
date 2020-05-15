@@ -1,4 +1,4 @@
-package com.zhangteng.imagepicker;
+package com.zhangteng.app;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

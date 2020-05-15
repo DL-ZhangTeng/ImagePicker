@@ -1,5 +1,6 @@
 package com.zhangteng.imagepicker.config;
 
+import com.zhangteng.imagepicker.BuildConfig;
 import com.zhangteng.imagepicker.callback.HandlerCallBack;
 import com.zhangteng.imagepicker.callback.IHandlerCallBack;
 import com.zhangteng.imagepicker.imageloader.GlideImageLoader;
@@ -87,10 +88,17 @@ public class ImagePickerConfig {
      */
     private int maxVideoSize;
     /**
-     *
+     * 弹出类型
      */
     private ImagePickerEnum imagePickerType;
-    private Builder builder;
+    /**
+     * 是否开启剪裁
+     */
+    private boolean isCrop;
+    /**
+     * 剪裁比率（w/h）
+     */
+    private float cropAspectRatio;
 
     public ImagePickerConfig(Builder builder) {
         setBuilder(builder);
@@ -115,7 +123,8 @@ public class ImagePickerConfig {
         this.maxVideoLength = builder.maxVideoLength;
         this.maxVideoSize = builder.maxVideoSize;
         this.imagePickerType = builder.imagePickerType;
-        this.builder = builder;
+        this.isCrop = builder.isCrop;
+        this.cropAspectRatio = builder.cropAspectRatio;
     }
 
     public static class Builder implements Serializable {
@@ -125,8 +134,8 @@ public class ImagePickerConfig {
         private int maxImageSelectable = 9;
         private int maxVideoSelectable = 1;
         private boolean isShowCamera = true;
-        private String filePath = "/imagePicker/ImagePickerPictures";
-        private String provider = "com.zhangteng.imagepicker.fileprovider";
+        private String filePath = "/" + BuildConfig.APPLICATION_ID + "/imagePicker/ImagePickerPictures";
+        private String provider = BuildConfig.APPLICATION_ID + ".FileProvider";
         private ArrayList<String> pathList = new ArrayList<>();
         private boolean isVideoPicker = true;
         private boolean isImagePicker = true;
@@ -137,6 +146,8 @@ public class ImagePickerConfig {
         private int maxVideoLength = 15000;
         private int maxVideoSize = 20;
         private ImagePickerEnum imagePickerType = ImagePickerEnum.BOTH;
+        private boolean isCrop = false;
+        private float cropAspectRatio = 0;
 
         public Builder provider(String provider) {
             this.provider = provider;
@@ -241,6 +252,17 @@ public class ImagePickerConfig {
             return this;
         }
 
+        public Builder isCrop(boolean isCrop) {
+            this.isCrop = isCrop;
+            return this;
+        }
+
+        public Builder isCrop(boolean isCrop, float cropAspectRatio) {
+            this.isCrop = isCrop;
+            this.cropAspectRatio = cropAspectRatio;
+            return this;
+        }
+
         public ImagePickerConfig build() {
             return new ImagePickerConfig(this);
         }
@@ -320,6 +342,14 @@ public class ImagePickerConfig {
         return imagePickerType;
     }
 
+    public boolean isCrop() {
+        return isCrop;
+    }
+
+    public float getCropAspectRatio() {
+        return cropAspectRatio;
+    }
+
     public int getCameraMediaType() {
         if (isVideoPicker() && !isImagePicker()) {
             return JCameraView.BUTTON_STATE_ONLY_RECORDER;
@@ -330,4 +360,3 @@ public class ImagePickerConfig {
         }
     }
 }
-

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activitys.ImagePickerActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/statusbar_height"
+        android:background="@color/image_picker_theme" />
 
     <RelativeLayout
         android:id="@+id/image_picker_rv_title"
@@ -32,8 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:drawablePadding="5dp"
             android:drawableRight="@mipmap/image_picker_dropdown_white"
+            android:drawablePadding="5dp"
             android:gravity="center"
             android:text="@string/image_picker_all_folder"
             android:textColor="@color/image_picker_white"

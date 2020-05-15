@@ -31,13 +31,7 @@ public class HandlerCallBack implements IHandlerCallBack {
     }
 
     @Override
-    public void onFinish() {
-        if (photoList != null && !photoList.isEmpty())
-            onFinish(photoList);
-    }
-
-    public void onFinish(List<ImageInfo> photoList) {
-        Log.i(TAG, "onFinish: 结束");
+    public void onFinish(List<ImageInfo> selectImage) {
 
     }
 

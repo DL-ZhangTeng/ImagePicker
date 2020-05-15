@@ -1,0 +1,22 @@
+<resources>
+    <style name="ImagePickerTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/image_picker_theme</item>
+        <item name="colorPrimaryDark">@color/image_picker_theme</item>
+        <item name="colorAccent">@color/image_picker_theme</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="popupAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/in_fade</item>
+        <item name="android:windowExitAnimation">@anim/out_fade</item>
+    </style>
+
+    <style name="PhotoDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <!-- activity不变暗 -->
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowEnterAnimation">@anim/camera_push_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/camera_push_bottom_out</item>
+    </style>
+</resources>
