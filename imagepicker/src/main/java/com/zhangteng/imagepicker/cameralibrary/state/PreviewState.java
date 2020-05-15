@@ -80,12 +80,12 @@ class PreviewState implements State {
 
     @Override
     public void cancel(SurfaceHolder holder, float screenProp) {
-        LogUtil.i("浏览状态下,没有 cancel 事件");
+        LogUtil.i("There is no cancel event in the browse state");
     }
 
     @Override
     public void confirm() {
-        LogUtil.i("浏览状态下,没有 confirm 事件");
+        LogUtil.i("There is no confirmation event in the browse state");
     }
 
     @Override
