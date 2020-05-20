@@ -56,6 +56,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
     private TextView mTextViewFolder;
     private TextView mTextViewFinish;
     private FolderPopupWindow mFolderPopupWindow;
+    private View mStatusView;
     private RelativeLayout mRelativeLayout;
     private LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks;
     private Context mContext;
@@ -81,7 +82,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
         Window window = getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(0x00000000);
         }
@@ -101,8 +102,11 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
         mLinearLaoyutBack = findViewById(R.id.image_picker_ll_back);
         mLinearLaoyutBack.setOnClickListener(view -> goBack());
         mTextViewFolder = findViewById(R.id.image_picker_tv_folder);
-        mRelativeLayout = findViewById(R.id.image_picker_rv_title);
+        mStatusView = findViewById(R.id.image_picker_status);
+        mRelativeLayout = findViewById(R.id.image_picker_title);
         mTextViewFinish = findViewById(R.id.image_picker_tv_finish);
+        mStatusView.setBackgroundResource(ImagePickerOpen.getInstance().getImagePickerConfig().getThemeColorRes());
+        mRelativeLayout.setBackgroundResource(ImagePickerOpen.getInstance().getImagePickerConfig().getThemeColorRes());
         mTextViewFolder.setOnClickListener(this::showPopupWindow);
         mTextViewFinish.setOnClickListener(view -> {
             if (NullUtill.isEmpty(selectImageInfo)) {

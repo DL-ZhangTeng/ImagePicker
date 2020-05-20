@@ -7,15 +7,16 @@
     tools:context=".activitys.ImagePickerActivity">
 
     <View
+        android:id="@+id/image_picker_status"
         android:layout_width="match_parent"
         android:layout_height="@dimen/statusbar_height"
         android:background="@color/image_picker_theme" />
 
     <RelativeLayout
-        android:id="@+id/image_picker_rv_title"
+        android:id="@+id/image_picker_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebar_height"
-        android:background="@color/image_picker_blue">
+        android:background="@color/image_picker_theme">
 
         <LinearLayout
             android:id="@+id/image_picker_ll_back"

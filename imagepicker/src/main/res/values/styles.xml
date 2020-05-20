@@ -1,8 +1,5 @@
 <resources>
     <style name="ImagePickerTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/image_picker_theme</item>
-        <item name="colorPrimaryDark">@color/image_picker_theme</item>
-        <item name="colorAccent">@color/image_picker_theme</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

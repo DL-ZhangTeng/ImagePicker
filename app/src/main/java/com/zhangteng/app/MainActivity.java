@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 .maxWidth(1920)                               //图片最大宽度
                 .maxImageSize(15)                             //图片最大大小Mb
                 .isCrop(true)
+                .themeColorRes(R.color.colorAccent)
                 .build();
 
         findViewById(R.id.iv).setOnClickListener(v -> {

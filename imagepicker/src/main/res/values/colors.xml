@@ -17,11 +17,5 @@
 
     <!-- 常用颜色 -->
     <color name="image_picker_white">#FFFFFFFF</color>
-    <color name="image_picker_black">#000000</color>
-    <color name="image_picker_green">#00FF00</color>
-    <color name="image_picker_blue">#00E9C4</color>
-    <color name="image_picker_yellow">#FFFF00</color>
-    <color name="image_picker_red">#FF0000</color>
-    <color name="image_picker_orange">#FF6600</color>
     <color name="image_picker_theme">#00E9C4</color>
 </resources>

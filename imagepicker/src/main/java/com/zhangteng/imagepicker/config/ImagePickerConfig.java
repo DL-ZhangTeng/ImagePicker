@@ -1,6 +1,9 @@
 package com.zhangteng.imagepicker.config;
 
+import android.support.annotation.ColorRes;
+
 import com.zhangteng.imagepicker.BuildConfig;
+import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.callback.HandlerCallBack;
 import com.zhangteng.imagepicker.callback.IHandlerCallBack;
 import com.zhangteng.imagepicker.imageloader.GlideImageLoader;
@@ -99,6 +102,11 @@ public class ImagePickerConfig {
      * 剪裁比率（w/h）
      */
     private float cropAspectRatio;
+    /**
+     * 主题色
+     */
+    @ColorRes
+    private int themeColorRes;
 
     public ImagePickerConfig(Builder builder) {
         setBuilder(builder);
@@ -125,6 +133,7 @@ public class ImagePickerConfig {
         this.imagePickerType = builder.imagePickerType;
         this.isCrop = builder.isCrop;
         this.cropAspectRatio = builder.cropAspectRatio;
+        this.themeColorRes = builder.themeColorRes;
     }
 
     public static class Builder implements Serializable {
@@ -148,6 +157,8 @@ public class ImagePickerConfig {
         private ImagePickerEnum imagePickerType = ImagePickerEnum.BOTH;
         private boolean isCrop = false;
         private float cropAspectRatio = 0;
+        @ColorRes
+        private int themeColorRes = R.color.image_picker_theme;
 
         public Builder provider(String provider) {
             this.provider = provider;
@@ -263,6 +274,11 @@ public class ImagePickerConfig {
             return this;
         }
 
+        public Builder themeColorRes(@ColorRes int themeColorRes) {
+            this.themeColorRes = themeColorRes;
+            return this;
+        }
+
         public ImagePickerConfig build() {
             return new ImagePickerConfig(this);
         }
@@ -348,6 +364,10 @@ public class ImagePickerConfig {
 
     public float getCropAspectRatio() {
         return cropAspectRatio;
+    }
+
+    public int getThemeColorRes() {
+        return themeColorRes;
     }
 
     public int getCameraMediaType() {
