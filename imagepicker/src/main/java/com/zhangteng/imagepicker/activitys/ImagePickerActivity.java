@@ -110,8 +110,8 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
         mBackIv = findViewById(R.id.image_picker_back);
         mStatusView.setBackgroundResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerThemeColorRes());
         mRelativeLayout.setBackgroundResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerThemeColorRes());
-        mTextViewFinish.setTextColor(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerTitleColorRes());
-        mTextViewFolder.setTextColor(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerTitleColorRes());
+        mTextViewFinish.setTextColor(getResources().getColor(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerTitleColorRes()));
+        mTextViewFolder.setTextColor(getResources().getColor(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerTitleColorRes()));
         mBackIv.setImageResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerBackRes());
         mTextViewFolder.setOnClickListener(this::showPopupWindow);
         mTextViewFinish.setOnClickListener(view -> {
