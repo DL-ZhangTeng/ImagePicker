@@ -1,6 +1,7 @@
 package com.zhangteng.imagepicker.config;
 
 import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 
 import com.zhangteng.imagepicker.BuildConfig;
 import com.zhangteng.imagepicker.R;
@@ -103,10 +104,31 @@ public class ImagePickerConfig {
      */
     private float cropAspectRatio;
     /**
-     * 主题色
+     * 选择器主题色
      */
     @ColorRes
-    private int themeColorRes;
+    private int pickerThemeColorRes;
+    /**
+     * 剪裁器主题色
+     */
+    @ColorRes
+    private int cropThemeColorRes;
+    /**
+     * 选择器标题色
+     */
+    @ColorRes
+    private int pickerTitleColorRes;
+    /**
+     * 剪裁器标题色
+     */
+    @ColorRes
+    private int cropTitleColorRes;
+
+    /**
+     * 选择器返回按钮
+     */
+    @DrawableRes
+    private int pickerBackRes;
 
     public ImagePickerConfig(Builder builder) {
         setBuilder(builder);
@@ -133,7 +155,11 @@ public class ImagePickerConfig {
         this.imagePickerType = builder.imagePickerType;
         this.isCrop = builder.isCrop;
         this.cropAspectRatio = builder.cropAspectRatio;
-        this.themeColorRes = builder.themeColorRes;
+        this.pickerThemeColorRes = builder.pickerThemeColorRes;
+        this.pickerTitleColorRes = builder.pickerTitleColorRes;
+        this.cropThemeColorRes = builder.cropThemeColorRes;
+        this.cropTitleColorRes = builder.cropTitleColorRes;
+        this.pickerBackRes = builder.pickerBackRes;
     }
 
     public static class Builder implements Serializable {
@@ -158,7 +184,15 @@ public class ImagePickerConfig {
         private boolean isCrop = false;
         private float cropAspectRatio = 0;
         @ColorRes
-        private int themeColorRes = R.color.image_picker_theme;
+        private int pickerThemeColorRes = R.color.image_picker_theme;
+        @ColorRes
+        private int cropThemeColorRes = R.color.image_picker_theme;
+        @ColorRes
+        private int pickerTitleColorRes = R.color.image_picker_title;
+        @ColorRes
+        private int cropTitleColorRes = R.color.image_picker_title;
+        @DrawableRes
+        private int pickerBackRes = R.mipmap.image_picker_back_white;
 
         public Builder provider(String provider) {
             this.provider = provider;
@@ -274,8 +308,28 @@ public class ImagePickerConfig {
             return this;
         }
 
-        public Builder themeColorRes(@ColorRes int themeColorRes) {
-            this.themeColorRes = themeColorRes;
+        public Builder pickerThemeColorRes(@ColorRes int pickerThemeColorRes) {
+            this.pickerThemeColorRes = pickerThemeColorRes;
+            return this;
+        }
+
+        public Builder cropThemeColorRes(@ColorRes int cropThemeColorRes) {
+            this.cropThemeColorRes = cropThemeColorRes;
+            return this;
+        }
+
+        public Builder pickerTitleColorRes(@ColorRes int pickerTitleColorRes) {
+            this.pickerTitleColorRes = pickerTitleColorRes;
+            return this;
+        }
+
+        public Builder cropTitleColorRes(@ColorRes int cropTitleColorRes) {
+            this.cropTitleColorRes = cropTitleColorRes;
+            return this;
+        }
+
+        public Builder pickerBackRes(@DrawableRes int pickerBackRes) {
+            this.pickerBackRes = pickerBackRes;
             return this;
         }
 
@@ -366,8 +420,24 @@ public class ImagePickerConfig {
         return cropAspectRatio;
     }
 
-    public int getThemeColorRes() {
-        return themeColorRes;
+    public int getPickerThemeColorRes() {
+        return pickerThemeColorRes;
+    }
+
+    public int getCropThemeColorRes() {
+        return cropThemeColorRes;
+    }
+
+    public int getPickerTitleColorRes() {
+        return pickerTitleColorRes;
+    }
+
+    public int getCropTitleColorRes() {
+        return cropTitleColorRes;
+    }
+
+    public int getPickerBackRes() {
+        return pickerBackRes;
     }
 
     public int getCameraMediaType() {

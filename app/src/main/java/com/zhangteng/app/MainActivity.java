@@ -33,7 +33,11 @@ public class MainActivity extends AppCompatActivity {
                 .maxWidth(1920)                               //图片最大宽度
                 .maxImageSize(15)                             //图片最大大小Mb
                 .isCrop(true)
-                .themeColorRes(R.color.colorAccent)
+                .pickerThemeColorRes(R.color.colorAccent)
+                .pickerTitleColorRes(R.color.image_picker_white)
+                .cropThemeColorRes(R.color.colorAccent)
+                .cropTitleColorRes(R.color.colorPrimary)
+                .pickerBackRes(R.mipmap.image_picker_back_black)
                 .build();
 
         findViewById(R.id.iv).setOnClickListener(v -> {

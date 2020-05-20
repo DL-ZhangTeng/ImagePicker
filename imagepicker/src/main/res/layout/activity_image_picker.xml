@@ -25,6 +25,7 @@
             android:gravity="center">
 
             <ImageView
+                android:id="@+id/image_picker_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
@@ -37,22 +38,20 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:drawableRight="@mipmap/image_picker_dropdown_white"
-            android:drawablePadding="5dp"
             android:gravity="center"
             android:text="@string/image_picker_all_folder"
-            android:textColor="@color/image_picker_white"
+            android:textColor="@color/image_picker_title"
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/image_picker_tv_finish"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
             android:gravity="center"
             android:text="@string/image_picker_finish"
-            android:textColor="@color/image_picker_white"
+            android:textColor="@color/image_picker_title"
             android:textSize="18sp" />
 
 

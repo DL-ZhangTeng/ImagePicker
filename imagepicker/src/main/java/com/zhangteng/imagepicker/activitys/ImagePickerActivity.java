@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -58,6 +59,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
     private FolderPopupWindow mFolderPopupWindow;
     private View mStatusView;
     private RelativeLayout mRelativeLayout;
+    private ImageView mBackIv;
     private LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks;
     private Context mContext;
     /**
@@ -105,8 +107,12 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
         mStatusView = findViewById(R.id.image_picker_status);
         mRelativeLayout = findViewById(R.id.image_picker_title);
         mTextViewFinish = findViewById(R.id.image_picker_tv_finish);
-        mStatusView.setBackgroundResource(ImagePickerOpen.getInstance().getImagePickerConfig().getThemeColorRes());
-        mRelativeLayout.setBackgroundResource(ImagePickerOpen.getInstance().getImagePickerConfig().getThemeColorRes());
+        mBackIv = findViewById(R.id.image_picker_back);
+        mStatusView.setBackgroundResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerThemeColorRes());
+        mRelativeLayout.setBackgroundResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerThemeColorRes());
+        mTextViewFinish.setTextColor(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerTitleColorRes());
+        mTextViewFolder.setTextColor(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerTitleColorRes());
+        mBackIv.setImageResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerBackRes());
         mTextViewFolder.setOnClickListener(this::showPopupWindow);
         mTextViewFinish.setOnClickListener(view -> {
             if (NullUtill.isEmpty(selectImageInfo)) {
