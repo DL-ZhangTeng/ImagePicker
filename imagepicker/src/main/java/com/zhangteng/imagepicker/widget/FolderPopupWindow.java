@@ -14,7 +14,7 @@ import com.zhangteng.imagepicker.adapter.FolderListAdapter;
 import com.zhangteng.imagepicker.utils.ScreenUtils;
 
 /**
- * Created by swing on 2018/4/17.
+ * Created by Swing on 2018/4/17.
  */
 public class FolderPopupWindow extends PopupWindow {
     private Context mContext;

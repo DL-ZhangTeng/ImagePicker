@@ -8,7 +8,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.zhangteng.imagepicker.R;
 
 /**
- * Created by swing on 2018/4/18.
+ * Created by Swing on 2018/4/18.
  */
 public class GlideImageLoader implements ImageLoader {
     @Override

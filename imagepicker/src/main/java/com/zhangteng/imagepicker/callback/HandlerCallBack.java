@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by swing on 2018/4/18.
+ * Created by Swing on 2018/4/18.
  */
 public class HandlerCallBack implements IHandlerCallBack {
     private String TAG = "---ImagePicker---";

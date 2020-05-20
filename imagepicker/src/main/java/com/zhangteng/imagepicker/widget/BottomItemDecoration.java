@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * Created by swing on 2018/4/17.
+ * Created by Swing on 2018/4/17.
  */
 public class BottomItemDecoration extends RecyclerView.ItemDecoration {
     public BottomItemDecoration() {

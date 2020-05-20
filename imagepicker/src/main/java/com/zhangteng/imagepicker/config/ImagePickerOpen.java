@@ -23,7 +23,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by swing on 2018/4/18.
+ * Created by Swing on 2018/4/18.
  */
 public class ImagePickerOpen {
     private static ImagePickerOpen imagePickerOpen;

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by swing on 2018/4/17.
+ * Created by Swing on 2018/4/17.
  */
 public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.FolderViewHolder> {
     private Context mContext;

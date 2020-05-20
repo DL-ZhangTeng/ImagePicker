@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * 为空判断
- * Created by swing on 2019/7/10 0010.
+ * Created by Swing on 2019/7/10 0010.
  */
 public class NullUtill {
 

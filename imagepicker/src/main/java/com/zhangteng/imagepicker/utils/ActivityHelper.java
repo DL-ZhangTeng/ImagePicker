@@ -8,7 +8,7 @@ import com.zhangteng.imagepicker.R;
 
 
 /**
- * Created by swing on 2017/11/4.
+ * Created by Swing on 2017/11/4.
  */
 
 public class ActivityHelper {

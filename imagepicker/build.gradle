@@ -47,10 +47,10 @@ def developerId = 'duoluo9'//设置自己ID
 def developerName = '张腾'//设置自己名字
 def developerEmail = '763263368@qq.com'//设置自己邮箱
 def artifactName = 'ImagePicker'//项目名
-def description = '6.0+动态权限请求'//添加项目描述
+def description = '图片选择器'//添加项目描述
 
 group = "com.zhangteng.imagepicker"//发布aar前缀根节点
-version = "1.0.0"//发布aar的库版本
+version = "1.0.1"//发布aar的库版本
 
 install {
     repositories.mavenInstaller {

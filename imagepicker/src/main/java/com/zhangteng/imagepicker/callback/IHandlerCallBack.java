@@ -5,7 +5,7 @@ import com.zhangteng.imagepicker.bean.ImageInfo;
 import java.util.List;
 
 /**
- * Created by swing on 2018/4/18.
+ * Created by Swing on 2018/4/18.
  */
 public interface IHandlerCallBack {
 
