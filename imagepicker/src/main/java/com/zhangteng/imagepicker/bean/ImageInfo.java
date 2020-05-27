@@ -1,9 +1,12 @@
 package com.zhangteng.imagepicker.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Swing on 2018/4/17.
  */
-public class ImageInfo {
+public class ImageInfo implements Parcelable {
     private String name;
     private String addTime;
     private String path;
@@ -37,6 +40,35 @@ public class ImageInfo {
         this.path = path;
         this.thumbnail = thumbnail;
     }
+
+    protected ImageInfo(Parcel in) {
+        name = in.readString();
+        addTime = in.readString();
+        path = in.readString();
+        thumbnail = in.readString();
+        mime = in.readString();
+        folderId = in.readInt();
+        folderName = in.readString();
+        folderPath = in.readString();
+        duration = in.readLong();
+        dateToken = in.readLong();
+        id = in.readInt();
+        size = in.readInt();
+        width = in.readLong();
+        height = in.readLong();
+    }
+
+    public static final Creator<ImageInfo> CREATOR = new Creator<ImageInfo>() {
+        @Override
+        public ImageInfo createFromParcel(Parcel in) {
+            return new ImageInfo(in);
+        }
+
+        @Override
+        public ImageInfo[] newArray(int size) {
+            return new ImageInfo[size];
+        }
+    };
 
     public long getWidth() {
         return width;
@@ -148,5 +180,28 @@ public class ImageInfo {
 
     public void setDateToken(long dateToken) {
         this.dateToken = dateToken;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(addTime);
+        dest.writeString(path);
+        dest.writeString(thumbnail);
+        dest.writeString(mime);
+        dest.writeInt(folderId);
+        dest.writeString(folderName);
+        dest.writeString(folderPath);
+        dest.writeLong(duration);
+        dest.writeLong(dateToken);
+        dest.writeInt(id);
+        dest.writeInt(size);
+        dest.writeLong(width);
+        dest.writeLong(height);
     }
 }
