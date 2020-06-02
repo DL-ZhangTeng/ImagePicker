@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
                 .imageLoader(new GlideImageLoader()) //图片加载器
                 .iHandlerCallBack(new HandlerCallBack())    //图片选择器生命周期监听（直接打开摄像头时无效）
                 .multiSelect(true)                 //是否多选
-                .isVideoPicker(false)              //是否选择视频 默认false
+                .isVideoPicker(true)              //是否选择视频 默认false
                 .isImagePicker(true)
                 .imagePickerType(ImagePickerEnum.PHOTO_PICKER) //选择器打开类型
                 .isMirror(false)                              //是否旋转镜头
@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
                 .maxHeight(1920)                              //图片最大高度
                 .maxWidth(1920)                               //图片最大宽度
                 .maxImageSize(15)                             //图片最大大小Mb
+                .maxVideoLength(5 * 1000)
+                .maxVideoSize(180)
                 .isCrop(true)
                 .pickerThemeColorRes(R.color.colorAccent)
                 .pickerTitleColorRes(R.color.image_picker_white)

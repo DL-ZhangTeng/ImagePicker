@@ -90,7 +90,7 @@ public class CaptureButton extends View {
         state = STATE_IDLE;                //初始化为空闲状态
         button_state = BUTTON_STATE_BOTH;  //初始化按钮为可录制可拍照
         LogUtil.i("CaptureButtom start");
-        duration = 10 * 1000;              //默认最长录制时间为10s
+        duration = 15 * 1000;              //默认最长录制时间为10s
         LogUtil.i("CaptureButtom end");
         min_duration = 1500;              //默认最短录制时间为1.5s
 
@@ -285,13 +285,14 @@ public class CaptureButton extends View {
 
     //录制视频计时器
     private class RecordCountDownTimer extends CountDownTimer {
+
         RecordCountDownTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
+            super(millisInFuture + 999, countDownInterval);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
-            updateProgress(millisUntilFinished);
+            updateProgress(millisUntilFinished - 999);
         }
 
         @Override

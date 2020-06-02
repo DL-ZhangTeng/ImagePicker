@@ -83,7 +83,7 @@ public class ImagePickerConfig {
     private int maxImageSize;
 
     /**
-     * 单位：毫秒 ,默认15秒
+     * 单位：毫秒 ,默认15秒(包含15秒)
      */
     private int maxVideoLength;
 
@@ -174,12 +174,12 @@ public class ImagePickerConfig {
         private ArrayList<String> pathList = new ArrayList<>();
         private boolean isVideoPicker = true;
         private boolean isImagePicker = true;
-        private boolean isMirror = false;
+        private boolean isMirror = true;
         private int maxWidth = 1920;
         private int maxHeight = 1920;
         private int maxImageSize = 15;
         private int maxVideoLength = 15000;
-        private int maxVideoSize = 20;
+        private int maxVideoSize = 45;
         private ImagePickerEnum imagePickerType = ImagePickerEnum.BOTH;
         private boolean isCrop = false;
         private float cropAspectRatio = 0;

@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 
 import com.zhangteng.imagepicker.bean.ImageInfo;
 import com.zhangteng.imagepicker.config.Constant;
+import com.zhangteng.imagepicker.config.ImagePickerOpen;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -79,7 +80,8 @@ public class ImageLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
                     long dateToken = cursor.getLong(cursor.getColumnIndex(IMAGEPROJECTION[9]));
                     long width = cursor.getLong(cursor.getColumnIndex(IMAGEPROJECTION[10]));
                     long height = cursor.getLong(cursor.getColumnIndex(IMAGEPROJECTION[11]));
-                    if (size > 1024 * 5) {
+                    if (size >= 5 * 1024
+                            && size <= ImagePickerOpen.getInstance().getImagePickerConfig().getMaxImageSize() * 1024 * 1024) {
                         if (imageInfosDifferent == null) {
                             imageInfosDifferent = new HashSet<>();
                         }
@@ -102,20 +104,6 @@ public class ImageLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
                         imageInfo.setWidth(width);
                         imageInfo.setHeight(height);
                         imageInfos1.add(imageInfo);
-//                        File file = new File(path);
-//                        File parent = file.getParentFile();
-//                        FolderInfo folderInfo = new FolderInfo();
-//                        folderInfo.setName(parent.getName());
-//                        folderInfo.setPath(parent.getAbsolutePath());
-//                        if (!folderInfos.contains(folderInfo)) {
-//                            List<ImageInfo> list = new ArrayList<>();
-//                            list.add(imageInfo);
-//                            folderInfo.setImageInfoList(list);
-//                            folderInfo.setImageInfo(list.get(0));
-//                            folderInfos.add(folderInfo);
-//                        } else {
-//                            folderInfos.get(folderInfos.indexOf(folderInfo)).getImageInfoList().add(imageInfo);
-//                        }
                     }
                 } while (cursor.moveToNext());
                 loaderCallBacks.onImageLoadFinished(imageInfos1, null);

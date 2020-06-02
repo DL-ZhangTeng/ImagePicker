@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 
 import com.zhangteng.imagepicker.bean.ImageInfo;
 import com.zhangteng.imagepicker.config.Constant;
+import com.zhangteng.imagepicker.config.ImagePickerOpen;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -75,12 +76,14 @@ public class VideoLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
                     String mimeType = cursor.getString(cursor.getColumnIndexOrThrow(VIDEOPROJECTION[5]));
                     String thumb = cursor.getString(cursor.getColumnIndexOrThrow(VIDEOPROJECTION[6]));
                     long duration = cursor.getLong(cursor.getColumnIndex(VIDEOPROJECTION[7]));
-                    Integer folderId = cursor.getInt(cursor.getColumnIndex(VIDEOPROJECTION[8]));
+                    int folderId = cursor.getInt(cursor.getColumnIndex(VIDEOPROJECTION[8]));
                     String folderName = cursor.getString(cursor.getColumnIndex(VIDEOPROJECTION[9]));
                     long dateToken = cursor.getLong(cursor.getColumnIndex(VIDEOPROJECTION[10]));
                     long width = cursor.getLong(cursor.getColumnIndex(VIDEOPROJECTION[11]));
                     long height = cursor.getLong(cursor.getColumnIndex(VIDEOPROJECTION[12]));
-                    if (size > 1024 * 5 && duration / 1000 <= 15) {
+                    if (size >= 5 * 1024
+                            && size <= ImagePickerOpen.getInstance().getImagePickerConfig().getMaxVideoSize() * 1024 * 1024
+                            && duration <= ImagePickerOpen.getInstance().getImagePickerConfig().getMaxVideoLength() + 999) {
                         if (imageInfosDifferent == null) {
                             imageInfosDifferent = new HashSet<>();
                         }
@@ -104,20 +107,6 @@ public class VideoLoaderCallBacks implements LoaderManager.LoaderCallbacks<Curso
                         imageInfo.setWidth(width);
                         imageInfo.setHeight(height);
                         imageInfos1.add(imageInfo);
-//                        File file = new File(path);
-//                        File parent = file.getParentFile();
-//                        FolderInfo folderInfo = new FolderInfo();
-//                        folderInfo.setName(parent.getName());
-//                        folderInfo.setPath(parent.getAbsolutePath());
-//                        if (!folderInfos.contains(folderInfo)) {
-//                            List<ImageInfo> list = new ArrayList<>();
-//                            list.add(imageInfo);
-//                            folderInfo.setImageInfoList(list);
-//                            folderInfo.setImageInfo(list.get(0));
-//                            folderInfos.add(folderInfo);
-//                        } else {
-//                            folderInfos.get(folderInfos.indexOf(folderInfo)).getImageInfoList().add(imageInfo);
-//                        }
                     }
                 } while (cursor.moveToNext());
 

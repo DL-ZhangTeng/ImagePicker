@@ -22,16 +22,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
+import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.cameralibrary.listener.CaptureListener;
 import com.zhangteng.imagepicker.cameralibrary.listener.ClickListener;
 import com.zhangteng.imagepicker.cameralibrary.listener.ErrorListener;
 import com.zhangteng.imagepicker.cameralibrary.listener.JCameraListener;
 import com.zhangteng.imagepicker.cameralibrary.listener.TypeListener;
 import com.zhangteng.imagepicker.cameralibrary.state.CameraMachine;
-import com.zhangteng.imagepicker.utils.LogUtil;
 import com.zhangteng.imagepicker.cameralibrary.view.CameraView;
-import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.utils.FileUtils;
+import com.zhangteng.imagepicker.utils.LogUtil;
 import com.zhangteng.imagepicker.utils.ScreenUtils;
 
 import java.io.IOException;
@@ -99,7 +99,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     private int iconSrc = 0;        //图标资源
     private int iconLeft = 0;       //左图标
     private int iconRight = 0;      //右图标
-    private int duration = 10 * 1000;       //录制时间
+    private int duration = 15 * 1000;       //录制时间
 
 
     private boolean isMirror = true;       //是否镜像
@@ -107,6 +107,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
 
     public void setDuration(int duration) {
         this.duration = duration;
+        mCaptureLayout.setDuration(duration);
     }
 
     //缩放梯度
