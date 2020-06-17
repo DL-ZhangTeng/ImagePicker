@@ -8,7 +8,6 @@ import com.zhangteng.imagepicker.bean.ImageInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +23,9 @@ public class MediaHandler {
     /**
      * 对查询到的图片进行聚类（相册分类）
      *
-     * @param context
-     * @param imageFileList
-     * @return
+     * @param context       上下文
+     * @param imageFileList 图片文件列表
+     * @return 文件夹列表
      */
     public static List<FolderInfo> getImageFolder(Context context, ArrayList<ImageInfo> imageFileList) {
         return getFolderInfo(context, imageFileList, null);
@@ -36,21 +35,21 @@ public class MediaHandler {
     /**
      * 对查询到的视频进行聚类（相册分类）
      *
-     * @param context
-     * @param imageFileList
-     * @return
+     * @param context       上下文
+     * @param videoFileList 视频文件列表
+     * @return 文件夹列表
      */
-    public static List<FolderInfo> getVideoFolder(Context context, ArrayList<ImageInfo> imageFileList) {
-        return getFolderInfo(context, null, imageFileList);
+    public static List<FolderInfo> getVideoFolder(Context context, ArrayList<ImageInfo> videoFileList) {
+        return getFolderInfo(context, null, videoFileList);
     }
 
     /**
      * 对查询到的图片和视频分类
      *
-     * @param context
-     * @param imageFileList
-     * @param videoFileList
-     * @return
+     * @param context       上下文
+     * @param imageFileList 图片文件列表
+     * @param videoFileList 视频文件列表
+     * @return 文件夹列表
      */
     public static List<FolderInfo> getFolderInfo(Context context, ArrayList<ImageInfo> imageFileList, ArrayList<ImageInfo> videoFileList) {
 
@@ -66,18 +65,7 @@ public class MediaHandler {
         }
 
         //对媒体数据进行排序
-        Collections.sort(imageInfoList, new Comparator<ImageInfo>() {
-            @Override
-            public int compare(ImageInfo o1, ImageInfo o2) {
-                if (o1.getDateToken() > o2.getDateToken()) {
-                    return -1;
-                } else if (o1.getDateToken() < o2.getDateToken()) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        });
+        Collections.sort(imageInfoList, (o1, o2) -> Long.compare(o2.getDateToken(), o1.getDateToken()));
 
         //全部图片或视频
         if (!imageInfoList.isEmpty()) {
@@ -107,7 +95,7 @@ public class MediaHandler {
                 String folderName = imageInfo.getFolderName();
                 FolderInfo folderInfo = folderInfoMap.get(imageFolderId);
                 if (folderInfo == null) {
-                    folderInfo = new FolderInfo(folderName, imageInfo.getFolderPath(), imageInfo, new ArrayList<ImageInfo>());
+                    folderInfo = new FolderInfo(folderName, imageInfo.getFolderPath(), imageInfo, new ArrayList<>());
                     folderInfo.setFolderId(imageFolderId);
                 }
                 List<ImageInfo> imageList = folderInfo.getImageInfoList();
@@ -124,18 +112,7 @@ public class MediaHandler {
         }
 
         //按照图片文件夹的数量排序
-        Collections.sort(folderInfoList, new Comparator<FolderInfo>() {
-            @Override
-            public int compare(FolderInfo o1, FolderInfo o2) {
-                if (o1.getImageInfoList().size() > o2.getImageInfoList().size()) {
-                    return -1;
-                } else if (o1.getImageInfoList().size() < o2.getImageInfoList().size()) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        });
+        Collections.sort(folderInfoList, (o1, o2) -> Integer.compare(o2.getImageInfoList().size(), o1.getImageInfoList().size()));
         return folderInfoList;
     }
 

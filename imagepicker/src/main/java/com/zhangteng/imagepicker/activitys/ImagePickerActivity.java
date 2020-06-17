@@ -60,7 +60,8 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
     private View mStatusView;
     private RelativeLayout mRelativeLayout;
     private ImageView mBackIv;
-    private LoaderManager.LoaderCallbacks<Cursor> loaderCallbacks;
+    private LoaderManager.LoaderCallbacks<Cursor> loaderImageCallbacks;
+    private LoaderManager.LoaderCallbacks<Cursor> loaderVideoCallbacks;
     private Context mContext;
     /**
      * 文件夹列表
@@ -235,17 +236,13 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
             }
         });
         mRecyclerViewImageList.setAdapter(imagePickerAdapter);
-        if (imagePickerConfig.isImagePicker() && !imagePickerConfig.isVideoPicker()) {
-            loaderCallbacks = new ImageLoaderCallBacks(this, this);
-            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
-        } else if (!imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
-            loaderCallbacks = new VideoLoaderCallBacks(this, this);
-            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
+        if (imagePickerConfig.isImagePicker() || !imagePickerConfig.isVideoPicker()) {
+            loaderImageCallbacks = new ImageLoaderCallBacks(this, this);
+            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderImageCallbacks);
         } else {
-            loaderCallbacks = new ImageLoaderCallBacks(this, this);
-            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
+            loaderVideoCallbacks = new VideoLoaderCallBacks(this, this);
+            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderVideoCallbacks);
         }
-
     }
 
     @Override
@@ -323,7 +320,6 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
                 }
                 if (iHandlerCallBack != null)
                     iHandlerCallBack.onSuccess(selectImageInfo);
-                LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
                 if (!imagePickerConfig.isCrop()) {
                     Intent intent = new Intent();
                     intent.putExtra(Constant.PICKER_PATH, paths);
@@ -349,40 +345,31 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
     public void onImageLoadFinished(ArrayList<ImageInfo> fileList, ArrayList<FolderInfo> folderList) {
         imageInfos.clear();
         imageInfos.addAll(fileList);
-        if (imagePickerConfig.isImagePicker() && !imagePickerConfig.isVideoPicker()) {
-            folderInfos.clear();
-            folderInfos.addAll(MediaHandler.getImageFolder(this, fileList));
-            folderListAdapter.notifyDataSetChanged();
-            imagePickerAdapter.notifyDataSetChanged();
-        } else if (imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
-            loaderCallbacks = new VideoLoaderCallBacks(this, this);
-            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderCallbacks);
+        imagePickerAdapter.notifyDataSetChanged();
+        folderInfos.clear();
+        folderInfos.addAll(MediaHandler.getImageFolder(this, fileList));
+        folderListAdapter.notifyDataSetChanged();
+        if (imagePickerConfig.isVideoPicker()) {
+            loaderVideoCallbacks = new VideoLoaderCallBacks(this, this);
+            LoaderManager.getInstance(this).restartLoader(Constant.ALL, null, loaderVideoCallbacks);
         }
     }
 
     @Override
     public void onVideoLoadFinished(ArrayList<ImageInfo> fileList, ArrayList<FolderInfo> folderList) {
-        if (!imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
-            imageInfos.clear();
-            imageInfos.addAll(fileList);
-            folderInfos.clear();
-            folderInfos.addAll(MediaHandler.getVideoFolder(this, fileList));
-            folderListAdapter.notifyDataSetChanged();
-            imagePickerAdapter.notifyDataSetChanged();
-        } else if (imagePickerConfig.isImagePicker() && imagePickerConfig.isVideoPicker()) {
-            List<FolderInfo> folderInfoArrayList = MediaHandler.getFolderInfo(this, imageInfos, fileList);
-            for (int i = 0; i < folderInfoArrayList.size(); i++) {
-                FolderInfo folderInfo = folderInfoArrayList.get(i);
-                if (folderInfo.getFolderId() == MediaHandler.ALL_MEDIA_FOLDER) {
-                    imageInfos.clear();
-                    imageInfos.addAll(folderInfo.getImageInfoList());
-                }
+        List<FolderInfo> folderInfoArrayList = MediaHandler.getFolderInfo(this, imagePickerConfig.isImagePicker() ? imageInfos : null, fileList);
+        for (int i = 0; i < folderInfoArrayList.size(); i++) {
+            FolderInfo folderInfo = folderInfoArrayList.get(i);
+            if (folderInfo.getFolderId() == MediaHandler.ALL_MEDIA_FOLDER) {
+                imageInfos.clear();
+                imageInfos.addAll(folderInfo.getImageInfoList());
+                imagePickerAdapter.notifyDataSetChanged();
+                break;
             }
-            folderInfos.clear();
-            folderInfos.addAll(folderInfoArrayList);
-            folderListAdapter.notifyDataSetChanged();
-            imagePickerAdapter.notifyDataSetChanged();
         }
+        folderInfos.clear();
+        folderInfos.addAll(folderInfoArrayList);
+        folderListAdapter.notifyDataSetChanged();
     }
 
     private void updateCropSelectedImage(Uri resultUri) {
