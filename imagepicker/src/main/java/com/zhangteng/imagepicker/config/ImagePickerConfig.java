@@ -1,7 +1,7 @@
 package com.zhangteng.imagepicker.config;
 
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
 
 import com.zhangteng.imagepicker.BuildConfig;
 import com.zhangteng.imagepicker.R;
@@ -169,8 +169,8 @@ public class ImagePickerConfig {
         private int maxImageSelectable = 9;
         private int maxVideoSelectable = 1;
         private boolean isShowCamera = true;
-        private String filePath = "/" + BuildConfig.APPLICATION_ID + "/imagePicker/ImagePickerPictures";
-        private String provider = BuildConfig.APPLICATION_ID + ".FileProvider";
+        private String filePath = "/" + BuildConfig.LIBRARY_PACKAGE_NAME + "/imagePicker/ImagePickerPictures";
+        private String provider = BuildConfig.LIBRARY_PACKAGE_NAME + ".FileProvider";
         private ArrayList<String> pathList = new ArrayList<>();
         private boolean isVideoPicker = true;
         private boolean isImagePicker = true;
