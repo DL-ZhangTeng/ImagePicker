@@ -3,11 +3,12 @@ package com.zhangteng.imagepicker.config;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 import com.zhangteng.androidpermission.AndroidPermission;
 import com.zhangteng.androidpermission.Permission;
@@ -16,6 +17,7 @@ import com.zhangteng.imagepicker.activitys.CameraActivity;
 import com.zhangteng.imagepicker.activitys.CameraDialogFragment;
 import com.zhangteng.imagepicker.activitys.ImagePickerActivity;
 import com.zhangteng.imagepicker.utils.FileUtils;
+import com.zhangteng.imagepicker.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +57,7 @@ public class ImagePickerOpen {
 
                     @Override
                     public void failure() {
-                        openNoPermission(mActivity);
+                        ToastUtil.toastShort(mActivity, "请开启读写文件、相机和录制等相关权限！");
                     }
 
                     @Override
@@ -99,7 +101,7 @@ public class ImagePickerOpen {
 
                     @Override
                     public void failure() {
-                        openNoPermission(mActivity, requestCode);
+                        ToastUtil.toastShort(mActivity, "请开启读写文件、相机和录制等相关权限！");
                     }
 
                     @Override
