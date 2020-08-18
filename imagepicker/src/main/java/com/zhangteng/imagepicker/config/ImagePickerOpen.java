@@ -13,11 +13,13 @@ import androidx.fragment.app.FragmentActivity;
 import com.zhangteng.androidpermission.AndroidPermission;
 import com.zhangteng.androidpermission.Permission;
 import com.zhangteng.androidpermission.callback.Callback;
+import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.activitys.CameraActivity;
 import com.zhangteng.imagepicker.activitys.CameraDialogFragment;
 import com.zhangteng.imagepicker.activitys.ImagePickerActivity;
 import com.zhangteng.imagepicker.utils.FileUtils;
 import com.zhangteng.imagepicker.utils.ToastUtil;
+import com.zhangteng.imagepicker.widget.JCameraView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +50,7 @@ public class ImagePickerOpen {
     public void open(FragmentActivity mActivity) {
         AndroidPermission androidPermission = new AndroidPermission.Buidler()
                 .with(mActivity)
-                .permission(Permission.CAMERA, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.RECORD_AUDIO)
+                .permission(getPermissions())
                 .callback(new Callback() {
                     @Override
                     public void success() {
@@ -57,7 +59,7 @@ public class ImagePickerOpen {
 
                     @Override
                     public void failure() {
-                        ToastUtil.toastShort(mActivity, "请开启读写文件、相机和录制等相关权限！");
+                        ToastUtil.toastShort(mActivity, getPermissionFailureString(mActivity));
                     }
 
                     @Override
@@ -69,6 +71,38 @@ public class ImagePickerOpen {
         androidPermission.excute();
     }
 
+    /**
+     * ImagePickerEnum.PHOTO_PICKER 只启动照片选择
+     * ImagePickerEnum.CAMERA 只启动相机
+     * 其他 启动下方弹框
+     */
+    public void open(FragmentActivity mActivity, int requestCode) {
+        AndroidPermission androidPermission = new AndroidPermission.Buidler()
+                .with(mActivity)
+                .permission(getPermissions())
+                .callback(new Callback() {
+                    @Override
+                    public void success() {
+                        openNoPermission(mActivity, requestCode);
+                    }
+
+                    @Override
+                    public void failure() {
+                        ToastUtil.toastShort(mActivity, getPermissionFailureString(mActivity));
+                    }
+
+                    @Override
+                    public void nonExecution() {
+                        openNoPermission(mActivity, requestCode);
+                    }
+                })
+                .build();
+        androidPermission.excute();
+    }
+
+    /**
+     * 通过回调获取返回结果
+     */
     private void openNoPermission(FragmentActivity mActivity) {
         if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.PHOTO_PICKER) {
             openImagePicker(mActivity, Constant.PICKER_RESULT_CODE);
@@ -85,34 +119,8 @@ public class ImagePickerOpen {
     }
 
     /**
-     * ImagePickerEnum.PHOTO_PICKER 只启动照片选择
-     * ImagePickerEnum.CAMERA 只启动相机
-     * 其他 启动下方弹框
+     * 通过Intent获取返回结果
      */
-    public void open(FragmentActivity mActivity, int requestCode) {
-        AndroidPermission androidPermission = new AndroidPermission.Buidler()
-                .with(mActivity)
-                .permission(Permission.CAMERA, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE)
-                .callback(new Callback() {
-                    @Override
-                    public void success() {
-                        openNoPermission(mActivity, requestCode);
-                    }
-
-                    @Override
-                    public void failure() {
-                        ToastUtil.toastShort(mActivity, "请开启读写文件、相机和录制等相关权限！");
-                    }
-
-                    @Override
-                    public void nonExecution() {
-                        openNoPermission(mActivity, requestCode);
-                    }
-                })
-                .build();
-        androidPermission.excute();
-    }
-
     private void openNoPermission(FragmentActivity mActivity, int requestCode) {
         if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.PHOTO_PICKER) {
             openImagePicker(mActivity, requestCode);
@@ -126,6 +134,36 @@ public class ImagePickerOpen {
                 cameraDialogFragment.show(mActivity.getSupportFragmentManager(), "cameraDialogFragment");
             }
         }
+    }
+
+    /**
+     * 获取所需权限数组
+     */
+    private String[] getPermissions() {
+        String[] permissions;
+        if (!imagePickerConfig.isShowCamera()) {
+            permissions = Permission.Group.STORAGE;
+        } else if (imagePickerConfig.getCameraMediaType() == JCameraView.BUTTON_STATE_ONLY_CAPTURE) {
+            permissions = new String[]{Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.CAMERA};
+        } else {
+            permissions = new String[]{Permission.CAMERA, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.RECORD_AUDIO};
+        }
+        return permissions;
+    }
+
+    /**
+     * 获取所需权限失败提示语
+     */
+    private String getPermissionFailureString(FragmentActivity mActivity) {
+        String permissionFailure;
+        if (!imagePickerConfig.isShowCamera()) {
+            permissionFailure = mActivity.getResources().getString(R.string.image_picker_permission_storage);
+        } else if (imagePickerConfig.getCameraMediaType() == JCameraView.BUTTON_STATE_ONLY_CAPTURE) {
+            permissionFailure = mActivity.getResources().getString(R.string.image_picker_permission_camera);
+        } else {
+            permissionFailure = mActivity.getResources().getString(R.string.image_picker_permission_record);
+        }
+        return permissionFailure;
     }
 
     public void openCamera(Activity activity, int requestCode) {

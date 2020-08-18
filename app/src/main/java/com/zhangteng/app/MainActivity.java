@@ -2,6 +2,7 @@ package com.zhangteng.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
                 .imageLoader(new GlideImageLoader()) //图片加载器
                 .iHandlerCallBack(new HandlerCallBack())    //图片选择器生命周期监听（直接打开摄像头时无效）
                 .multiSelect(true)                 //是否多选
+                .isShowCamera(true)
                 .isVideoPicker(true)              //是否选择视频 默认false
                 .isImagePicker(true)
                 .imagePickerType(ImagePickerEnum.PHOTO_PICKER) //选择器打开类型
