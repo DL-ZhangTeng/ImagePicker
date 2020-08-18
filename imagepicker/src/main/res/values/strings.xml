@@ -17,4 +17,8 @@
     <string name="error_original">大小不超过 %1$sM。</string>
     <string name="error_video">视频长度不超过%1$d秒。</string>
     <string name="error_size">文件大小不要超过%1$dM。</string>
+
+    <string name="image_picker_permission_storage">请开启读写文件相关权限！</string>
+    <string name="image_picker_permission_camera">请开启读写文件和相机相关权限！</string>
+    <string name="image_picker_permission_record">请开启读写文件、相机和录制相关权限！</string>
 </resources>
