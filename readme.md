@@ -1,4 +1,4 @@
- # 图片选择器ImagePicker
+# 图片选择器ImagePicker
 ImagePicker是一个Android版本的图片视频选择组件。
 [GitHub仓库地址](https://github.com/duoluo9/ImagePicker)
 ## 引入
