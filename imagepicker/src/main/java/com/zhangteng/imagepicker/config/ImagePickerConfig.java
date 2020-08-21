@@ -129,6 +129,11 @@ public class ImagePickerConfig {
      */
     @DrawableRes
     private int pickerBackRes;
+    /**
+     * 选择器文件夹弹出按钮
+     */
+    @DrawableRes
+    private int pickerFolderRes;
 
     public ImagePickerConfig(Builder builder) {
         setBuilder(builder);
@@ -160,6 +165,7 @@ public class ImagePickerConfig {
         this.cropThemeColorRes = builder.cropThemeColorRes;
         this.cropTitleColorRes = builder.cropTitleColorRes;
         this.pickerBackRes = builder.pickerBackRes;
+        this.pickerFolderRes = builder.pickerFolderRes;
     }
 
     public static class Builder implements Serializable {
@@ -193,6 +199,8 @@ public class ImagePickerConfig {
         private int cropTitleColorRes = R.color.image_picker_title;
         @DrawableRes
         private int pickerBackRes = R.mipmap.image_picker_back_white;
+        @DrawableRes
+        private int pickerFolderRes = R.mipmap.image_picker_folder_white;
 
         public Builder provider(String provider) {
             this.provider = provider;
@@ -333,6 +341,11 @@ public class ImagePickerConfig {
             return this;
         }
 
+        public Builder pickerFolderRes(@DrawableRes int pickerFolderRes) {
+            this.pickerFolderRes = pickerFolderRes;
+            return this;
+        }
+
         public ImagePickerConfig build() {
             return new ImagePickerConfig(this);
         }
@@ -438,6 +451,10 @@ public class ImagePickerConfig {
 
     public int getPickerBackRes() {
         return pickerBackRes;
+    }
+
+    public int getPickerFolderRes() {
+        return pickerFolderRes;
     }
 
     public int getCameraMediaType() {

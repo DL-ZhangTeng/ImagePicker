@@ -37,11 +37,12 @@ public class MainActivity extends AppCompatActivity {
                 .maxVideoLength(5 * 1000)
                 .maxVideoSize(180)
                 .isCrop(true)
-                .pickerThemeColorRes(R.color.colorAccent)
-                .pickerTitleColorRes(R.color.image_picker_white)
-                .cropThemeColorRes(R.color.colorAccent)
-                .cropTitleColorRes(R.color.colorPrimary)
+                .pickerThemeColorRes(R.color.image_picker_white)
+                .pickerTitleColorRes(R.color.image_picker_text_black)
+                .cropThemeColorRes(R.color.image_picker_white)
+                .cropTitleColorRes(R.color.image_picker_text_black)
                 .pickerBackRes(R.mipmap.image_picker_back_black)
+                .pickerFolderRes(R.mipmap.image_picker_folder_black)
                 .build();
 
         findViewById(R.id.iv).setOnClickListener(v -> {
