@@ -55,6 +55,8 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
     private RecyclerView mRecyclerViewImageList;
     private LinearLayout mLinearLaoyutBack;
     private TextView mTextViewFolder;
+    private ImageView mImageViewFolder;
+    private LinearLayout mLLFolder;
     private TextView mTextViewFinish;
     private FolderPopupWindow mFolderPopupWindow;
     private View mStatusView;
@@ -104,7 +106,9 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
         mRecyclerViewImageList.setLayoutManager(new GridLayoutManager(this, 3));
         mLinearLaoyutBack = findViewById(R.id.image_picker_ll_back);
         mLinearLaoyutBack.setOnClickListener(view -> goBack());
+        mLLFolder = findViewById(R.id.image_picker_ll_folder);
         mTextViewFolder = findViewById(R.id.image_picker_tv_folder);
+        mImageViewFolder = findViewById(R.id.image_picker_iv_folder);
         mStatusView = findViewById(R.id.image_picker_status);
         mRelativeLayout = findViewById(R.id.image_picker_title);
         mTextViewFinish = findViewById(R.id.image_picker_tv_finish);
@@ -113,8 +117,9 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
         mRelativeLayout.setBackgroundResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerThemeColorRes());
         mTextViewFinish.setTextColor(getResources().getColor(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerTitleColorRes()));
         mTextViewFolder.setTextColor(getResources().getColor(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerTitleColorRes()));
+        mImageViewFolder.setImageResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerFolderRes());
         mBackIv.setImageResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerBackRes());
-        mTextViewFolder.setOnClickListener(this::showPopupWindow);
+        mLLFolder.setOnClickListener(this::showPopupWindow);
         mTextViewFinish.setOnClickListener(view -> {
             if (NullUtill.isEmpty(selectImageInfo)) {
                 if (imagePickerConfig.isVideoPicker() && imagePickerConfig.isImagePicker()) {
