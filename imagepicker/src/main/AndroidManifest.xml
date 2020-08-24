@@ -1,14 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.zhangteng.imagepicker">
     <!-- 读取文件权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 录制音频权限 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 相机权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <application
-        android:requestLegacyExternalStorage="true"
-        tools:ignore="UnusedAttribute">
+    <application>
         <activity
             android:name=".activitys.ImagePickerActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
