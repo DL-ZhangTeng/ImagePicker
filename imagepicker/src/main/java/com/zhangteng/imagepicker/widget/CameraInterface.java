@@ -28,8 +28,8 @@ import com.zhangteng.imagepicker.utils.AngleUtil;
 import com.zhangteng.imagepicker.utils.CameraParamUtil;
 import com.zhangteng.imagepicker.utils.CheckPermission;
 import com.zhangteng.imagepicker.utils.DeviceUtil;
-import com.zhangteng.imagepicker.utils.LogUtil;
 import com.zhangteng.imagepicker.utils.FileUtils;
+import com.zhangteng.imagepicker.utils.LogUtil;
 import com.zhangteng.imagepicker.utils.ScreenUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -427,19 +427,19 @@ public class CameraInterface implements Camera.PreviewCallback {
         if (null != mCamera) {
             try {
                 mCamera.setPreviewCallback(null);
-                mSwitchView = null;
-                mFlashLamp = null;
                 mCamera.stopPreview();
                 //这句要在stopPreview后执行，不然会卡顿或者花屏
                 mCamera.setPreviewDisplay(null);
+//                destroyCameraInterface();
+                Log.i(TAG, "=== Destroy Camera ===");
+            } catch (IOException ignore) {
+            } finally {
+                mSwitchView = null;
+                mFlashLamp = null;
                 mHolder = null;
                 isPreviewing = false;
                 mCamera.release();
                 mCamera = null;
-//                destroyCameraInterface();
-                Log.i(TAG, "=== Destroy Camera ===");
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         } else {
             Log.i(TAG, "=== Camera  Null===");
@@ -600,6 +600,10 @@ public class CameraInterface implements Camera.PreviewCallback {
         videoFileName = "video_" + System.currentTimeMillis() + ".mp4";
         if (saveVideoPath.equals("")) {
             saveVideoPath = Environment.getExternalStorageDirectory().getPath();
+        }
+        File videoDir = new File(saveVideoPath);
+        if (!videoDir.exists()) {
+            videoDir.mkdirs();
         }
         videoFileAbsPath = saveVideoPath + File.separator + videoFileName;
         mediaRecorder.setOutputFile(videoFileAbsPath);
