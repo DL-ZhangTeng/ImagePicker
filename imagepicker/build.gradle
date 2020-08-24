@@ -53,7 +53,7 @@ def artifactName = 'ImagePicker'//项目名
 def description = '图片选择器'//添加项目描述
 
 group = "com.zhangteng.imagepicker"//发布aar前缀根节点
-version = "1.0.8"//发布aar的库版本
+version = "1.0.9"//发布aar的库版本
 
 install {
     repositories.mavenInstaller {
