@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ImagePickerConfig imagePickerConfig = new ImagePickerConfig.Builder()
+                .provider(getPackageName() + ".FileProvider")
                 .imageLoader(new GlideImageLoader()) //图片加载器
                 .iHandlerCallBack(new HandlerCallBack())    //图片选择器生命周期监听（直接打开摄像头时无效）
                 .multiSelect(true)                 //是否多选
@@ -45,11 +46,10 @@ public class MainActivity extends AppCompatActivity {
                 .pickerFolderRes(R.mipmap.image_picker_folder_black)
                 .build();
 
-        findViewById(R.id.iv).setOnClickListener(v -> {
-            ImagePickerOpen.getInstance()
-                    .setImagePickerConfig(imagePickerConfig)
-                    .open(this, 100);
-        });
+        findViewById(R.id.iv).setOnClickListener(v ->
+                ImagePickerOpen.getInstance()
+                        .setImagePickerConfig(imagePickerConfig)
+                        .open(this, 100));
     }
 
     @Override

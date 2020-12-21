@@ -49,7 +49,7 @@ public class ImagePickerConfig {
      */
     private String provider;
     /**
-     * 拍照以及截图后 存放的位置。    默认：/imagePicker/Pictures
+     * 拍照以及截图后 存放的位置。    默认：/imagePicker
      */
     private String filePath;
     /**
@@ -175,7 +175,7 @@ public class ImagePickerConfig {
         private int maxImageSelectable = 9;
         private int maxVideoSelectable = 1;
         private boolean isShowCamera = true;
-        private String filePath = "/" + BuildConfig.LIBRARY_PACKAGE_NAME + "/imagePicker/ImagePickerPictures";
+        private String filePath = "/imagePicker";
         private String provider = BuildConfig.LIBRARY_PACKAGE_NAME + ".FileProvider";
         private ArrayList<String> pathList = new ArrayList<>();
         private boolean isVideoPicker = true;
