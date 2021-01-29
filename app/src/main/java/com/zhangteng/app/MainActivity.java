@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && data != null) {
             ArrayList<String> paths = data.getStringArrayListExtra(Constant.PICKER_PATH);
-            new GlideImageLoader().loadImage(this, findViewById(R.id.iv), paths.get(0));
+            ImagePickerOpen.getInstance().getImagePickerConfig().getImageLoader().loadImage(this, findViewById(R.id.iv), paths.get(0));
         }
     }
 }
