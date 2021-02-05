@@ -52,22 +52,22 @@ public class ImagePickerOpen {
                 .permission(getPermissions())
                 .callback(new Callback() {
                     @Override
-                    public void success() {
+                    public void success(Activity permissionActivity) {
                         openNoPermission(mActivity);
                     }
 
                     @Override
-                    public void failure() {
+                    public void failure(Activity permissionActivity) {
                         ToastUtil.toastShort(mActivity, getPermissionFailureString(mActivity));
                     }
 
                     @Override
-                    public void nonExecution() {
+                    public void nonExecution(Activity permissionActivity) {
                         openNoPermission(mActivity);
                     }
                 })
                 .build();
-        androidPermission.excute();
+        androidPermission.execute();
     }
 
     /**
@@ -81,22 +81,22 @@ public class ImagePickerOpen {
                 .permission(getPermissions())
                 .callback(new Callback() {
                     @Override
-                    public void success() {
+                    public void success(Activity permissionActivity) {
                         openNoPermission(mActivity, requestCode);
                     }
 
                     @Override
-                    public void failure() {
+                    public void failure(Activity permissionActivity) {
                         ToastUtil.toastShort(mActivity, getPermissionFailureString(mActivity));
                     }
 
                     @Override
-                    public void nonExecution() {
+                    public void nonExecution(Activity permissionActivity) {
                         openNoPermission(mActivity, requestCode);
                     }
                 })
                 .build();
-        androidPermission.excute();
+        androidPermission.execute();
     }
 
     /**
