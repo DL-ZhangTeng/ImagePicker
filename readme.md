@@ -15,7 +15,7 @@ ImagePicker是一个Android版本的图片视频选择组件。
 <dependency>
 	    <groupId>com.github.duoluo9</groupId>
 	    <artifactId>ImagePicker</artifactId>
-	    <version>Tag</version>
+	    <version>1.1.5</version>
 </dependency>
 ```
 
@@ -27,7 +27,7 @@ allprojects {
     }
 }
 
-implementation 'com.github.duoluo9:ImagePicker:1.1.2'
+implementation 'com.github.duoluo9:ImagePicker:1.1.5'
 ```
 
 ## 效果图
