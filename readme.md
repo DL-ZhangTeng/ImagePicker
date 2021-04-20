@@ -2,13 +2,20 @@
 ImagePicker是一个Android版本的图片视频选择组件。
 [csdn博客地址](https://blog.csdn.net/duoluo9/article/details/108117954)
 ## 引入
+
 ### maven
 ```xml
+<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+</repositories>
+
 <dependency>
-	<groupId>com.zhangteng.imagepicker</groupId>
-	<artifactId>imagepicker</artifactId>
-	<version>1.1.2</version>
-	<type>pom</type>
+	    <groupId>com.github.duoluo9</groupId>
+	    <artifactId>ImagePicker</artifactId>
+	    <version>Tag</version>
 </dependency>
 ```
 
@@ -16,21 +23,13 @@ ImagePicker是一个Android版本的图片视频选择组件。
 ```groovy
 allprojects {
     repositories {
-        maven { url 'https://dl.bintray.com/duoluo9/android' }
+        maven { url 'https://jitpack.io' }
     }
 }
 
-implementation 'com.zhangteng.imagepicker:imagepicker:1.1.2'
+implementation 'com.github.duoluo9:ImagePicker:1.1.2'
 ```
 
-
-
-###  ivy
-```xml
-<dependency org="com.zhangteng.imagepicker" name="imagepicker" rev="1.1.2">
-	<artifact name="imagepicker" ext="pom"></artifact>
-</dependency>
-```
 ## 效果图
 ![图片选择器1](https://img-blog.csdnimg.cn/20200820102910783.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1b2x1bzk=,size_16,color_FFFFFF,t_70#pic_center)
 ![图片选择器2](https://img-blog.csdnimg.cn/20200820102951969.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1b2x1bzk=,size_16,color_FFFFFF,t_70#pic_center)
