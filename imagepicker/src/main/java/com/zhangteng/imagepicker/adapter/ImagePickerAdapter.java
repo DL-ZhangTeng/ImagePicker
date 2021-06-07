@@ -61,7 +61,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         layoutParams.height = heightOrWidth;
         layoutParams.width = heightOrWidth;
         holder.itemView.setLayoutParams(layoutParams);
-        ImageInfo imageInfo;
+        ImageInfo imageInfo = null;
         if (imagePickerConfig.isShowCamera()) {
             if (position == 0) {
                 holder.itemView.setOnClickListener(view -> {
@@ -94,7 +94,16 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             });
             initView(holder, imageInfo);
         }
-
+        //设置已选中图片状态（根据imagePickerConfig.getPathList()中的图片判断）
+        List<String> selectImage = imagePickerConfig.getPathList();
+        if (imageInfo != null && !selectImageInfo.contains(imageInfo)) {
+            for (String imagePath : selectImage) {
+                if (NullUtill.getNotNull(imageInfo.getPath()).equals(imagePath)) {
+                    selectItem(imageInfo);
+                    initView(holder, imageInfo);
+                }
+            }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
