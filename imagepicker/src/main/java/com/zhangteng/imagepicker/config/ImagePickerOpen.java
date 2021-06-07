@@ -18,6 +18,7 @@ import com.zhangteng.imagepicker.activitys.CameraActivity;
 import com.zhangteng.imagepicker.activitys.CameraDialogFragment;
 import com.zhangteng.imagepicker.activitys.ImagePickerActivity;
 import com.zhangteng.imagepicker.utils.FileUtils;
+import com.zhangteng.imagepicker.utils.NullUtill;
 import com.zhangteng.imagepicker.utils.ToastUtil;
 import com.zhangteng.imagepicker.widget.JCameraView;
 
@@ -225,6 +226,18 @@ public class ImagePickerOpen {
             imagePickerConfig = new ImagePickerConfig(new ImagePickerConfig.Builder());
         }
         return imagePickerConfig;
+    }
+
+    /**
+     * @param pathList 默认选中的图片集合
+     * @return this
+     */
+    public ImagePickerOpen pathList(List<String> pathList) {
+        imagePickerConfig.getPathList().clear();
+        if (!NullUtill.isEmpty(pathList)) {
+            imagePickerConfig.getPathList().addAll(pathList);
+        }
+        return this;
     }
 
     public static List<String> getResultData(Context context, int requestCode, int resultCode, @Nullable Intent data) {

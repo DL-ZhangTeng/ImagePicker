@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 .maxVideoLength(5 * 1000)
                 .maxVideoSize(180)
                 .isCrop(true)
+                .pathList(new ArrayList<>())
                 .pickerThemeColorRes(R.color.image_picker_white)
                 .pickerTitleColorRes(R.color.image_picker_text_black)
                 .cropThemeColorRes(R.color.image_picker_white)
@@ -46,10 +47,13 @@ public class MainActivity extends AppCompatActivity {
                 .pickerFolderRes(R.mipmap.image_picker_folder_black)
                 .build();
 
-        findViewById(R.id.iv).setOnClickListener(v ->
-                ImagePickerOpen.getInstance()
-                        .setImagePickerConfig(imagePickerConfig)
-                        .open(this, 100));
+        findViewById(R.id.iv).setOnClickListener(v -> {
+            imagePickerConfig.getPathList().clear();
+            ImagePickerOpen.getInstance()
+                    .setImagePickerConfig(imagePickerConfig)
+                    .pathList(new ArrayList<>())
+                    .open(this, 100);
+        });
     }
 
     @Override
