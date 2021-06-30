@@ -1,8 +1,7 @@
 # 图片选择器ImagePicker
 ImagePicker是一个Android版本的图片视频选择组件。
-[csdn博客地址](https://blog.csdn.net/duoluo9/article/details/108117954)
+[GitHub仓库地址](https://github.com/duoluo9/ImagePicker)
 ## 引入
-
 ### maven
 ```xml
 <repositories>
@@ -15,7 +14,7 @@ ImagePicker是一个Android版本的图片视频选择组件。
 <dependency>
 	    <groupId>com.github.duoluo9</groupId>
 	    <artifactId>ImagePicker</artifactId>
-	    <version>1.1.5</version>
+	    <version>Tag</version>
 </dependency>
 ```
 
@@ -27,7 +26,7 @@ allprojects {
     }
 }
 
-implementation 'com.github.duoluo9:ImagePicker:1.1.5'
+implementation 'com.github.duoluo9:ImagePicker:1.1.2'
 ```
 
 ## 效果图
@@ -63,6 +62,7 @@ cropThemeColorRes| 剪裁器主题色
 pickerTitleColorRes| 选择器标题色
 cropTitleColorRes| 剪裁器标题色
 pickerBackRes| 选择器返回按钮
+pickerFolderRes| 选择器文件夹选择下拉图标
 ## 使用
 ```java
   @Override
@@ -84,6 +84,7 @@ pickerBackRes| 选择器返回按钮
                 .maxVideoLength(5 * 1000)
                 .maxVideoSize(180)
                 .isCrop(true)
+                .pathList(new ArrayList<>())    //已选择图片列表
                 .pickerThemeColorRes(R.color.colorAccent)
                 .pickerTitleColorRes(R.color.image_picker_white)
                 .cropThemeColorRes(R.color.colorAccent)
@@ -92,8 +93,11 @@ pickerBackRes| 选择器返回按钮
                 .build();
 
         findViewById(R.id.iv).setOnClickListener(v -> {
+        	//重新打开选择器时不需要默认选中已选择的图片
+            //imagePickerConfig.getPathList().clear();
             ImagePickerOpen.getInstance()
                     .setImagePickerConfig(imagePickerConfig)
+                    .pathList(new ArrayList<>())	//设置默认选中的图片列表
                     .open(this, 100);
         });
     }
@@ -103,7 +107,10 @@ pickerBackRes| 选择器返回按钮
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && data != null) {
             ArrayList<String> paths = data.getStringArrayListExtra(Constant.PICKER_PATH);
-            new GlideImageLoader().loadImage(this, findViewById(R.id.iv), paths.get(0));
+            ImagePickerOpen.getInstance()
+                    .getImagePickerConfig()
+                    .getImageLoader()
+                    .loadImage(this, findViewById(R.id.iv), paths.get(0));
         }
     }
 ```
@@ -144,6 +151,10 @@ public class HandlerCallBack implements IHandlerCallBack {
 ## 历史版本
 版本| 更新| 更新时间
 -------- | ----- | -----
+v1.1.6|1.放弃非AndroidX维护；2.增加默认选中图片集合；3.使用jitpack仓库 |2021/6/7 at 13:35
+v1.0.10/v1.1.5| 1.照片存储空间修改到Android/data/${applicationId}/files/imagePicker文件夹下;2.更新权限请求库版本|2021/2/5 at 15:49
+v1.0.9/v1.1.4| 处理部分机型未释放相机bug&忽略目标版本为29时的分区存储|2020/8/24 at 13:58
+v1.0.8/v1.1.3| 增加文件夹选择下拉图标|2020/8/21 at 10:50
 v1.0.7/v1.1.2| 根据使用功能动态请求权限|2020/8/18 0018 at 上午 10:50
 v1.0.6/v1.1.1| 修复请求权限失败时崩溃bug|2020/8/17 0017 at 下午 17:31
 v1.1.0| 迁移到androidx|2020/7/22 0022 at 上午 11:54
@@ -154,8 +165,9 @@ v1.0.2| 更全的样式自定义|2020/5/20 0020 at 下午 17:13
 v1.0.0| 初版| 2020/5/15 0015 at 下午 16:14
 
 ## 赞赏
-如果您喜欢ImagePicker，或感觉ImagePicker帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢，您也可以扫描下面的二维码，请作者喝杯茶 tea
+如果您喜欢ImagePicker，或感觉ImagePicker帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢
 
+您也可以扫描下面的二维码，请作者喝杯茶 tea
 ![支付宝收款码](https://img-blog.csdnimg.cn/20200807160902219.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1b2x1bzk=,size_16,color_FFFFFF,t_70)
 ![微信收款码](https://img-blog.csdnimg.cn/20200807160902112.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1b2x1bzk=,size_16,color_FFFFFF,t_70)
 
