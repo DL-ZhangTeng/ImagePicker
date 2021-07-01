@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         findViewById(R.id.iv).setOnClickListener(v -> {
-            imagePickerConfig.getPathList().clear();
+//            imagePickerConfig.getPathList().clear();
             ImagePickerOpen.getInstance()
                     .setImagePickerConfig(imagePickerConfig)
                     .pathList(new ArrayList<>())

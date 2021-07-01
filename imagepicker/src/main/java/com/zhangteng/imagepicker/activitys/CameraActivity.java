@@ -6,10 +6,11 @@ import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.cameralibrary.listener.ClickListener;
@@ -51,7 +52,7 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.camera_layout);
         jCameraView = findViewById(R.id.jcameraview);
         //设置视频保存路径
-        jCameraView.setSaveVideoPath(FileUtils.getFilesDir(CameraActivity.this) + ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath());
+        jCameraView.setSaveVideoPath(FileUtils.getVideoDir() + ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath());
         jCameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
         jCameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
         jCameraView.setDuration(duration);
@@ -87,7 +88,7 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void captureSuccess(Bitmap bitmap) {
                 //获取图片bitmap
-                String path = FileUtils.saveBitmap(CameraActivity.this, ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath(), bitmap);
+                String path = FileUtils.saveBitmap(ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath(), bitmap);
                 ArrayList<String> paths = new ArrayList<>(1);
                 paths.add(path);
 

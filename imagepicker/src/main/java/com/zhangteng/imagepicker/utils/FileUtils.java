@@ -1,6 +1,5 @@
 package com.zhangteng.imagepicker.utils;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
@@ -29,20 +28,21 @@ public class FileUtils {
     }
 
     /**
-     * 获取媒体文件夹
+     * 获取图片文件夹
      *
-     * @param context
-     * @return
+     * @return 文件夹路径
      */
-    public static String getFilesDir(Context context) {
-        String cachePath;
-        //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageEmulated()) {
-            cachePath = context.getExternalFilesDir(null).getAbsolutePath();
-        } else {
-            cachePath = context.getFilesDir().getAbsolutePath();
-        }
-        return cachePath;
+    public static String getPictureDir() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+    }
+
+    /**
+     * 获取视频文件夹
+     *
+     * @return 文件夹路径
+     */
+    public static String getVideoDir() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath();
     }
 
     /**
@@ -50,25 +50,21 @@ public class FileUtils {
      *
      * @param filePath 文件夹路径
      */
-    public static void createFile(Context context, String filePath) {
+    public static void createFile(String filePath) {
 
-        File dir = new File(getFilesDir(context) + filePath);
-        File cropFile = new File(getFilesDir(context) + filePath + "/crop");
+        File pictureDir = new File(getPictureDir() + filePath);
+        File videoDir = new File(getVideoDir() + filePath);
+        File cropFile = new File(getPictureDir() + filePath + "/crop");
 
 
+        if (!pictureDir.exists()) {
+            pictureDir.mkdirs();
+        }
+        if (!videoDir.exists()) {
+            videoDir.mkdir();
+        }
         if (!cropFile.exists()) {
-            cropFile.mkdirs();
-        }
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
-        File file = new File(cropFile, ".nomedia");    // 创建忽视文件。   有该文件，系统将检索不到此文件夹下的图片。
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            cropFile.mkdir();
         }
     }
 
@@ -78,14 +74,14 @@ public class FileUtils {
      * @param dir 文件夹路径
      * @return 图片绝对路径
      */
-    public static String saveBitmap(Context context, String dir, Bitmap b) {
-        File f = new File(getFilesDir(context) + dir);
+    public static String saveBitmap(String dir, Bitmap b) {
+        File f = new File(getPictureDir() + dir);
         if (!f.exists()) {
             f.mkdir();
         }
         long dataTake = System.currentTimeMillis();
         String jpegName = "picture_" + dataTake + ".jpg";
-        String jpegPath = getFilesDir(context) + dir + File.separator + jpegName;
+        String jpegPath = getPictureDir() + dir + File.separator + jpegName;
         try {
             FileOutputStream fout = new FileOutputStream(jpegPath);
             BufferedOutputStream bos = new BufferedOutputStream(fout);
@@ -104,8 +100,8 @@ public class FileUtils {
      *
      * @param path 相对路径
      */
-    public static File getCropDir(Context context, String path) {
-        File cropFile = new File(getFilesDir(context) + path + "/crop");
+    public static File getCropDir(String path) {
+        File cropFile = new File(getPictureDir() + path + "/crop");
         if (!cropFile.exists()) {
             cropFile.mkdirs();
         }

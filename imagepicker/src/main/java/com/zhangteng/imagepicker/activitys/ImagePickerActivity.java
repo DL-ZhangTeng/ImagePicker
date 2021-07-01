@@ -142,7 +142,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
                     for (int i = selectImageInfo.size() - 1; i >= 0; i--) {
                         File sourceFile = new File(selectImageInfo.get(i).getPath());
                         String name = sourceFile.getName();
-                        File parentFile = FileUtils.getCropDir(this, imagePickerConfig.getFilePath());
+                        File parentFile = FileUtils.getCropDir(imagePickerConfig.getFilePath());
                         File destinationFile = new File(parentFile.getAbsoluteFile() + File.separator + UUID.randomUUID() + name);
                         Uri sourceUri = Uri.fromFile(sourceFile);
                         Uri destinationUri = Uri.fromFile(destinationFile);
@@ -219,7 +219,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
                     if (imagePickerConfig.isCrop() && !NullUtill.isEmpty(selectImage) && !NullUtill.isEmpty(selectImageInfo)) {
                         File sourceFile = new File(selectImage.get(0));
                         String name = sourceFile.getName();
-                        File parentFile = FileUtils.getCropDir(ImagePickerActivity.this, imagePickerConfig.getFilePath());
+                        File parentFile = FileUtils.getCropDir(imagePickerConfig.getFilePath());
                         File destinationFile = new File(parentFile.getAbsoluteFile() + File.separator + UUID.randomUUID() + name);
                         Uri sourceUri = Uri.fromFile(sourceFile);
                         Uri destinationUri = Uri.fromFile(destinationFile);
@@ -317,7 +317,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
                         for (int i = selectImageInfo.size() - 1; i >= 0; i--) {
                             File sourceFile = new File(selectImageInfo.get(i).getPath());
                             String name = sourceFile.getName();
-                            File parentFile = FileUtils.getCropDir(this, imagePickerConfig.getFilePath());
+                            File parentFile = FileUtils.getCropDir(imagePickerConfig.getFilePath());
                             File destinationFile = new File(parentFile.getAbsoluteFile() + File.separator + UUID.randomUUID() + name);
                             Uri sourceUri = Uri.fromFile(sourceFile);
                             Uri destinationUri = Uri.fromFile(destinationFile);
