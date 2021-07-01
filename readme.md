@@ -151,6 +151,7 @@ public class HandlerCallBack implements IHandlerCallBack {
 ## 历史版本
 版本| 更新| 更新时间
 -------- | ----- | -----
+v1.1.7|图片视频存储地址修改为公共媒体地址（targetSdkVersion 29+时在Android10+有文件访问限制）|2021/7/1 at 11:24
 v1.1.6|1.放弃非AndroidX维护；2.增加默认选中图片集合；3.使用jitpack仓库 |2021/6/7 at 13:35
 v1.0.10/v1.1.5| 1.照片存储空间修改到Android/data/${applicationId}/files/imagePicker文件夹下;2.更新权限请求库版本|2021/2/5 at 15:49
 v1.0.9/v1.1.4| 处理部分机型未释放相机bug&忽略目标版本为29时的分区存储|2020/8/24 at 13:58
