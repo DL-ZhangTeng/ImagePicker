@@ -1,22 +1,7 @@
 # 图片选择器ImagePicker
 ImagePicker是一个Android版本的图片视频选择组件。
-[GitHub仓库地址](https://github.com/duoluo9/ImagePicker)
+[GitHub仓库地址](https://github.com/DL-ZhangTeng/ImagePicker)
 ## 引入
-### maven
-```xml
-<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-</repositories>
-
-<dependency>
-	    <groupId>com.github.duoluo9</groupId>
-	    <artifactId>ImagePicker</artifactId>
-	    <version>Tag</version>
-</dependency>
-```
 
 ### gradle
 ```groovy
@@ -26,7 +11,11 @@ allprojects {
     }
 }
 
-implementation 'com.github.duoluo9:ImagePicker:1.1.2'
+implementation 'com.github.DL-ZhangTeng:ImagePicker:1.1.2'
+//三方
+implementation 'com.github.bumptech.glide:glide:4.11.0'
+implementation 'com.yalantis:ucrop:2.2.0'
+implementation 'com.github.DL-ZhangTeng:RequestPermission:1.1.3'
 ```
 
 ## 效果图
