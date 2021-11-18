@@ -126,7 +126,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
                 if (imagePickerConfig.isVideoPicker() && imagePickerConfig.isImagePicker()) {
                     ToastUtil.toastShort(ImagePickerActivity.this, "请选择文件");
                 } else {
-                    ToastUtil.toastShort(ImagePickerActivity.this, imagePickerConfig.isImagePicker() ? "请选择图片" : "请选择视频");
+                    ToastUtil.toastShort(ImagePickerActivity.this, imagePickerConfig.isVideoPicker() ? "请选择视频" : "请选择图片");
                 }
                 return;
             }

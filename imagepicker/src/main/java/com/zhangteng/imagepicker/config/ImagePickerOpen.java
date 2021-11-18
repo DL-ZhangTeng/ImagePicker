@@ -1,5 +1,7 @@
 package com.zhangteng.imagepicker.config;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,8 +27,6 @@ import com.zhangteng.imagepicker.widget.JCameraView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.Activity.RESULT_OK;
-
 /**
  * Created by Swing on 2018/4/18.
  */
@@ -44,6 +44,7 @@ public class ImagePickerOpen {
     }
 
     /**
+     * 通过回调获取返回结果（有请求权限，需要添加依赖 implementation 'com.github.DL-ZhangTeng:RequestPermission:1.1.5'）
      * ImagePickerEnum.PHOTO_PICKER 只启动照片选择
      * ImagePickerEnum.CAMERA 只启动相机
      * 其他 启动下方弹框
@@ -73,6 +74,7 @@ public class ImagePickerOpen {
     }
 
     /**
+     * 通过Intent获取返回结果（有请求权限，需要添加依赖 implementation 'com.github.DL-ZhangTeng:RequestPermission:1.1.5'）
      * ImagePickerEnum.PHOTO_PICKER 只启动照片选择
      * ImagePickerEnum.CAMERA 只启动相机
      * 其他 启动下方弹框
@@ -102,9 +104,12 @@ public class ImagePickerOpen {
     }
 
     /**
-     * 通过回调获取返回结果
+     * 通过回调获取返回结果（无请求权限）
+     * ImagePickerEnum.PHOTO_PICKER 只启动照片选择
+     * ImagePickerEnum.CAMERA 只启动相机
+     * 其他 启动下方弹框
      */
-    private void openNoPermission(FragmentActivity mActivity) {
+    public void openNoPermission(FragmentActivity mActivity) {
         if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.PHOTO_PICKER) {
             openImagePicker(mActivity, Constant.PICKER_RESULT_CODE);
         } else if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.CAMERA) {
@@ -120,9 +125,12 @@ public class ImagePickerOpen {
     }
 
     /**
-     * 通过Intent获取返回结果
+     * 通过Intent获取返回结果（无请求权限）
+     * ImagePickerEnum.PHOTO_PICKER 只启动照片选择
+     * ImagePickerEnum.CAMERA 只启动相机
+     * 其他 启动下方弹框
      */
-    private void openNoPermission(FragmentActivity mActivity, int requestCode) {
+    public void openNoPermission(FragmentActivity mActivity, int requestCode) {
         if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.PHOTO_PICKER) {
             openImagePicker(mActivity, requestCode);
         } else if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.CAMERA) {
@@ -240,6 +248,14 @@ public class ImagePickerOpen {
         return this;
     }
 
+    /**
+     * 使用open(FragmentActivity mActivity, int requestCode)
+     * 或openNoPermission(FragmentActivity mActivity, int requestCode)
+     * 启动时可以使用本方法获取选择结果
+     * 必须在onActivityResult(int requestCode, int resultCode, @Nullable Intent data)中调用
+     *
+     * @return List<String> 被选中文件列表
+     */
     public static List<String> getResultData(Context context, int requestCode, int resultCode, @Nullable Intent data) {
         List<String> result = new ArrayList<>();
         if (resultCode == RESULT_OK) {

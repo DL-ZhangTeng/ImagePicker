@@ -15,7 +15,7 @@ implementation 'com.github.DL-ZhangTeng:ImagePicker:1.1.2'
 //三方
 implementation 'com.github.bumptech.glide:glide:4.11.0'
 implementation 'com.yalantis:ucrop:2.2.0'
-implementation 'com.github.DL-ZhangTeng:RequestPermission:1.1.3'
+implementation 'com.github.DL-ZhangTeng:RequestPermission:1.1.5'
 ```
 
 ## 效果图
@@ -140,6 +140,7 @@ public class HandlerCallBack implements IHandlerCallBack {
 ## 历史版本
 版本| 更新| 更新时间
 -------- | ----- | -----
+v1.1.8|开放openNoPermission方法，更新权限请求库版本|2021/11/18 at 15:44
 v1.1.7|图片视频存储地址修改为公共媒体地址（targetSdkVersion 29+时在Android10+有文件访问限制）|2021/7/1 at 11:24
 v1.1.6|1.放弃非AndroidX维护；2.增加默认选中图片集合；3.使用jitpack仓库 |2021/6/7 at 13:35
 v1.0.10/v1.1.5| 1.照片存储空间修改到Android/data/${applicationId}/files/imagePicker文件夹下;2.更新权限请求库版本|2021/2/5 at 15:49
