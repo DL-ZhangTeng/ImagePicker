@@ -11,11 +11,11 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:ImagePicker:1.1.2'
+implementation 'com.github.DL-ZhangTeng:ImagePicker:v1.1.8'
 //三方
 implementation 'com.github.bumptech.glide:glide:4.11.0'
 implementation 'com.yalantis:ucrop:2.2.0'
-implementation 'com.github.DL-ZhangTeng:RequestPermission:1.1.5'
+implementation 'com.github.DL-ZhangTeng:RequestPermission:v1.1.5'
 ```
 
 ## 效果图
@@ -94,12 +94,31 @@ pickerFolderRes| 选择器文件夹选择下拉图标
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && data != null) {
-            ArrayList<String> paths = data.getStringArrayListExtra(Constant.PICKER_PATH);
+        List<String> result = new ArrayList<>();
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == 100) {
+                if (data.hasExtra(Constant.PICKER_PATH)) {
+                    List<String> resultPicker = data.getStringArrayListExtra(Constant.PICKER_PATH);
+                    if (resultPicker != null)
+                        result.addAll(resultPicker);
+                }
+            }
+            if (requestCode == 100) {
+                if (data.hasExtra(Constant.CAMERA_PATH)){
+                    List<String> resultCamera = data.getStringArrayListExtra(Constant.CAMERA_PATH);
+                    if (resultCamera != null)
+                        result.addAll(resultCamera);
+                }
+            }
+        }
+        if (resultCode == Constant.CAMERA_ERROR_CODE) {
+            Toast.makeText(context, "请检查相机权限", Toast.LENGTH_SHORT).show();
+        }
+        if (!result.isEmpty()) {
             ImagePickerOpen.getInstance()
                     .getImagePickerConfig()
                     .getImageLoader()
-                    .loadImage(this, findViewById(R.id.iv), paths.get(0));
+                    .loadImage(this, findViewById(R.id.iv), result.get(0));
         }
     }
 ```
@@ -140,6 +159,7 @@ public class HandlerCallBack implements IHandlerCallBack {
 ## 历史版本
 版本| 更新| 更新时间
 -------- | ----- | -----
+v1.1.9|修改依赖库&选择图片回调|2022/01/02 at 21:55
 v1.1.8|开放openNoPermission方法，更新权限请求库版本|2021/11/18 at 15:44
 v1.1.7|图片视频存储地址修改为公共媒体地址（targetSdkVersion 29+时在Android10+有文件访问限制）|2021/7/1 at 11:24
 v1.1.6|1.放弃非AndroidX维护；2.增加默认选中图片集合；3.使用jitpack仓库 |2021/6/7 at 13:35

@@ -258,11 +258,20 @@ public class ImagePickerOpen {
      */
     public static List<String> getResultData(Context context, int requestCode, int resultCode, @Nullable Intent data) {
         List<String> result = new ArrayList<>();
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && data != null) {
             if (requestCode == Constant.PICKER_RESULT_CODE) {
-                result = data.getStringArrayListExtra(Constant.PICKER_PATH);
-            } else if (requestCode == Constant.CAMERA_RESULT_CODE) {
-                result = data.getStringArrayListExtra(Constant.CAMERA_PATH);
+                if (data.hasExtra(Constant.PICKER_PATH)) {
+                    List<String> resultPicker = data.getStringArrayListExtra(Constant.PICKER_PATH);
+                    if (resultPicker != null)
+                        result.addAll(resultPicker);
+                }
+            }
+            if (requestCode == Constant.CAMERA_RESULT_CODE) {
+                if (data.hasExtra(Constant.CAMERA_PATH)){
+                    List<String> resultCamera = data.getStringArrayListExtra(Constant.CAMERA_PATH);
+                    if (resultCamera != null)
+                        result.addAll(resultCamera);
+                }
             }
         }
         if (resultCode == Constant.CAMERA_ERROR_CODE) {
