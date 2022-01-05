@@ -4,9 +4,9 @@ public interface Constant {
     int ALL = 0;
     int FODLER = 1;
 
-    int PICKER_RESULT_CODE = 100;
-    int CAMERA_RESULT_CODE = 101;
-    int CAMERA_ERROR_CODE = 103;
+    int PICKER_REQUEST_CODE = 1000;
+    int CAMERA_REQUEST_CODE = 1001;
+    int CAMERA_ERROR_CODE = 1003;
 
     String CAMERA_PATH = "CAMERA_PATH";
     String PICKER_PATH = "PICKER_PATH";

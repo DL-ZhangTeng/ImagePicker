@@ -195,7 +195,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
         imagePickerAdapter.setOnItemClickListener(new ImagePickerAdapter.OnItemClickListener() {
             @Override
             public void onCameraClick(List<ImageInfo> selectImageInfo) {
-                ImagePickerOpen.getInstance().openCamera(ImagePickerActivity.this, Constant.CAMERA_RESULT_CODE);
+                ImagePickerOpen.getInstance().openCamera(ImagePickerActivity.this, Constant.CAMERA_REQUEST_CODE);
                 ImagePickerActivity.this.selectImageInfo = selectImageInfo;
             }
 
@@ -280,7 +280,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.CAMERA_RESULT_CODE) {
+        if (requestCode == Constant.CAMERA_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 ArrayList<String> paths = data.getStringArrayListExtra(Constant.CAMERA_PATH);
                 String mime = data.getStringExtra(Constant.MIME);

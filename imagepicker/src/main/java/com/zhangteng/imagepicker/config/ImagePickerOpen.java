@@ -111,13 +111,13 @@ public class ImagePickerOpen {
      */
     public void openNoPermission(FragmentActivity mActivity) {
         if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.PHOTO_PICKER) {
-            openImagePicker(mActivity, Constant.PICKER_RESULT_CODE);
+            openImagePicker(mActivity, Constant.PICKER_REQUEST_CODE);
         } else if (imagePickerConfig.getImagePickerType() == ImagePickerEnum.CAMERA) {
-            openCamera(mActivity, Constant.CAMERA_RESULT_CODE);
+            openCamera(mActivity, Constant.CAMERA_REQUEST_CODE);
         } else {
             if (mActivity != null) {
                 if (cameraDialogFragment == null) {
-                    cameraDialogFragment = CameraDialogFragment.newInstance(Constant.CAMERA_RESULT_CODE, Constant.PICKER_RESULT_CODE);
+                    cameraDialogFragment = CameraDialogFragment.newInstance(Constant.CAMERA_REQUEST_CODE, Constant.PICKER_REQUEST_CODE);
                 }
                 cameraDialogFragment.show(mActivity.getSupportFragmentManager(), "cameraDialogFragment");
             }
@@ -259,14 +259,14 @@ public class ImagePickerOpen {
     public static List<String> getResultData(Context context, int requestCode, int resultCode, @Nullable Intent data) {
         List<String> result = new ArrayList<>();
         if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == Constant.PICKER_RESULT_CODE) {
+            if (requestCode == Constant.PICKER_REQUEST_CODE) {
                 if (data.hasExtra(Constant.PICKER_PATH)) {
                     List<String> resultPicker = data.getStringArrayListExtra(Constant.PICKER_PATH);
                     if (resultPicker != null)
                         result.addAll(resultPicker);
                 }
             }
-            if (requestCode == Constant.CAMERA_RESULT_CODE) {
+            if (requestCode == Constant.CAMERA_REQUEST_CODE) {
                 if (data.hasExtra(Constant.CAMERA_PATH)){
                     List<String> resultCamera = data.getStringArrayListExtra(Constant.CAMERA_PATH);
                     if (resultCamera != null)

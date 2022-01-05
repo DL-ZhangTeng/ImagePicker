@@ -28,8 +28,8 @@ public class CameraDialogFragment extends DialogFragment {
     private ImageView ivTakePhoto;
     private ImageView ivPickPhoto;
     private ImageView ivCancel;
-    private int cameraRequestCode = Constant.CAMERA_RESULT_CODE;
-    private int pickerRequestCode = Constant.PICKER_RESULT_CODE;
+    private int cameraRequestCode = Constant.CAMERA_REQUEST_CODE;
+    private int pickerRequestCode = Constant.PICKER_REQUEST_CODE;
 
     public CameraDialogFragment() {
     }
