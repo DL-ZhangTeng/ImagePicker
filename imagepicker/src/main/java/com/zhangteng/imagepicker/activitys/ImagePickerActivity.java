@@ -349,6 +349,12 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LoaderManager.getInstance(this).destroyLoader(Constant.ALL);
+    }
+
+    @Override
     public void onImageLoadFinished(ArrayList<ImageInfo> fileList, ArrayList<FolderInfo> folderList) {
         imageInfos.clear();
         imageInfos.addAll(fileList);
