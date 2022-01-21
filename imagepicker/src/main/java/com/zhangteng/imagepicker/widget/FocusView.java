@@ -3,11 +3,12 @@ package com.zhangteng.imagepicker.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.zhangteng.imagepicker.utils.ScreenUtils;
+import androidx.annotation.Nullable;
+
+import com.zhangteng.utils.DensityUtilKt;
 
 
 /**
@@ -30,7 +31,7 @@ public class FocusView extends View {
 
     public FocusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.size = ScreenUtils.getScreenWidth(context) / 3;
+        this.size = DensityUtilKt.getScreenWidth(context) / 3;
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);

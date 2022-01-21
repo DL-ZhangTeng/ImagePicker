@@ -9,7 +9,6 @@ import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
-import androidx.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -22,6 +21,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
+import androidx.annotation.RequiresApi;
+
 import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.cameralibrary.listener.CaptureListener;
 import com.zhangteng.imagepicker.cameralibrary.listener.ClickListener;
@@ -30,9 +31,9 @@ import com.zhangteng.imagepicker.cameralibrary.listener.JCameraListener;
 import com.zhangteng.imagepicker.cameralibrary.listener.TypeListener;
 import com.zhangteng.imagepicker.cameralibrary.state.CameraMachine;
 import com.zhangteng.imagepicker.cameralibrary.view.CameraView;
-import com.zhangteng.imagepicker.utils.FileUtils;
-import com.zhangteng.imagepicker.utils.LogUtil;
-import com.zhangteng.imagepicker.utils.ScreenUtils;
+import com.zhangteng.utils.DensityUtilKt;
+import com.zhangteng.utils.FileUtilsKt;
+import com.zhangteng.utils.LogUtilsKt;
 
 import java.io.IOException;
 
@@ -143,10 +144,10 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     }
 
     private void initData() {
-        layout_width = ScreenUtils.getScreenWidth(mContext);
+        layout_width = DensityUtilKt.getScreenWidth(mContext);
         //缩放梯度
         zoomGradient = (int) (layout_width / 16f);
-        LogUtil.i("zoom = " + zoomGradient);
+        LogUtilsKt.i("zoom = " + zoomGradient);
         machine = new CameraMachine(getContext(), this, this);
     }
 
@@ -217,7 +218,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
 
             @Override
             public void recordZoom(float zoom) {
-                LogUtil.i("recordZoom");
+                LogUtilsKt.i("recordZoom");
                 machine.zoom(zoom, CameraInterface.TYPE_RECORDER);
             }
 
@@ -284,7 +285,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
 
     //生命周期onResume
     public void onResume() {
-        LogUtil.i("JCameraView onResume");
+        LogUtilsKt.i("JCameraView onResume");
         resetState(TYPE_DEFAULT); //重置状态
         CameraInterface.getInstance().registerSensorManager(mContext);
         CameraInterface.getInstance().setSwitchView(mSwitchCamera, mFlashLamp);
@@ -293,7 +294,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
 
     //生命周期onPause
     public void onPause() {
-        LogUtil.i("JCameraView onPause");
+        LogUtilsKt.i("JCameraView onPause");
         stopVideo();
         resetState(TYPE_PICTURE);
         CameraInterface.getInstance().isPreview(false);
@@ -303,7 +304,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     //SurfaceView生命周期
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        LogUtil.i("JCameraView SurfaceCreated");
+        LogUtilsKt.i("JCameraView SurfaceCreated");
         new Thread() {
             @Override
             public void run() {
@@ -318,7 +319,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        LogUtil.i("JCameraView SurfaceDestroyed");
+        LogUtilsKt.i("JCameraView SurfaceDestroyed");
         CameraInterface.getInstance().doDestroyCamera();
     }
 
@@ -426,7 +427,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
             case TYPE_VIDEO:
                 stopVideo();    //停止播放
                 //初始化VideoView
-                FileUtils.delFile(videoUrl);
+                FileUtilsKt.deleteFile(videoUrl);
                 mVideoView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
                 machine.start(mVideoView.getHolder(), screenProp);
                 break;
@@ -541,7 +542,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
 
     @Override
     public void startPreviewCallback() {
-        LogUtil.i("startPreviewCallback");
+        LogUtilsKt.i("startPreviewCallback");
         handlerFocus(mFocusView.getWidth() / 2, mFocusView.getHeight() / 2);
     }
 

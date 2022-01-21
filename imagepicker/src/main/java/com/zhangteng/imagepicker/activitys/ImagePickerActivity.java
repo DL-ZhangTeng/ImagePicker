@@ -40,12 +40,12 @@ import com.zhangteng.imagepicker.loader.ImageLoaderCallBacks;
 import com.zhangteng.imagepicker.loader.LoaderCallBacks;
 import com.zhangteng.imagepicker.loader.MediaHandler;
 import com.zhangteng.imagepicker.loader.VideoLoaderCallBacks;
-import com.zhangteng.imagepicker.utils.FileUtils;
-import com.zhangteng.imagepicker.utils.NullUtill;
-import com.zhangteng.imagepicker.utils.ScreenUtils;
-import com.zhangteng.imagepicker.utils.ToastUtil;
 import com.zhangteng.imagepicker.utils.UcropUtil;
 import com.zhangteng.imagepicker.widget.FolderPopupWindow;
+import com.zhangteng.utils.DensityUtilKt;
+import com.zhangteng.utils.FileUtilsKt;
+import com.zhangteng.utils.NullUtils;
+import com.zhangteng.utils.ToastUtilsKt;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -122,11 +122,11 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
         mBackIv.setImageResource(ImagePickerOpen.getInstance().getImagePickerConfig().getPickerBackRes());
         mLLFolder.setOnClickListener(this::showPopupWindow);
         mTextViewFinish.setOnClickListener(view -> {
-            if (NullUtill.isEmpty(selectImageInfo)) {
+            if (NullUtils.INSTANCE.isEmpty(selectImageInfo)) {
                 if (imagePickerConfig.isVideoPicker() && imagePickerConfig.isImagePicker()) {
-                    ToastUtil.toastShort(ImagePickerActivity.this, "请选择文件");
+                    ToastUtilsKt.showShortToast(ImagePickerActivity.this, "请选择文件");
                 } else {
-                    ToastUtil.toastShort(ImagePickerActivity.this, imagePickerConfig.isVideoPicker() ? "请选择视频" : "请选择图片");
+                    ToastUtilsKt.showShortToast(ImagePickerActivity.this, imagePickerConfig.isVideoPicker() ? "请选择视频" : "请选择图片");
                 }
                 return;
             }
@@ -142,7 +142,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
                     for (int i = selectImageInfo.size() - 1; i >= 0; i--) {
                         File sourceFile = new File(selectImageInfo.get(i).getPath());
                         String name = sourceFile.getName();
-                        File parentFile = FileUtils.getCropDir(imagePickerConfig.getFilePath());
+                        File parentFile = FileUtilsKt.getCropDir(ImagePickerActivity.this, FileUtilsKt.getPictureDir(), imagePickerConfig.getFilePath());
                         File destinationFile = new File(parentFile.getAbsoluteFile() + File.separator + UUID.randomUUID() + name);
                         Uri sourceUri = Uri.fromFile(sourceFile);
                         Uri destinationUri = Uri.fromFile(destinationFile);
@@ -216,10 +216,10 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
                     mTextViewFinish.setVisibility(View.GONE);
                     if (iHandlerCallBack != null)
                         iHandlerCallBack.onSuccess(selectImageInfo);
-                    if (imagePickerConfig.isCrop() && !NullUtill.isEmpty(selectImage) && !NullUtill.isEmpty(selectImageInfo)) {
+                    if (imagePickerConfig.isCrop() && !NullUtils.INSTANCE.isEmpty(selectImage) && !NullUtils.INSTANCE.isEmpty(selectImageInfo)) {
                         File sourceFile = new File(selectImage.get(0));
                         String name = sourceFile.getName();
-                        File parentFile = FileUtils.getCropDir(imagePickerConfig.getFilePath());
+                        File parentFile = FileUtilsKt.getCropDir(ImagePickerActivity.this, FileUtilsKt.getPictureDir(), imagePickerConfig.getFilePath());
                         File destinationFile = new File(parentFile.getAbsoluteFile() + File.separator + UUID.randomUUID() + name);
                         Uri sourceUri = Uri.fromFile(sourceFile);
                         Uri destinationUri = Uri.fromFile(destinationFile);
@@ -284,12 +284,12 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
             if (resultCode == RESULT_OK) {
                 ArrayList<String> paths = data.getStringArrayListExtra(Constant.CAMERA_PATH);
                 String mime = data.getStringExtra(Constant.MIME);
-                long height = data.getIntExtra(Constant.HEIGHT, ScreenUtils.getScreenHeight(this));
-                long width = data.getIntExtra(Constant.WIDTH, ScreenUtils.getScreenWidth(this));
+                long height = data.getIntExtra(Constant.HEIGHT, DensityUtilKt.getScreenHeight(this));
+                long width = data.getIntExtra(Constant.WIDTH, DensityUtilKt.getScreenWidth(this));
                 List<String> selectImage = imagePickerConfig.getPathList();
                 if (selectImage != null) {
                     selectImage.clear();
-                    if (NullUtill.isEmpty(selectImageInfo)) {
+                    if (NullUtils.INSTANCE.isEmpty(selectImageInfo)) {
                         selectImageInfo = new ArrayList<>();
                     }
                     for (ImageInfo info : selectImageInfo) {
@@ -317,7 +317,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
                         for (int i = selectImageInfo.size() - 1; i >= 0; i--) {
                             File sourceFile = new File(selectImageInfo.get(i).getPath());
                             String name = sourceFile.getName();
-                            File parentFile = FileUtils.getCropDir(imagePickerConfig.getFilePath());
+                            File parentFile = FileUtilsKt.getCropDir(ImagePickerActivity.this, FileUtilsKt.getPictureDir(), imagePickerConfig.getFilePath());
                             File destinationFile = new File(parentFile.getAbsoluteFile() + File.separator + UUID.randomUUID() + name);
                             Uri sourceUri = Uri.fromFile(sourceFile);
                             Uri destinationUri = Uri.fromFile(destinationFile);
@@ -387,14 +387,14 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
 
     private void updateCropSelectedImage(Uri resultUri) {
         count++;
-        if (NullUtill.isEmpty(selectImageInfo)) {
+        if (NullUtils.INSTANCE.isEmpty(selectImageInfo)) {
             selectImageInfo = new ArrayList<>();
         }
         if (resultUri != null && resultUri.getPath() != null) {
             String resultName = new File(resultUri.getPath()).getName();
-            if (!NullUtill.isEmpty(resultName)) {
+            if (!NullUtils.INSTANCE.isEmpty(resultName)) {
                 for (ImageInfo imageInfo : selectImageInfo) {
-                    if (!NullUtill.isEmpty(imageInfo.getName())
+                    if (!NullUtils.INSTANCE.isEmpty(imageInfo.getName())
                             && resultName.contains(imageInfo.getName())) {
                         imageInfo.setPath(resultUri.getPath());
                         BitmapFactory.Options options = new BitmapFactory.Options();

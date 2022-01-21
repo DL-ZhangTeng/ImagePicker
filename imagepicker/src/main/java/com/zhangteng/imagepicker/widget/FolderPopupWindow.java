@@ -2,16 +2,17 @@ package com.zhangteng.imagepicker.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.adapter.FolderListAdapter;
-import com.zhangteng.imagepicker.utils.ScreenUtils;
+import com.zhangteng.utils.DensityUtilKt;
 
 /**
  * Created by Swing on 2018/4/17.
@@ -49,7 +50,7 @@ public class FolderPopupWindow extends PopupWindow {
         //设置PopupWindow弹出窗体的宽
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         //设置PopupWindow弹出窗体的高
-        this.setHeight(ScreenUtils.getScreenHeight(mContext)*2/3);
+        this.setHeight(DensityUtilKt.getScreenHeight(mContext) * 2 / 3);
         //设置PopupWindow弹出窗体可点击
         this.setFocusable(false);
         //设置非PopupWindow区域是否可触摸

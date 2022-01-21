@@ -16,8 +16,8 @@ import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.bean.ImageInfo;
 import com.zhangteng.imagepicker.config.ImagePickerConfig;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
-import com.zhangteng.imagepicker.utils.NullUtill;
-import com.zhangteng.imagepicker.utils.ScreenUtils;
+import com.zhangteng.utils.DensityUtilKt;
+import com.zhangteng.utils.NullUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        int heightOrWidth = Math.min(ScreenUtils.getScreenHeight(mContext) / 3, ScreenUtils.getScreenWidth(mContext) / 3);
+        int heightOrWidth = Math.min(DensityUtilKt.getScreenHeight(mContext) / 3, DensityUtilKt.getScreenWidth(mContext) / 3);
         layoutParams.height = heightOrWidth;
         layoutParams.width = heightOrWidth;
         holder.itemView.setLayoutParams(layoutParams);
@@ -98,7 +98,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         List<String> selectImage = imagePickerConfig.getPathList();
         if (imageInfo != null && !selectImageInfo.contains(imageInfo)) {
             for (String imagePath : selectImage) {
-                if (NullUtill.getNotNull(imageInfo.getPath()).equals(imagePath)) {
+                if (NullUtils.INSTANCE.getNotNull(imageInfo.getPath()).equals(imagePath)) {
                     selectItem(imageInfo);
                     initView(holder, imageInfo);
                 }
@@ -125,7 +125,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ImageViewHolder) holder).checkBox.setVisibility(View.GONE);
             ((ImageViewHolder) holder).mask.setVisibility(View.GONE);
         }
-        if (NullUtill.getNotNull(imageInfo.getMime()).toLowerCase().contains("video")) {
+        if (NullUtils.INSTANCE.getNotNull(imageInfo.getMime()).toLowerCase().contains("video")) {
             ((ImageViewHolder) holder).duration.setVisibility(View.VISIBLE);
             ((ImageViewHolder) holder).duration.setText(new SimpleDateFormat("mm:ss").format(imageInfo.getDuration()));
         } else {
@@ -170,10 +170,10 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      * 选择或取消选择文件,
      */
     private void selectItem(ImageInfo imageInfo) {
-        if (imagePickerConfig.isVideoPicker() && NullUtill.getNotNull(imageInfo.getMime()).toLowerCase().contains("video")) {
+        if (imagePickerConfig.isVideoPicker() && NullUtils.INSTANCE.getNotNull(imageInfo.getMime()).toLowerCase().contains("video")) {
             int selected = 0;
             for (ImageInfo info : selectImageInfo) {
-                if (NullUtill.getNotNull(info.getMime()).toLowerCase().contains("video")) {
+                if (NullUtils.INSTANCE.getNotNull(info.getMime()).toLowerCase().contains("video")) {
                     selected++;
                 }
             }

@@ -14,7 +14,7 @@ import android.view.View;
 
 import com.zhangteng.imagepicker.cameralibrary.listener.CaptureListener;
 import com.zhangteng.imagepicker.utils.CheckPermission;
-import com.zhangteng.imagepicker.utils.LogUtil;
+import com.zhangteng.utils.LogUtilsKt;
 
 import static com.zhangteng.imagepicker.widget.JCameraView.BUTTON_STATE_BOTH;
 import static com.zhangteng.imagepicker.widget.JCameraView.BUTTON_STATE_ONLY_CAPTURE;
@@ -89,9 +89,9 @@ public class CaptureButton extends View {
 
         state = STATE_IDLE;                //初始化为空闲状态
         button_state = BUTTON_STATE_BOTH;  //初始化按钮为可录制可拍照
-        LogUtil.i("CaptureButtom start");
+        LogUtilsKt.i("CaptureButtom start");
         duration = 15 * 1000;              //默认最长录制时间为10s
-        LogUtil.i("CaptureButtom end");
+        LogUtilsKt.i("CaptureButtom end");
         min_duration = 1500;              //默认最短录制时间为1.5s
 
         center_X = (button_size + outside_add_size * 2) / 2;
@@ -137,7 +137,7 @@ public class CaptureButton extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                LogUtil.i("state = " + state);
+                LogUtilsKt.i("state = " + state);
                 if (event.getPointerCount() > 1 || state != STATE_IDLE)
                     break;
                 event_Y = event.getY();     //记录Y值

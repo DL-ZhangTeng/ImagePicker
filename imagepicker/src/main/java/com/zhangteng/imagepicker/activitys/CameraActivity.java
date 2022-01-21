@@ -18,9 +18,11 @@ import com.zhangteng.imagepicker.cameralibrary.listener.ErrorListener;
 import com.zhangteng.imagepicker.cameralibrary.listener.JCameraListener;
 import com.zhangteng.imagepicker.config.Constant;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
-import com.zhangteng.imagepicker.utils.FileUtils;
 import com.zhangteng.imagepicker.widget.JCameraView;
+import com.zhangteng.utils.BitmapUtilsKt;
+import com.zhangteng.utils.FileUtilsKt;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -52,7 +54,7 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.camera_layout);
         jCameraView = findViewById(R.id.jcameraview);
         //设置视频保存路径
-        jCameraView.setSaveVideoPath(FileUtils.getVideoDir() + ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath());
+        jCameraView.setSaveVideoPath(FileUtilsKt.getVideoDir() + ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath());
         jCameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
         jCameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
         jCameraView.setDuration(duration);
@@ -87,8 +89,16 @@ public class CameraActivity extends AppCompatActivity {
         jCameraView.setJCameraListener(new JCameraListener() {
             @Override
             public void captureSuccess(Bitmap bitmap) {
+                String picturePath = FileUtilsKt.getPictureDir() + ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath();
+                long dataTake = System.currentTimeMillis();
+                String jpegName = "picture_" + dataTake + ".jpg";
                 //获取图片bitmap
-                String path = FileUtils.saveBitmap(ImagePickerOpen.getInstance().getImagePickerConfig().getFilePath(), bitmap);
+                String path;
+                if (BitmapUtilsKt.saveBitmap(bitmap, picturePath, jpegName)) {
+                    path = picturePath + File.separator + jpegName;
+                } else {
+                    path = null;
+                }
                 ArrayList<String> paths = new ArrayList<>(1);
                 paths.add(path);
 

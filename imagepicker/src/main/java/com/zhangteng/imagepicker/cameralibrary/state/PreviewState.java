@@ -6,7 +6,7 @@ import android.view.SurfaceHolder;
 
 import com.zhangteng.imagepicker.widget.CameraInterface;
 import com.zhangteng.imagepicker.widget.JCameraView;
-import com.zhangteng.imagepicker.utils.LogUtil;
+import com.zhangteng.utils.LogUtilsKt;
 
 class PreviewState implements State {
     public static final String TAG = "PreviewState";
@@ -30,7 +30,7 @@ class PreviewState implements State {
 
     @Override
     public void focus(float x, float y, CameraInterface.FocusCallback callback) {
-        LogUtil.i("preview state focus");
+        LogUtilsKt.i("preview state focus");
         if (machine.getView().handlerFocus(x, y)) {
             CameraInterface.getInstance().handleFocus(machine.getContext(), x, y, callback);
         }
@@ -53,7 +53,7 @@ class PreviewState implements State {
             public void captureResult(Bitmap bitmap, boolean isVertical) {
                 machine.getView().showPicture(bitmap, isVertical);
                 machine.setState(machine.getBorrowPictureState());
-                LogUtil.i("capture");
+                LogUtilsKt.i("capture");
             }
         });
     }
@@ -80,17 +80,17 @@ class PreviewState implements State {
 
     @Override
     public void cancel(SurfaceHolder holder, float screenProp) {
-        LogUtil.i("There is no cancel event in the browse state");
+        LogUtilsKt.i("There is no cancel event in the browse state");
     }
 
     @Override
     public void confirm() {
-        LogUtil.i("There is no confirmation event in the browse state");
+        LogUtilsKt.i("There is no confirmation event in the browse state");
     }
 
     @Override
     public void zoom(float zoom, int type) {
-        LogUtil.i(TAG, "zoom");
+        LogUtilsKt.i(TAG, "zoom");
         CameraInterface.getInstance().setZoom(zoom, type);
     }
 

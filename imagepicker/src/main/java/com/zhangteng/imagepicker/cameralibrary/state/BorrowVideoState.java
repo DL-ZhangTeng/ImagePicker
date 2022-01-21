@@ -5,7 +5,7 @@ import android.view.SurfaceHolder;
 
 import com.zhangteng.imagepicker.widget.CameraInterface;
 import com.zhangteng.imagepicker.widget.JCameraView;
-import com.zhangteng.imagepicker.utils.LogUtil;
+import com.zhangteng.utils.LogUtilsKt;
 
 public class BorrowVideoState implements State {
     private final String TAG = "BorrowVideoState";
@@ -71,7 +71,7 @@ public class BorrowVideoState implements State {
 
     @Override
     public void zoom(float zoom, int type) {
-        LogUtil.i(TAG, "zoom");
+        LogUtilsKt.i(TAG, "zoom");
     }
 
     @Override

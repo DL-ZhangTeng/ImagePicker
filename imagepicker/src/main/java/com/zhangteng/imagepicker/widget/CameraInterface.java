@@ -1,5 +1,7 @@
 package com.zhangteng.imagepicker.widget;
 
+import static android.graphics.Bitmap.createBitmap;
+
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -28,17 +30,15 @@ import com.zhangteng.imagepicker.utils.AngleUtil;
 import com.zhangteng.imagepicker.utils.CameraParamUtil;
 import com.zhangteng.imagepicker.utils.CheckPermission;
 import com.zhangteng.imagepicker.utils.DeviceUtil;
-import com.zhangteng.imagepicker.utils.FileUtils;
-import com.zhangteng.imagepicker.utils.LogUtil;
-import com.zhangteng.imagepicker.utils.ScreenUtils;
+import com.zhangteng.utils.DensityUtilKt;
+import com.zhangteng.utils.FileUtilsKt;
+import com.zhangteng.utils.LogUtilsKt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.graphics.Bitmap.createBitmap;
 
 @SuppressWarnings("deprecation")
 public class CameraInterface implements Camera.PreviewCallback {
@@ -248,7 +248,7 @@ public class CameraInterface implements Camera.PreviewCallback {
                     mParams.setZoom(nowScaleRate);
                     mCamera.setParameters(mParams);
                 }
-                LogUtil.i("setZoom = " + nowScaleRate);
+                LogUtilsKt.i("setZoom = " + nowScaleRate);
                 break;
         }
 
@@ -334,7 +334,7 @@ public class CameraInterface implements Camera.PreviewCallback {
             SELECTED_CAMERA = CAMERA_POST_POSITION;
         }
         doDestroyCamera();
-        LogUtil.i("open start");
+        LogUtilsKt.i("open start");
         openCamera(SELECTED_CAMERA);
 //        mCamera = Camera.open();
         if (Build.VERSION.SDK_INT > 17 && this.mCamera != null) {
@@ -344,7 +344,7 @@ public class CameraInterface implements Camera.PreviewCallback {
                 e.printStackTrace();
             }
         }
-        LogUtil.i("open end");
+        LogUtilsKt.i("open end");
         doStartPreview(holder, screenProp);
     }
 
@@ -353,7 +353,7 @@ public class CameraInterface implements Camera.PreviewCallback {
      */
     public void doStartPreview(SurfaceHolder holder, float screenProp) {
         if (isPreviewing) {
-            LogUtil.i("doStartPreview isPreviewing");
+            LogUtilsKt.i("doStartPreview isPreviewing");
         }
         if (this.screenProp < 0) {
             this.screenProp = screenProp;
@@ -651,7 +651,7 @@ public class CameraInterface implements Camera.PreviewCallback {
                 isRecorder = false;
             }
             if (isShort) {
-                if (FileUtils.delFile(videoFileAbsPath)) {
+                if (FileUtilsKt.deleteFile(videoFileAbsPath)) {
                     callback.recordResult(null, null);
                 }
                 return;
@@ -724,8 +724,8 @@ public class CameraInterface implements Camera.PreviewCallback {
     private static Rect calculateTapArea(float x, float y, float coefficient, Context context) {
         float focusAreaSize = 300;
         int areaSize = Float.valueOf(focusAreaSize * coefficient).intValue();
-        int centerX = (int) (x / ScreenUtils.getScreenWidth(context) * 2000 - 1000);
-        int centerY = (int) (y / ScreenUtils.getScreenHeight(context) * 2000 - 1000);
+        int centerX = (int) (x / DensityUtilKt.getScreenWidth(context) * 2000 - 1000);
+        int centerY = (int) (y / DensityUtilKt.getScreenHeight(context) * 2000 - 1000);
         int left = clamp(centerX - areaSize / 2, -1000, 1000);
         int top = clamp(centerY - areaSize / 2, -1000, 1000);
         RectF rectF = new RectF(left, top, left + areaSize, top + areaSize);

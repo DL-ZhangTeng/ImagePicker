@@ -19,10 +19,10 @@ import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.activitys.CameraActivity;
 import com.zhangteng.imagepicker.activitys.CameraDialogFragment;
 import com.zhangteng.imagepicker.activitys.ImagePickerActivity;
-import com.zhangteng.imagepicker.utils.FileUtils;
-import com.zhangteng.imagepicker.utils.NullUtill;
-import com.zhangteng.imagepicker.utils.ToastUtil;
 import com.zhangteng.imagepicker.widget.JCameraView;
+import com.zhangteng.utils.FileUtilsKt;
+import com.zhangteng.utils.NullUtils;
+import com.zhangteng.utils.ToastUtilsKt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class ImagePickerOpen {
 
                     @Override
                     public void failure(Activity permissionActivity) {
-                        ToastUtil.toastShort(mActivity, getPermissionFailureString(mActivity));
+                        ToastUtilsKt.showShortToast(mActivity, getPermissionFailureString(mActivity));
                     }
 
                     @Override
@@ -91,7 +91,7 @@ public class ImagePickerOpen {
 
                     @Override
                     public void failure(Activity permissionActivity) {
-                        ToastUtil.toastShort(mActivity, getPermissionFailureString(mActivity));
+                        ToastUtilsKt.showShortToast(mActivity, getPermissionFailureString(mActivity));
                     }
 
                     @Override
@@ -217,7 +217,7 @@ public class ImagePickerOpen {
             Log.e(TAG, "请配置 IHandlerCallBack");
             return;
         }
-        FileUtils.createFile(imagePickerConfig.getFilePath());
+        FileUtilsKt.createFile(activity, FileUtilsKt.getPictureDir(), imagePickerConfig.getFilePath());
 
         Intent intent = new Intent(activity, ImagePickerActivity.class);
         activity.startActivityForResult(intent, requestCode);
@@ -242,7 +242,7 @@ public class ImagePickerOpen {
      */
     public ImagePickerOpen pathList(List<String> pathList) {
         imagePickerConfig.getPathList().clear();
-        if (!NullUtill.isEmpty(pathList)) {
+        if (!NullUtils.INSTANCE.isEmpty(pathList)) {
             imagePickerConfig.getPathList().addAll(pathList);
         }
         return this;
@@ -267,7 +267,7 @@ public class ImagePickerOpen {
                 }
             }
             if (requestCode == Constant.CAMERA_REQUEST_CODE) {
-                if (data.hasExtra(Constant.CAMERA_PATH)){
+                if (data.hasExtra(Constant.CAMERA_PATH)) {
                     List<String> resultCamera = data.getStringArrayListExtra(Constant.CAMERA_PATH);
                     if (resultCamera != null)
                         result.addAll(resultCamera);
