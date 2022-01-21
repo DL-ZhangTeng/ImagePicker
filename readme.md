@@ -11,11 +11,12 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:ImagePicker:v1.1.8'
+implementation 'com.github.DL-ZhangTeng:ImagePicker:1.3.0'
 //三方
-implementation 'com.github.bumptech.glide:glide:4.11.0'
+implementation 'com.github.bumptech.glide:glide:4.12.0'
 implementation 'com.yalantis:ucrop:2.2.0'
-implementation 'com.github.DL-ZhangTeng:RequestPermission:v1.1.5'
+implementation 'com.github.DL-ZhangTeng:RequestPermission:1.1.5'
+implementation 'com.github.DL-ZhangTeng.BaseLibrary:utils:1.3.0'
 ```
 
 ## 效果图
@@ -159,6 +160,8 @@ public class HandlerCallBack implements IHandlerCallBack {
 ## 历史版本
 版本| 更新| 更新时间
 -------- | ----- | -----
+v1.3.0|使用base的utils库|2022/1/21 at 15:42
+v1.2.0|常量名&值更换|2022/1/5 at 23:42
 v1.1.9|修改依赖库&选择图片回调|2022/01/02 at 21:55
 v1.1.8|开放openNoPermission方法，更新权限请求库版本|2021/11/18 at 15:44
 v1.1.7|图片视频存储地址修改为公共媒体地址（targetSdkVersion 29+时在Android10+有文件访问限制）|2021/7/1 at 11:24
