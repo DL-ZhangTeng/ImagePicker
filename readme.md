@@ -12,11 +12,11 @@ allprojects {
 }
 
 implementation 'com.github.DL-ZhangTeng:ImagePicker:1.3.0'
-//三方
-implementation 'com.github.bumptech.glide:glide:4.12.0'
-implementation 'com.yalantis:ucrop:2.2.0'
-implementation 'com.github.DL-ZhangTeng:RequestPermission:1.1.5'
-implementation 'com.github.DL-ZhangTeng.BaseLibrary:utils:1.3.0'
+    //使用的三方
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'com.yalantis:ucrop:2.2.0'
+    implementation 'com.github.DL-ZhangTeng:RequestPermission:1.2.0'
+    implementation 'com.github.DL-ZhangTeng.BaseLibrary:utils:1.3.5'
 ```
 
 ## 效果图
@@ -179,10 +179,7 @@ v1.0.2| 更全的样式自定义|2020/5/20 0020 at 下午 17:13
 v1.0.0| 初版| 2020/5/15 0015 at 下午 16:14
 
 ## 赞赏
-如果您喜欢ImagePicker，或感觉ImagePicker帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢，您也可以扫描下面的二维码，请作者喝杯茶 tea
-
-![支付宝收款码](https://img-blog.csdnimg.cn/20200807160902219.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1b2x1bzk=,size_16,color_FFFFFF,t_70)
-![微信收款码](https://img-blog.csdnimg.cn/20200807160902112.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1b2x1bzk=,size_16,color_FFFFFF,t_70)
+如果您喜欢ImagePicker，或感觉ImagePicker帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢
 
 ## 联系我
 邮箱：763263311@qq.com/ztxiaoran@foxmail.com
