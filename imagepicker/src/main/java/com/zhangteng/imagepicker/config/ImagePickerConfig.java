@@ -27,7 +27,7 @@ public class ImagePickerConfig {
     /**
      * 回调
      */
-    private IHandlerCallBack iHandlerCallBack;
+    private IHandlerCallBack<ImageInfo> iHandlerCallBack;
     /**
      * 是否开启多选  默认 ： false
      */
@@ -353,7 +353,7 @@ public class ImagePickerConfig {
 
     }
 
-    public IHandlerCallBack getiHandlerCallBack() {
+    public IHandlerCallBack<ImageInfo> getiHandlerCallBack() {
         return iHandlerCallBack;
     }
 

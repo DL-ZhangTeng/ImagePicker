@@ -124,7 +124,7 @@ pickerFolderRes| 选择器文件夹选择下拉图标
     }
 ```
 ```java
-public class HandlerCallBack implements IHandlerCallBack {
+public class HandlerCallBack implements IHandlerCallBack<ImageInfo> {
     private String TAG = "---ImagePicker---";
     List<ImageInfo> photoList = new ArrayList<>();
 
