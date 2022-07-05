@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Swing on 2018/4/18.
  */
-public interface IHandlerCallBack {
+public interface IHandlerCallBack extends com.zhangteng.utils.IHandlerCallBack<ImageInfo> {
 
     void onStart();
 

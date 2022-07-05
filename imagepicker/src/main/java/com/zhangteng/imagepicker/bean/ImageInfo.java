@@ -3,10 +3,12 @@ package com.zhangteng.imagepicker.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.zhangteng.utils.IMediaBean;
+
 /**
  * Created by Swing on 2018/4/17.
  */
-public class ImageInfo implements Parcelable {
+public class ImageInfo implements IMediaBean, Parcelable {
     private String name;
     private String addTime;
     private String path;
