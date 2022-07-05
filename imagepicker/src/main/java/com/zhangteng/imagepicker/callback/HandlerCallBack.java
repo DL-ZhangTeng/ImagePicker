@@ -3,6 +3,7 @@ package com.zhangteng.imagepicker.callback;
 import android.util.Log;
 
 import com.zhangteng.imagepicker.bean.ImageInfo;
+import com.zhangteng.utils.IHandlerCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by Swing on 2018/4/18.
  */
-public class HandlerCallBack implements IHandlerCallBack {
+public class HandlerCallBack implements IHandlerCallBack<ImageInfo> {
     private String TAG = "---ImagePicker---";
     List<ImageInfo> photoList = new ArrayList<>();
 

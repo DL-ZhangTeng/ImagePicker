@@ -32,7 +32,6 @@ import com.zhangteng.imagepicker.adapter.FolderListAdapter;
 import com.zhangteng.imagepicker.adapter.ImagePickerAdapter;
 import com.zhangteng.imagepicker.bean.FolderInfo;
 import com.zhangteng.imagepicker.bean.ImageInfo;
-import com.zhangteng.imagepicker.callback.IHandlerCallBack;
 import com.zhangteng.imagepicker.config.Constant;
 import com.zhangteng.imagepicker.config.ImagePickerConfig;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
@@ -44,6 +43,7 @@ import com.zhangteng.imagepicker.utils.UcropUtil;
 import com.zhangteng.imagepicker.widget.FolderPopupWindow;
 import com.zhangteng.utils.DensityUtilKt;
 import com.zhangteng.utils.FileUtilsKt;
+import com.zhangteng.utils.IHandlerCallBack;
 import com.zhangteng.utils.NullUtils;
 import com.zhangteng.utils.ToastUtilsKt;
 
@@ -78,7 +78,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
     private FolderListAdapter folderListAdapter;
     private ImagePickerAdapter imagePickerAdapter;
     private ImagePickerConfig imagePickerConfig;
-    private IHandlerCallBack iHandlerCallBack;
+    private IHandlerCallBack<ImageInfo> iHandlerCallBack;
     private List<ImageInfo> selectImageInfo;
     private int count = 0;
 

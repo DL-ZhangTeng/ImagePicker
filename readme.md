@@ -11,7 +11,7 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:ImagePicker:1.3.0'
+implementation 'com.github.DL-ZhangTeng:ImagePicker:1.3.1'
     //使用的三方
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation 'com.yalantis:ucrop:2.2.0'
@@ -160,6 +160,7 @@ public class HandlerCallBack implements IHandlerCallBack {
 ## 历史版本
 版本| 更新| 更新时间
 -------- | ----- | -----
+v1.3.1|继承Utils库中的接口|2022/7/5 at 9:21
 v1.3.0|使用base的utils库|2022/1/21 at 15:42
 v1.2.0|常量名&值更换|2022/1/5 at 23:42
 v1.1.9|修改依赖库&选择图片回调|2022/01/02 at 21:55

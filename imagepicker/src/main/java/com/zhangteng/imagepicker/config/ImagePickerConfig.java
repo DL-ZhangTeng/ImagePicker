@@ -5,11 +5,12 @@ import androidx.annotation.DrawableRes;
 
 import com.zhangteng.imagepicker.BuildConfig;
 import com.zhangteng.imagepicker.R;
+import com.zhangteng.imagepicker.bean.ImageInfo;
 import com.zhangteng.imagepicker.callback.HandlerCallBack;
-import com.zhangteng.imagepicker.callback.IHandlerCallBack;
 import com.zhangteng.imagepicker.imageloader.GlideImageLoader;
-import com.zhangteng.imagepicker.imageloader.ImageLoader;
 import com.zhangteng.imagepicker.widget.JCameraView;
+import com.zhangteng.utils.IHandlerCallBack;
+import com.zhangteng.utils.ImageLoader;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -170,7 +171,7 @@ public class ImagePickerConfig {
 
     public static class Builder implements Serializable {
         private ImageLoader imageLoader = new GlideImageLoader();
-        private IHandlerCallBack iHandlerCallBack = new HandlerCallBack();
+        private IHandlerCallBack<ImageInfo> iHandlerCallBack = new HandlerCallBack();
         private boolean multiSelect = true;
         private int maxImageSelectable = 9;
         private int maxVideoSelectable = 1;
@@ -207,7 +208,7 @@ public class ImagePickerConfig {
             return this;
         }
 
-        public Builder iHandlerCallBack(IHandlerCallBack iHandlerCallBack) {
+        public Builder iHandlerCallBack(IHandlerCallBack<ImageInfo> iHandlerCallBack) {
             this.iHandlerCallBack = iHandlerCallBack;
             return this;
         }

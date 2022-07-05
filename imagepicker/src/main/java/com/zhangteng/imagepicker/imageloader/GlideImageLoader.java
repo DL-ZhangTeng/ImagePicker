@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.zhangteng.imagepicker.R;
+import com.zhangteng.utils.ImageLoader;
 
 /**
  * Created by Swing on 2018/4/18.
