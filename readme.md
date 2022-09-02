@@ -15,8 +15,8 @@ implementation 'com.github.DL-ZhangTeng:ImagePicker:1.3.1'
     //使用的三方
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation 'com.yalantis:ucrop:2.2.0'
-    implementation 'com.github.DL-ZhangTeng:RequestPermission:1.2.0'
-    implementation 'com.github.DL-ZhangTeng.BaseLibrary:utils:1.3.5'
+    implementation 'com.github.DL-ZhangTeng:RequestPermission:1.2.+'
+    implementation 'com.github.DL-ZhangTeng:Utils:1.0.+'
 ```
 
 ## 效果图
