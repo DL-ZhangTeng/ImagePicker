@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.zhangteng.imagepicker">
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- 读取文件权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 录制音频权限 -->
@@ -11,11 +10,15 @@
         tools:ignore="UnusedAttribute">
         <activity
             android:name=".activitys.ImagePickerActivity"
+            android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activitys.CameraActivity" />
+        <activity
+            android:name=".activitys.CameraActivity"
+            android:exported="false" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:configChanges="orientation|screenSize"
+            android:exported="false"
             android:screenOrientation="fullSensor"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 

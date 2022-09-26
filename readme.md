@@ -27,42 +27,47 @@ implementation 'com.github.DL-ZhangTeng:ImagePicker:1.4.0'
 
 
 ## 属性
-属性名| 描述
---- | -----
-multiSelect| 是否单选，默认true
-maxImageSelectable| 多选时最多选多少张，默认9
-maxVideoSelectable| 多选时最多选多少个，默认1
-isShowCamera| 是否在第一格显示拍照录制，默认true
-filePath| 图片剪裁保持地址，默认"/" + BuildConfig.APPLICATION_ID + "/imagePicker/ImagePickerPictures"
-provider| 文件提供者，默认BuildConfig.APPLICATION_ID + ".FileProvider"
-pathList| 图片保持List
-isVideoPicker| 是否可选择视频，默认true
-isImagePicker|是否可选择图片，默认true
-isMirror| 摄像拍照是否镜像
-maxWidth| 最大图片宽度，默认1920
-maxHeight| 最大图片高度，默认1920
-maxImageSize| 图片大小，默认15M
-maxVideoLength| 视频长度，默认15000ms
-maxVideoSize| 视频大小，默认45M
-imagePickerType| 弹出类型，默认图片选择器
-isCrop| 是否开启剪裁，默认false
-cropAspectRatio| 剪裁比率（w/h），默认0
-pickerThemeColorRes| 选择器主题色
-cropThemeColorRes| 剪裁器主题色
-pickerTitleColorRes| 选择器标题色
-cropTitleColorRes| 剪裁器标题色
-pickerBackRes| 选择器返回按钮
-pickerFolderRes| 选择器文件夹选择下拉图标
+| 属性名                 | 描述                                                                               |
+|---------------------|----------------------------------------------------------------------------------|
+| multiSelect         | 是否单选，默认true                                                                      |
+| maxImageSelectable  | 多选时最多选多少张，默认9                                                                    |
+| maxVideoSelectable  | 多选时最多选多少个，默认1                                                                    |
+| isShowCamera        | 是否在第一格显示拍照录制，默认true                                                              |
+| filePath            | 图片剪裁保持地址，默认"/" + BuildConfig.APPLICATION_ID + "/imagePicker/ImagePickerPictures" |
+| provider            | 文件提供者，默认BuildConfig.APPLICATION_ID + ".FileProvider"                             |
+| pathList            | 图片保持List                                                                         |
+| isVideoPicker       | 是否可选择视频，默认true                                                                   |
+| isImagePicker       | 是否可选择图片，默认true                                                                   |
+| isMirror            | 摄像拍照是否镜像                                                                         |
+| maxWidth            | 最大图片宽度，默认1920                                                                    |
+| maxHeight           | 最大图片高度，默认1920                                                                    |
+| maxImageSize        | 图片大小，默认15M                                                                       |
+| maxVideoLength      | 视频长度，默认15000ms                                                                   |
+| maxVideoSize        | 视频大小，默认45M                                                                       |
+| imagePickerType     | 弹出类型，默认图片选择器                                                                     |
+| isCrop              | 是否开启剪裁，默认false                                                                   |
+| cropAspectRatio     | 剪裁比率（w/h），默认0                                                                    |
+| pickerThemeColorRes | 选择器主题色                                                                           |
+| cropThemeColorRes   | 剪裁器主题色                                                                           |
+| pickerTitleColorRes | 选择器标题色                                                                           |
+| cropTitleColorRes   | 剪裁器标题色                                                                           |
+| pickerBackRes       | 选择器返回按钮                                                                          |
+| pickerFolderRes     | 选择器文件夹选择下拉图标                                                                     |
+
 ## 使用
 ```java
-  @Override
+public class MainActivity extends AppCompatActivity {
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ImagePickerConfig imagePickerConfig = new ImagePickerConfig.Builder()
+                .provider(getPackageName() + ".FileProvider")
                 .imageLoader(new GlideImageLoader()) //图片加载器
                 .iHandlerCallBack(new HandlerCallBack())    //图片选择器生命周期监听（直接打开摄像头时无效）
                 .multiSelect(true)                 //是否多选
+                .isShowCamera(true)
                 .isVideoPicker(true)              //是否选择视频 默认false
                 .isImagePicker(true)
                 .imagePickerType(ImagePickerEnum.PHOTO_PICKER) //选择器打开类型
@@ -74,20 +79,20 @@ pickerFolderRes| 选择器文件夹选择下拉图标
                 .maxVideoLength(5 * 1000)
                 .maxVideoSize(180)
                 .isCrop(true)
-                .pathList(new ArrayList<>())    //已选择图片列表
-                .pickerThemeColorRes(R.color.colorAccent)
-                .pickerTitleColorRes(R.color.image_picker_white)
-                .cropThemeColorRes(R.color.colorAccent)
-                .cropTitleColorRes(R.color.colorPrimary)
+                .pathList(new ArrayList<>())
+                .pickerThemeColorRes(R.color.image_picker_white)
+                .pickerTitleColorRes(R.color.image_picker_text_black)
+                .cropThemeColorRes(R.color.image_picker_white)
+                .cropTitleColorRes(R.color.image_picker_text_black)
                 .pickerBackRes(R.mipmap.image_picker_back_black)
+                .pickerFolderRes(R.mipmap.image_picker_folder_black)
                 .build();
 
         findViewById(R.id.iv).setOnClickListener(v -> {
-        	//重新打开选择器时不需要默认选中已选择的图片
-            //imagePickerConfig.getPathList().clear();
+//            imagePickerConfig.getPathList().clear();
             ImagePickerOpen.getInstance()
                     .setImagePickerConfig(imagePickerConfig)
-                    .pathList(new ArrayList<>())	//设置默认选中的图片列表
+                    .pathList(new ArrayList<>())
                     .open(this, 100);
         });
     }
@@ -95,33 +100,12 @@ pickerFolderRes| 选择器文件夹选择下拉图标
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        List<String> result = new ArrayList<>();
-        if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == 100) {
-                if (data.hasExtra(Constant.PICKER_PATH)) {
-                    List<String> resultPicker = data.getStringArrayListExtra(Constant.PICKER_PATH);
-                    if (resultPicker != null)
-                        result.addAll(resultPicker);
-                }
-            }
-            if (requestCode == 100) {
-                if (data.hasExtra(Constant.CAMERA_PATH)){
-                    List<String> resultCamera = data.getStringArrayListExtra(Constant.CAMERA_PATH);
-                    if (resultCamera != null)
-                        result.addAll(resultCamera);
-                }
-            }
-        }
-        if (resultCode == Constant.CAMERA_ERROR_CODE) {
-            Toast.makeText(context, "请检查相机权限", Toast.LENGTH_SHORT).show();
-        }
-        if (!result.isEmpty()) {
-            ImagePickerOpen.getInstance()
-                    .getImagePickerConfig()
-                    .getImageLoader()
-                    .loadImage(this, findViewById(R.id.iv), result.get(0));
+        if (requestCode == 100 && data != null) {
+            ArrayList<String> paths = data.getStringArrayListExtra(Constant.PICKER_PATH);
+            ImagePickerOpen.getInstance().getImagePickerConfig().getImageLoader().loadImage(this, findViewById(R.id.iv), paths.get(0));
         }
     }
+}
 ```
 ```java
 public class HandlerCallBack implements IHandlerCallBack<ImageInfo> {
@@ -158,27 +142,27 @@ public class HandlerCallBack implements IHandlerCallBack<ImageInfo> {
 ## 混淆
 -keep public class com.zhangteng.**.*{ *; }
 ## 历史版本
-版本| 更新| 更新时间
--------- | ----- | -----
-v1.4.0|使用独立的Utils库|2022/9/2 at 20:39
-v1.3.1|继承Utils库中的接口|2022/7/5 at 9:21
-v1.3.0|使用base的utils库|2022/1/21 at 15:42
-v1.2.0|常量名&值更换|2022/1/5 at 23:42
-v1.1.9|修改依赖库&选择图片回调|2022/01/02 at 21:55
-v1.1.8|开放openNoPermission方法，更新权限请求库版本|2021/11/18 at 15:44
-v1.1.7|图片视频存储地址修改为公共媒体地址（targetSdkVersion 29+时在Android10+有文件访问限制）|2021/7/1 at 11:24
-v1.1.6|1.放弃非AndroidX维护；2.增加默认选中图片集合；3.使用jitpack仓库 |2021/6/7 at 13:35
-v1.0.10/v1.1.5| 1.照片存储空间修改到Android/data/${applicationId}/files/imagePicker文件夹下;2.更新权限请求库版本|2021/2/5 at 15:49
-v1.0.9/v1.1.4| 处理部分机型未释放相机bug&忽略目标版本为29时的分区存储|2020/8/24 at 13:58
-v1.0.8/v1.1.3| 增加文件夹选择下拉图标|2020/8/21 at 10:50
-v1.0.7/v1.1.2| 根据使用功能动态请求权限|2020/8/18 0018 at 上午 10:50
-v1.0.6/v1.1.1| 修复请求权限失败时崩溃bug|2020/8/17 0017 at 下午 17:31
-v1.1.0| 迁移到androidx|2020/7/22 0022 at 上午 11:54
-v1.0.5| 多媒体查找逻辑调整|2020/6/17 0017 at 下午 17:37
-v1.0.4|视频做最大限制（显示的最大视频长度和录制的最大长度一致）|2020/6/2 0002 at 上午 11:00
-v1.0.3| imageInfo实现Parcelable接口|2020/5/27 0027 at 下午 14:39
-v1.0.2| 更全的样式自定义|2020/5/20 0020 at 下午 17:13
-v1.0.0| 初版| 2020/5/15 0015 at 下午 16:14
+| 版本             | 更新                                                                         | 更新时间                       |
+|----------------|----------------------------------------------------------------------------|----------------------------|
+| v1.4.0         | 使用独立的Utils库                                                                | 2022/9/2 at 20:39          |
+| v1.3.1         | 继承Utils库中的接口                                                               | 2022/7/5 at 9:21           |
+| v1.3.0         | 使用base的utils库                                                              | 2022/1/21 at 15:42         |
+| v1.2.0         | 常量名&值更换                                                                    | 2022/1/5 at 23:42          |
+| v1.1.9         | 修改依赖库&选择图片回调                                                               | 2022/01/02 at 21:55        |
+| v1.1.8         | 开放openNoPermission方法，更新权限请求库版本                                             | 2021/11/18 at 15:44        |
+| v1.1.7         | 图片视频存储地址修改为公共媒体地址（targetSdkVersion 29+时在Android10+有文件访问限制）                 | 2021/7/1 at 11:24          |
+| v1.1.6         | 1.放弃非AndroidX维护；2.增加默认选中图片集合；3.使用jitpack仓库                                 | 2021/6/7 at 13:35          |
+| v1.0.10/v1.1.5 | 1.照片存储空间修改到Android/data/${applicationId}/files/imagePicker文件夹下;2.更新权限请求库版本 | 2021/2/5 at 15:49          |
+| v1.0.9/v1.1.4  | 处理部分机型未释放相机bug&忽略目标版本为29时的分区存储                                             | 2020/8/24 at 13:58         |
+| v1.0.8/v1.1.3  | 增加文件夹选择下拉图标                                                                | 2020/8/21 at 10:50         |
+| v1.0.7/v1.1.2  | 根据使用功能动态请求权限                                                               | 2020/8/18 0018 at 上午 10:50 |
+| v1.0.6/v1.1.1  | 修复请求权限失败时崩溃bug                                                             | 2020/8/17 0017 at 下午 17:31 |
+| v1.1.0         | 迁移到androidx                                                                | 2020/7/22 0022 at 上午 11:54 |
+| v1.0.5         | 多媒体查找逻辑调整                                                                  | 2020/6/17 0017 at 下午 17:37 |
+| v1.0.4         | 视频做最大限制（显示的最大视频长度和录制的最大长度一致）                                               | 2020/6/2 0002 at 上午 11:00  |
+| v1.0.3         | imageInfo实现Parcelable接口                                                    | 2020/5/27 0027 at 下午 14:39 |
+| v1.0.2         | 更全的样式自定义                                                                   | 2020/5/20 0020 at 下午 17:13 |
+| v1.0.0         | 初版                                                                         | 2020/5/15 0015 at 下午 16:14 |
 
 ## 赞赏
 如果您喜欢ImagePicker，或感觉ImagePicker帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢
