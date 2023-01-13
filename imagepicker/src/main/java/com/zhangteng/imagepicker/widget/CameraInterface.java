@@ -30,9 +30,9 @@ import com.zhangteng.imagepicker.utils.AngleUtil;
 import com.zhangteng.imagepicker.utils.CameraParamUtil;
 import com.zhangteng.imagepicker.utils.CheckPermission;
 import com.zhangteng.imagepicker.utils.DeviceUtil;
-import com.zhangteng.utils.DensityUtilKt;
 import com.zhangteng.utils.FileUtilsKt;
 import com.zhangteng.utils.LogUtilsKt;
+import com.zhangteng.utils.ScreenUtilsKt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -724,8 +724,8 @@ public class CameraInterface implements Camera.PreviewCallback {
     private static Rect calculateTapArea(float x, float y, float coefficient, Context context) {
         float focusAreaSize = 300;
         int areaSize = Float.valueOf(focusAreaSize * coefficient).intValue();
-        int centerX = (int) (x / DensityUtilKt.getScreenWidth(context) * 2000 - 1000);
-        int centerY = (int) (y / DensityUtilKt.getScreenHeight(context) * 2000 - 1000);
+        int centerX = (int) (x / ScreenUtilsKt.getScreenWidth(context) * 2000 - 1000);
+        int centerY = (int) (y / ScreenUtilsKt.getScreenHeight(context) * 2000 - 1000);
         int left = clamp(centerX - areaSize / 2, -1000, 1000);
         int top = clamp(centerY - areaSize / 2, -1000, 1000);
         RectF rectF = new RectF(left, top, left + areaSize, top + areaSize);

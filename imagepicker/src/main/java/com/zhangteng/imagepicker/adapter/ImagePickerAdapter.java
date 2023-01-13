@@ -16,8 +16,8 @@ import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.bean.ImageInfo;
 import com.zhangteng.imagepicker.config.ImagePickerConfig;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
-import com.zhangteng.utils.DensityUtilKt;
 import com.zhangteng.utils.NullUtils;
+import com.zhangteng.utils.ScreenUtilsKt;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        int heightOrWidth = Math.min(DensityUtilKt.getScreenHeight(mContext) / 3, DensityUtilKt.getScreenWidth(mContext) / 3);
+        int heightOrWidth = Math.min(ScreenUtilsKt.getScreenHeight(mContext) / 3, ScreenUtilsKt.getScreenWidth(mContext) / 3);
         layoutParams.height = heightOrWidth;
         layoutParams.width = heightOrWidth;
         holder.itemView.setLayoutParams(layoutParams);

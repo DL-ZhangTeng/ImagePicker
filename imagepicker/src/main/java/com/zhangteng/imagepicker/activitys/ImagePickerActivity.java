@@ -41,10 +41,10 @@ import com.zhangteng.imagepicker.loader.MediaHandler;
 import com.zhangteng.imagepicker.loader.VideoLoaderCallBacks;
 import com.zhangteng.imagepicker.utils.UcropUtil;
 import com.zhangteng.imagepicker.widget.FolderPopupWindow;
-import com.zhangteng.utils.DensityUtilKt;
 import com.zhangteng.utils.FileUtilsKt;
 import com.zhangteng.utils.IHandlerCallBack;
 import com.zhangteng.utils.NullUtils;
+import com.zhangteng.utils.ScreenUtilsKt;
 import com.zhangteng.utils.ToastUtilsKt;
 
 import java.io.File;
@@ -284,8 +284,8 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
             if (resultCode == RESULT_OK) {
                 ArrayList<String> paths = data.getStringArrayListExtra(Constant.CAMERA_PATH);
                 String mime = data.getStringExtra(Constant.MIME);
-                long height = data.getIntExtra(Constant.HEIGHT, DensityUtilKt.getScreenHeight(this));
-                long width = data.getIntExtra(Constant.WIDTH, DensityUtilKt.getScreenWidth(this));
+                long height = data.getIntExtra(Constant.HEIGHT, ScreenUtilsKt.getScreenHeight(this));
+                long width = data.getIntExtra(Constant.WIDTH, ScreenUtilsKt.getScreenWidth(this));
                 List<String> selectImage = imagePickerConfig.getPathList();
                 if (selectImage != null) {
                     selectImage.clear();

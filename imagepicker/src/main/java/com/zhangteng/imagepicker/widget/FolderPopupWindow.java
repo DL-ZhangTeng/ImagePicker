@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.zhangteng.imagepicker.R;
 import com.zhangteng.imagepicker.adapter.FolderListAdapter;
-import com.zhangteng.utils.DensityUtilKt;
+import com.zhangteng.utils.ScreenUtilsKt;
 
 /**
  * Created by Swing on 2018/4/17.
@@ -50,7 +50,7 @@ public class FolderPopupWindow extends PopupWindow {
         //设置PopupWindow弹出窗体的宽
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         //设置PopupWindow弹出窗体的高
-        this.setHeight(DensityUtilKt.getScreenHeight(mContext) * 2 / 3);
+        this.setHeight(ScreenUtilsKt.getScreenHeight(mContext) * 2 / 3);
         //设置PopupWindow弹出窗体可点击
         this.setFocusable(false);
         //设置非PopupWindow区域是否可触摸

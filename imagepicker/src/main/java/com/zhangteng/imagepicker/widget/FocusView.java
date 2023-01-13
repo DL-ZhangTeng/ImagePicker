@@ -8,7 +8,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.zhangteng.utils.DensityUtilKt;
+import com.zhangteng.utils.ScreenUtilsKt;
 
 
 /**
@@ -31,7 +31,7 @@ public class FocusView extends View {
 
     public FocusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.size = DensityUtilKt.getScreenWidth(context) / 3;
+        this.size = ScreenUtilsKt.getScreenWidth(context) / 3;
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);

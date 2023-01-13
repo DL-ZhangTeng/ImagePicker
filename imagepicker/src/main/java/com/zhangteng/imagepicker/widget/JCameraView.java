@@ -31,9 +31,9 @@ import com.zhangteng.imagepicker.cameralibrary.listener.JCameraListener;
 import com.zhangteng.imagepicker.cameralibrary.listener.TypeListener;
 import com.zhangteng.imagepicker.cameralibrary.state.CameraMachine;
 import com.zhangteng.imagepicker.cameralibrary.view.CameraView;
-import com.zhangteng.utils.DensityUtilKt;
 import com.zhangteng.utils.FileUtilsKt;
 import com.zhangteng.utils.LogUtilsKt;
+import com.zhangteng.utils.ScreenUtilsKt;
 
 import java.io.IOException;
 
@@ -144,7 +144,7 @@ public class JCameraView extends FrameLayout implements CameraInterface.CameraOp
     }
 
     private void initData() {
-        layout_width = DensityUtilKt.getScreenWidth(mContext);
+        layout_width = ScreenUtilsKt.getScreenWidth(mContext);
         //缩放梯度
         zoomGradient = (int) (layout_width / 16f);
         LogUtilsKt.i("zoom = " + zoomGradient);
