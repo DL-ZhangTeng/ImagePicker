@@ -1,9 +1,12 @@
 # 图片选择器ImagePicker
+
 ImagePicker是一个Android版本的图片视频选择组件。
 [GitHub仓库地址](https://github.com/DL-ZhangTeng/ImagePicker)
+
 ## 引入
 
 ### gradle
+
 ```groovy
 allprojects {
     repositories {
@@ -11,22 +14,22 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:ImagePicker:1.4.0'
-    //使用的三方
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    implementation 'com.yalantis:ucrop:2.2.0'
-    implementation 'com.github.DL-ZhangTeng:RequestPermission:1.2.0'
-    implementation 'com.github.DL-ZhangTeng:Utils:2.0.1'
+implementation 'com.github.DL-ZhangTeng:ImagePicker:1.4.1'
+//使用的三方
+implementation 'com.github.bumptech.glide:glide:4.12.0'
+implementation 'com.yalantis:ucrop:2.2.0'
+implementation 'com.github.DL-ZhangTeng:RequestPermission:1.2.0'
+implementation 'com.github.DL-ZhangTeng:Utils:2.1.0'
 ```
 
 ## 效果图
+
 ![图片选择器1](https://img-blog.csdnimg.cn/20200820102910783.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1b2x1bzk=,size_16,color_FFFFFF,t_70#pic_center)
 ![图片选择器2](https://img-blog.csdnimg.cn/20200820102951969.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1b2x1bzk=,size_16,color_FFFFFF,t_70#pic_center)
 ![图片选择器3](https://img-blog.csdnimg.cn/20200820103007467.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2R1b2x1bzk=,size_16,color_FFFFFF,t_70#pic_center)
 
-
-
 ## 属性
+
 | 属性名                 | 描述                                                                               |
 |---------------------|----------------------------------------------------------------------------------|
 | multiSelect         | 是否单选，默认true                                                                      |
@@ -55,6 +58,7 @@ implementation 'com.github.DL-ZhangTeng:ImagePicker:1.4.0'
 | pickerFolderRes     | 选择器文件夹选择下拉图标                                                                     |
 
 ## 使用
+
 ```java
 public class MainActivity extends AppCompatActivity {
 
@@ -107,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 ```
+
 ```java
 public class HandlerCallBack implements IHandlerCallBack<ImageInfo> {
     private String TAG = "---ImagePicker---";
@@ -139,11 +144,16 @@ public class HandlerCallBack implements IHandlerCallBack<ImageInfo> {
     }
 }
 ```
+
 ## 混淆
+
 -keep public class com.zhangteng.**.*{ *; }
+
 ## 历史版本
+
 | 版本             | 更新                                                                         | 更新时间                       |
 |----------------|----------------------------------------------------------------------------|----------------------------|
+| v1.4.1         | 使用210工具库                                                                   | 2023/1/13 at 23:48         |
 | v1.4.0         | 使用独立的Utils库                                                                | 2022/9/2 at 20:39          |
 | v1.3.1         | 继承Utils库中的接口                                                               | 2022/7/5 at 9:21           |
 | v1.3.0         | 使用base的utils库                                                              | 2022/1/21 at 15:42         |
@@ -165,12 +175,15 @@ public class HandlerCallBack implements IHandlerCallBack<ImageInfo> {
 | v1.0.0         | 初版                                                                         | 2020/5/15 0015 at 下午 16:14 |
 
 ## 赞赏
+
 如果您喜欢ImagePicker，或感觉ImagePicker帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢
 
 ## 联系我
+
 邮箱：763263311@qq.com/ztxiaoran@foxmail.com
 
 ## License
+
 Copyright (c) [2020] [Swing]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
