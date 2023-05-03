@@ -50,7 +50,7 @@ public class ImagePickerOpen {
      * 其他 启动下方弹框
      */
     public void open(FragmentActivity mActivity) {
-        AndroidPermission androidPermission = new AndroidPermission.Buidler()
+        AndroidPermission androidPermission = new AndroidPermission.Builder()
                 .with(mActivity)
                 .permission(getPermissions())
                 .callback(new Callback() {
@@ -80,7 +80,7 @@ public class ImagePickerOpen {
      * 其他 启动下方弹框
      */
     public void open(FragmentActivity mActivity, int requestCode) {
-        AndroidPermission androidPermission = new AndroidPermission.Buidler()
+        AndroidPermission androidPermission = new AndroidPermission.Builder()
                 .with(mActivity)
                 .permission(getPermissions())
                 .callback(new Callback() {
