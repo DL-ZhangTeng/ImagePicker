@@ -14,12 +14,12 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:ImagePicker:1.4.2'
+implementation 'com.github.DL-ZhangTeng:ImagePicker:1.5.0'
 //使用的三方
 implementation 'com.github.bumptech.glide:glide:4.12.0'
 implementation 'com.yalantis:ucrop:2.2.0'
-implementation 'com.github.DL-ZhangTeng:RequestPermission:1.2.1'
-implementation 'com.github.DL-ZhangTeng:Utils:2.1.1'
+implementation 'com.github.DL-ZhangTeng:RequestPermission:1.3.0'
+implementation 'com.github.DL-ZhangTeng:Utils:2.2.0'
 ```
 
 ## 效果图
@@ -153,6 +153,7 @@ public class HandlerCallBack implements IHandlerCallBack<ImageInfo> {
 
 | 版本             | 更新                                                                         |     | 更新时间                       |
 |----------------|----------------------------------------------------------------------------|:----|----------------------------|
+| v1.5.0         | 权限请求被拒绝再次请求权限跳转设置页面                                                        |     | 2023/5/3 at 19:17          |
 | v1.4.2         | Android11的存储写入权限拒绝结果过滤                                                     |     | 2023/2/14 at 0:27          |
 | v1.4.1         | 使用210工具库                                                                   |     | 2023/1/13 at 23:48         |
 | v1.4.0         | 使用独立的Utils库                                                                |     | 2022/9/2 at 20:39          |
