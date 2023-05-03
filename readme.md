@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && data != null) {
-            ArrayList<String> paths = data.getStringArrayListExtra(Constant.PICKER_PATH);
+            List<String> paths = ImagePickerOpen.getResultData(this, resultCode, data);
             ImagePickerOpen.getInstance().getImagePickerConfig().getImageLoader().loadImage(this, findViewById(R.id.iv), paths.get(0));
         }
     }
@@ -153,7 +153,7 @@ public class HandlerCallBack implements IHandlerCallBack<ImageInfo> {
 
 | 版本             | 更新                                                                         |     | 更新时间                       |
 |----------------|----------------------------------------------------------------------------|:----|----------------------------|
-| v1.5.0         | 权限请求被拒绝再次请求权限跳转设置页面                                                        |     | 2023/5/3 at 19:17          |
+| v1.5.0         | 权限请求被拒绝再次请求权限跳转设置页面                                                        |     | 2023/5/3 at 20:27          |
 | v1.4.2         | Android11的存储写入权限拒绝结果过滤                                                     |     | 2023/2/14 at 0:27          |
 | v1.4.1         | 使用210工具库                                                                   |     | 2023/1/13 at 23:48         |
 | v1.4.0         | 使用独立的Utils库                                                                |     | 2022/9/2 at 20:39          |

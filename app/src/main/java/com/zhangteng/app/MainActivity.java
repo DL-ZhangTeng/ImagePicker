@@ -7,13 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.zhangteng.imagepicker.callback.HandlerCallBack;
-import com.zhangteng.imagepicker.config.Constant;
 import com.zhangteng.imagepicker.config.ImagePickerConfig;
 import com.zhangteng.imagepicker.config.ImagePickerEnum;
 import com.zhangteng.imagepicker.config.ImagePickerOpen;
 import com.zhangteng.imagepicker.imageloader.GlideImageLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 .isShowCamera(true)
                 .isVideoPicker(true)              //是否选择视频 默认false
                 .isImagePicker(true)
-                .imagePickerType(ImagePickerEnum.PHOTO_PICKER) //选择器打开类型
+                .imagePickerType(ImagePickerEnum.CAMERA) //选择器打开类型
                 .isMirror(false)                              //是否旋转镜头
                 .maxImageSelectable(9)                        //图片可选择数
                 .maxHeight(1920)                              //图片最大高度
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && data != null) {
-            ArrayList<String> paths = data.getStringArrayListExtra(Constant.PICKER_PATH);
+            List<String> paths = ImagePickerOpen.getResultData(this, resultCode, data);
             ImagePickerOpen.getInstance().getImagePickerConfig().getImageLoader().loadImage(this, findViewById(R.id.iv), paths.get(0));
         }
     }

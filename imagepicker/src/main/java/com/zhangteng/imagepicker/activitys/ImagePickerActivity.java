@@ -171,7 +171,7 @@ public class ImagePickerActivity extends AppCompatActivity implements LoaderCall
 
     protected void initData() {
         imagePickerConfig = ImagePickerOpen.getInstance().getImagePickerConfig();
-        iHandlerCallBack = imagePickerConfig.getiHandlerCallBack();
+        iHandlerCallBack = imagePickerConfig.getHandlerCallBack();
         if (iHandlerCallBack != null)
             iHandlerCallBack.onStart();
         mContext = this;

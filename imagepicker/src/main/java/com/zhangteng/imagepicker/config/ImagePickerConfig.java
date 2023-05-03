@@ -353,7 +353,7 @@ public class ImagePickerConfig {
 
     }
 
-    public IHandlerCallBack<ImageInfo> getiHandlerCallBack() {
+    public IHandlerCallBack<ImageInfo> getHandlerCallBack() {
         return iHandlerCallBack;
     }
 

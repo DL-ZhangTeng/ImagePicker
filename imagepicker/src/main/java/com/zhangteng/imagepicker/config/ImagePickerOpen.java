@@ -188,7 +188,7 @@ public class ImagePickerOpen {
             Log.e(TAG, "请配置 Provider");
             return;
         }
-        if (imagePickerConfig.getiHandlerCallBack() == null) {
+        if (imagePickerConfig.getHandlerCallBack() == null) {
             Log.e(TAG, "请配置 IHandlerCallBack");
             return;
         }
@@ -213,7 +213,7 @@ public class ImagePickerOpen {
             Log.e(TAG, "请配置 Provider");
             return;
         }
-        if (imagePickerConfig.getiHandlerCallBack() == null) {
+        if (imagePickerConfig.getHandlerCallBack() == null) {
             Log.e(TAG, "请配置 IHandlerCallBack");
             return;
         }
@@ -256,22 +256,18 @@ public class ImagePickerOpen {
      *
      * @return List<String> 被选中文件列表
      */
-    public static List<String> getResultData(Context context, int requestCode, int resultCode, @Nullable Intent data) {
+    public static List<String> getResultData(Context context, int resultCode, @Nullable Intent data) {
         List<String> result = new ArrayList<>();
         if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == Constant.PICKER_REQUEST_CODE) {
-                if (data.hasExtra(Constant.PICKER_PATH)) {
-                    List<String> resultPicker = data.getStringArrayListExtra(Constant.PICKER_PATH);
-                    if (resultPicker != null)
-                        result.addAll(resultPicker);
-                }
+            if (data.hasExtra(Constant.PICKER_PATH)) {
+                List<String> resultPicker = data.getStringArrayListExtra(Constant.PICKER_PATH);
+                if (resultPicker != null)
+                    result.addAll(resultPicker);
             }
-            if (requestCode == Constant.CAMERA_REQUEST_CODE) {
-                if (data.hasExtra(Constant.CAMERA_PATH)) {
-                    List<String> resultCamera = data.getStringArrayListExtra(Constant.CAMERA_PATH);
-                    if (resultCamera != null)
-                        result.addAll(resultCamera);
-                }
+            if (data.hasExtra(Constant.CAMERA_PATH)) {
+                List<String> resultCamera = data.getStringArrayListExtra(Constant.CAMERA_PATH);
+                if (resultCamera != null)
+                    result.addAll(resultCamera);
             }
         }
         if (resultCode == Constant.CAMERA_ERROR_CODE) {
